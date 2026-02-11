@@ -240,7 +240,7 @@
 
         .main-content {
             display: grid;
-            grid-template-columns: 300px 1fr 300px;
+            grid-template-columns: 300px 1fr 320px;
             gap: 20px;
         }
 
@@ -398,6 +398,7 @@
             font-size: 2em;
             animation: cheeseFloat 1.5s ease-out forwards;
             z-index: 9999;
+            font-weight: bold;
         }
 
         .click-power {
@@ -431,13 +432,13 @@
 
         .shop-tab {
             flex: 1;
-            padding: 10px;
+            padding: 10px 5px;
             background: rgba(255, 255, 255, 0.05);
             border: none;
             border-radius: 10px;
             color: white;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             transition: all 0.3s;
         }
 
@@ -469,7 +470,7 @@
 
         .shop-item-name {
             font-weight: 700;
-            font-size: 1.1em;
+            font-size: 1em;
         }
 
         .shop-item-level {
@@ -490,10 +491,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 10px;
         }
 
         .shop-item-cost {
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: 700;
             color: #f39c12;
         }
@@ -507,6 +509,7 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 14px;
         }
 
         .buy-btn:hover:not(:disabled) {
@@ -517,6 +520,27 @@
         .buy-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+
+        .select-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .select-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .select-btn.active {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
         }
 
         /* === ЛИДЕРБОРД === */
@@ -671,7 +695,7 @@
                 </div>
 
                 <div class="stat-item">
-                    <div class="stat-label">Всего сыра</div>
+                    <div class="stat-label">Всего заработано</div>
                     <div class="stat-value" id="totalCheese">0</div>
                 </div>
 
@@ -690,7 +714,7 @@
                         <div class="stat-value">x<span id="rebirthBonus">1</span></div>
                     </div>
                     <button class="rebirth-btn" id="rebirthBtn">
-                        ⭐ ПЕРЕРОДИТЬСЯ (1000000 🧀)
+                        ⭐ ПЕРЕРОДИТЬСЯ (<span id="rebirthCost">1,000,000</span> 🧀)
                     </button>
                 </div>
             </div>
@@ -730,7 +754,7 @@
                 </div>
 
                 <div class="leaderboard">
-                    <h2>🏆 Лидеры</h2>
+                    <h2>🏆 Топ Игроков</h2>
                     <div id="leaderboardList">
                         <div style="text-align: center; color: #bdc3c7; padding: 20px;">
                             Загрузка лидеров...
@@ -749,216 +773,9 @@
                     <button class="shop-tab" data-tab="sauce">Соусы</button>
                 </div>
 
-                <div id="upgradesTab" class="shop-content">
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">👆 Сильный палец</div>
-                            <div class="shop-item-level">Ур. <span id="fingerLevel">0</span></div>
-                        </div>
-                        <div class="shop-item-desc">+1 сыра за клик</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost"><span id="fingerCost">10</span> 🧀</div>
-                            <button class="buy-btn" data-upgrade="finger">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🤖 Авто-обмазыватель</div>
-                            <div class="shop-item-level">Ур. <span id="autoLevel">0</span></div>
-                        </div>
-                        <div class="shop-item-desc">+1 сыра в секунду</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost"><span id="autoCost">50</span> 🧀</div>
-                            <button class="buy-btn" data-upgrade="auto">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🧽 Сырная губка</div>
-                            <div class="shop-item-level">Ур. <span id="spongeLevel">0</span></div>
-                        </div>
-                        <div class="shop-item-desc">+5 сыра в секунду</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost"><span id="spongeCost">200</span> 🧀</div>
-                            <button class="buy-btn" data-upgrade="sponge">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🖌️ Малярная кисть</div>
-                            <div class="shop-item-level">Ур. <span id="brushLevel">0</span></div>
-                        </div>
-                        <div class="shop-item-desc">+15 сыра в секунду</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost"><span id="brushCost">1000</span> 🧀</div>
-                            <button class="buy-btn" data-upgrade="brush">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">💦 Распылитель</div>
-                            <div class="shop-item-level">Ур. <span id="sprayLevel">0</span></div>
-                        </div>
-                        <div class="shop-item-desc">+50 сыра в секунду</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost"><span id="sprayCost">5000</span> 🧀</div>
-                            <button class="buy-btn" data-upgrade="spray">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🔫 Сырная пушка</div>
-                            <div class="shop-item-level">Ур. <span id="gunLevel">0</span></div>
-                        </div>
-                        <div class="shop-item-desc">+200 сыра в секунду</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost"><span id="gunCost">25000</span> 🧀</div>
-                            <button class="buy-btn" data-upgrade="gun">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🏭 Сырная фабрика</div>
-                            <div class="shop-item-level">Ур. <span id="factoryLevel">0</span></div>
-                        </div>
-                        <div class="shop-item-desc">+1000 сыра в секунду</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost"><span id="factoryCost">100000</span> 🧀</div>
-                            <button class="buy-btn" data-upgrade="factory">Купить</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="intercomsTab" class="shop-content hidden">
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🚪 CYFRAL</div>
-                        </div>
-                        <div class="shop-item-desc">Базовый домофон (бесплатно)</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost">КУПЛЕН</div>
-                            <button class="buy-btn" data-select-intercom="cyfral" style="background: #3498db;">Выбрать</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🚪 МЕТАКОМ</div>
-                        </div>
-                        <div class="shop-item-desc">+10% к скорости производства</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost">5000 🧀</div>
-                            <button class="buy-btn" data-buy-intercom="metakom" data-cost="5000">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🚪 VIZIT</div>
-                        </div>
-                        <div class="shop-item-desc">+25% к скорости производства</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost">15000 🧀</div>
-                            <button class="buy-btn" data-buy-intercom="vizit" data-cost="15000">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🚪 ELTIS</div>
-                        </div>
-                        <div class="shop-item-desc">+50% к скорости производства</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost">50000 🧀</div>
-                            <button class="buy-btn" data-buy-intercom="eltis" data-cost="50000">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🚪 СТАЛКЕР</div>
-                        </div>
-                        <div class="shop-item-desc">+100% к скорости производства</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost">200000 🧀</div>
-                            <button class="buy-btn" data-buy-intercom="stalker" data-cost="200000">Купить</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="sauceTab" class="shop-content hidden">
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🧀 Обычный сыр</div>
-                        </div>
-                        <div class="shop-item-desc">Базовый соус (бесплатно)</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost">КУПЛЕН</div>
-                            <button class="buy-btn" data-select-sauce="basic" style="background: #3498db;">Выбрать</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🧀 Чеддер</div>
-                        </div>
-                        <div class="shop-item-desc">+5 сыра за клик</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost">3000 🧀</div>
-                            <button class="buy-btn" data-buy-sauce="cheddar" data-cost="3000">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🧀 Моцарелла</div>
-                        </div>
-                        <div class="shop-item-desc">+15 сыра за клик</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost">10000 🧀</div>
-                            <button class="buy-btn" data-buy-sauce="mozzarella" data-cost="10000">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🧀 Пармезан</div>
-                        </div>
-                        <div class="shop-item-desc">+50 сыра за клик</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost">35000 🧀</div>
-                            <button class="buy-btn" data-buy-sauce="parmesan" data-cost="35000">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🧀 Горгонзола</div>
-                        </div>
-                        <div class="shop-item-desc">+150 сыра за клик</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost">100000 🧀</div>
-                            <button class="buy-btn" data-buy-sauce="gorgonzola" data-cost="100000">Купить</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-item">
-                        <div class="shop-item-header">
-                            <div class="shop-item-name">🧀 Дор Блю</div>
-                        </div>
-                        <div class="shop-item-desc">+500 сыра за клик</div>
-                        <div class="shop-item-footer">
-                            <div class="shop-item-cost">500000 🧀</div>
-                            <button class="buy-btn" data-buy-sauce="dorblue" data-cost="500000">Купить</button>
-                        </div>
-                    </div>
-                </div>
+                <div id="upgradesTab" class="shop-content"></div>
+                <div id="intercomsTab" class="shop-content hidden"></div>
+                <div id="sauceTab" class="shop-content hidden"></div>
             </div>
         </div>
     </div>
@@ -967,7 +784,6 @@
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getDatabase, ref, set, get, onValue, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-        // Firebase конфигурация (только база данных)
         const firebaseConfig = {
             databaseURL: "https://sirnik-3356a-default-rtdb.firebaseio.com/"
         };
@@ -975,25 +791,17 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Глобальные переменные
         let currentUser = null;
         let isAuthMode = true;
         let gameData = {
             cheese: 0,
             totalCheese: 0,
+            allTimeCheese: 0,
             level: 1,
             rebirths: 0,
             clickPower: 1,
             cheesePerSecond: 0,
-            upgrades: {
-                finger: 0,
-                auto: 0,
-                sponge: 0,
-                brush: 0,
-                spray: 0,
-                gun: 0,
-                factory: 0
-            },
+            upgrades: {},
             intercoms: ['cyfral'],
             currentIntercom: 'cyfral',
             sauces: ['basic'],
@@ -1002,14 +810,66 @@
             sauceBonus: 0
         };
 
-        // Проверка сохраненной сессии
+        // МАССИВНЫЕ УЛУЧШЕНИЯ
+        const upgradesList = [
+            { id: 'finger', name: '👆 Сильный палец', desc: '+1 сыра за клик', baseCost: 50, type: 'click', power: 1, scale: 1.5 },
+            { id: 'glove', name: '🧤 Резиновая перчатка', desc: '+3 сыра за клик', baseCost: 250, type: 'click', power: 3, scale: 1.5 },
+            { id: 'brush2', name: '🖌️ Кисточка', desc: '+8 сыра за клик', baseCost: 1000, type: 'click', power: 8, scale: 1.6 },
+            { id: 'roller', name: '🖌️ Валик', desc: '+20 сыра за клик', baseCost: 5000, type: 'click', power: 20, scale: 1.6 },
+            { id: 'sprayer', name: '💧 Пульверизатор', desc: '+50 сыра за клик', baseCost: 25000, type: 'click', power: 50, scale: 1.7 },
+            { id: 'bucket', name: '🪣 Ведро с сыром', desc: '+150 сыра за клик', baseCost: 100000, type: 'click', power: 150, scale: 1.7 },
+            { id: 'hose', name: '🚿 Шланг', desc: '+400 сыра за клик', baseCost: 500000, type: 'click', power: 400, scale: 1.8 },
+            { id: 'cannon', name: '💣 Сырная пушка', desc: '+1000 сыра за клик', baseCost: 2500000, type: 'click', power: 1000, scale: 1.8 },
+            
+            { id: 'auto', name: '🤖 Робот-губка', desc: '+1 сыра/сек', baseCost: 100, type: 'auto', power: 1, scale: 1.7 },
+            { id: 'sponge', name: '🧽 Умная губка', desc: '+5 сыра/сек', baseCost: 500, type: 'auto', power: 5, scale: 1.7 },
+            { id: 'drone', name: '🚁 Дрон-обмазыватель', desc: '+15 сыра/сек', baseCost: 2500, type: 'auto', power: 15, scale: 1.8 },
+            { id: 'brush', name: '🖌️ Авто-кисть', desc: '+50 сыра/сек', baseCost: 10000, type: 'auto', power: 50, scale: 1.8 },
+            { id: 'spray', name: '💦 Авто-распылитель', desc: '+150 сыра/сек', baseCost: 50000, type: 'auto', power: 150, scale: 1.9 },
+            { id: 'machine', name: '⚙️ Сырная машина', desc: '+500 сыра/сек', baseCost: 250000, type: 'auto', power: 500, scale: 1.9 },
+            { id: 'gun', name: '🔫 Мега-пушка', desc: '+1500 сыра/сек', baseCost: 1000000, type: 'auto', power: 1500, scale: 2.0 },
+            { id: 'conveyor', name: '🏗️ Конвейер', desc: '+5000 сыра/сек', baseCost: 5000000, type: 'auto', power: 5000, scale: 2.0 },
+            { id: 'factory', name: '🏭 Сырная фабрика', desc: '+15000 сыра/сек', baseCost: 25000000, type: 'auto', power: 15000, scale: 2.1 },
+            { id: 'megafactory', name: '🏢 Мега-фабрика', desc: '+50000 сыра/сек', baseCost: 100000000, type: 'auto', power: 50000, scale: 2.1 },
+            { id: 'corporation', name: '🌐 Корпорация', desc: '+150000 сыра/сек', baseCost: 500000000, type: 'auto', power: 150000, scale: 2.2 },
+            { id: 'empire', name: '👑 Сырная империя', desc: '+500000 сыра/сек', baseCost: 2500000000, type: 'auto', power: 500000, scale: 2.2 },
+        ];
+
+        const intercomsList = [
+            { id: 'cyfral', name: 'CYFRAL', bonus: 1.0, cost: 0, desc: 'Базовый домофон' },
+            { id: 'metakom', name: 'МЕТАКОМ', bonus: 1.15, cost: 25000, desc: '+15% к производству' },
+            { id: 'vizit', name: 'VIZIT', bonus: 1.35, cost: 100000, desc: '+35% к производству' },
+            { id: 'eltis', name: 'ELTIS', bonus: 1.60, cost: 500000, desc: '+60% к производству' },
+            { id: 'stalker', name: 'СТАЛКЕР', bonus: 2.0, cost: 2500000, desc: '+100% к производству' },
+            { id: 'factorial', name: 'ФАКТОРИАЛ', bonus: 2.5, cost: 10000000, desc: '+150% к производству' },
+            { id: 'smartlock', name: 'SMARTLOCK', bonus: 3.0, cost: 50000000, desc: '+200% к производству' },
+            { id: 'quantum', name: 'QUANTUM', bonus: 4.0, cost: 250000000, desc: '+300% к производству' },
+        ];
+
+        const saucesList = [
+            { id: 'basic', name: 'Обычный сыр', bonus: 0, cost: 0, desc: 'Базовый соус' },
+            { id: 'cheddar', name: 'Чеддер', bonus: 10, cost: 15000, desc: '+10 сыра за клик' },
+            { id: 'mozzarella', name: 'Моцарелла', bonus: 30, cost: 75000, desc: '+30 сыра за клик' },
+            { id: 'parmesan', name: 'Пармезан', bonus: 100, cost: 400000, desc: '+100 сыра за клик' },
+            { id: 'gorgonzola', name: 'Горгонзола', bonus: 300, cost: 2000000, desc: '+300 сыра за клик' },
+            { id: 'dorblue', name: 'Дор Блю', bonus: 1000, cost: 10000000, desc: '+1000 сыра за клик' },
+            { id: 'roquefort', name: 'Рокфор', bonus: 3000, cost: 50000000, desc: '+3000 сыра за клик' },
+            { id: 'brie', name: 'Бри', bonus: 10000, cost: 250000000, desc: '+10000 сыра за клик' },
+        ];
+
+        // Инициализация улучшений
+        upgradesList.forEach(u => {
+            if (gameData.upgrades[u.id] === undefined) {
+                gameData.upgrades[u.id] = 0;
+            }
+        });
+
         const savedUser = localStorage.getItem('soysdomofon_user');
         if (savedUser) {
             currentUser = savedUser;
             loadGameData();
         }
 
-        // Переключение вкладок авторизации
         document.getElementById('loginTab').addEventListener('click', function() {
             isAuthMode = true;
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -1024,7 +884,6 @@
             document.getElementById('authButton').textContent = 'ЗАРЕГИСТРИРОВАТЬСЯ';
         });
 
-        // Обработка авторизации
         document.getElementById('authForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const login = document.getElementById('loginInput').value.trim();
@@ -1051,7 +910,6 @@
                 const snapshot = await get(userRef);
 
                 if (isAuthMode) {
-                    // Вход
                     if (!snapshot.exists()) {
                         showError('Аккаунт не найден. Зарегистрируйтесь!');
                         return;
@@ -1069,7 +927,6 @@
                     setTimeout(() => loadGameData(), 500);
 
                 } else {
-                    // Регистрация
                     if (snapshot.exists()) {
                         showError('Этот логин уже занят!');
                         return;
@@ -1111,37 +968,46 @@
             setTimeout(() => successDiv.classList.add('hidden'), 3000);
         }
 
-        // Загрузка данных игры
         async function loadGameData() {
             const userRef = ref(database, 'users/' + currentUser);
             const snapshot = await get(userRef);
 
             if (snapshot.exists()) {
                 const data = snapshot.val();
+                const loadedData = data.gameData || {};
+                
                 gameData = {
                     ...gameData,
-                    ...(data.gameData || {})
+                    ...loadedData,
+                    upgrades: loadedData.upgrades || {}
                 };
+                
+                // Инициализируем отсутствующие улучшения
+                upgradesList.forEach(u => {
+                    if (gameData.upgrades[u.id] === undefined) {
+                        gameData.upgrades[u.id] = 0;
+                    }
+                });
+                
                 document.getElementById('playerName').textContent = currentUser;
             }
 
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('gameScreen').style.display = 'block';
             
+            renderShop();
             updateUI();
             startGameLoop();
             loadLeaderboard();
             setupEventListeners();
         }
 
-        // Выход
         document.getElementById('logoutBtn').addEventListener('click', async function() {
             await saveGame();
             localStorage.removeItem('soysdomofon_user');
             location.reload();
         });
 
-        // Сохранение игры
         async function saveGame() {
             if (!currentUser) return;
             
@@ -1149,11 +1015,10 @@
                 const userRef = ref(database, 'users/' + currentUser + '/gameData');
                 await update(userRef, gameData);
 
-                // Обновляем лидерборд
                 const leaderboardRef = ref(database, 'leaderboard/' + currentUser);
                 await set(leaderboardRef, {
                     login: currentUser,
-                    totalCheese: gameData.totalCheese,
+                    totalCheese: gameData.allTimeCheese,
                     rebirths: gameData.rebirths,
                     level: gameData.level
                 });
@@ -1162,7 +1027,91 @@
             }
         }
 
-        // Клик по домофону
+        // Рендер магазина
+        function renderShop() {
+            // Улучшения
+            let upgradesHTML = '';
+            upgradesList.forEach(upgrade => {
+                const level = gameData.upgrades[upgrade.id] || 0;
+                const cost = Math.floor(upgrade.baseCost * Math.pow(upgrade.scale, level) * Math.pow(1.2, gameData.rebirths));
+                
+                upgradesHTML += `
+                    <div class="shop-item">
+                        <div class="shop-item-header">
+                            <div class="shop-item-name">${upgrade.name}</div>
+                            <div class="shop-item-level">Ур. ${level}</div>
+                        </div>
+                        <div class="shop-item-desc">${upgrade.desc}</div>
+                        <div class="shop-item-footer">
+                            <div class="shop-item-cost">${cost.toLocaleString()} 🧀</div>
+                            <button class="buy-btn" data-upgrade="${upgrade.id}">Купить</button>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('upgradesTab').innerHTML = upgradesHTML;
+
+            // Домофоны
+            let intercomsHTML = '';
+            intercomsList.forEach(intercom => {
+                const owned = gameData.intercoms.includes(intercom.id);
+                const active = gameData.currentIntercom === intercom.id;
+                
+                let buttonHTML = '';
+                if (intercom.id === 'cyfral') {
+                    buttonHTML = `<button class="select-btn ${active ? 'active' : ''}" data-select-intercom="${intercom.id}">Выбран</button>`;
+                } else if (owned) {
+                    buttonHTML = `<button class="select-btn ${active ? 'active' : ''}" data-select-intercom="${intercom.id}">${active ? 'Выбран' : 'Выбрать'}</button>`;
+                } else {
+                    buttonHTML = `<button class="buy-btn" data-buy-intercom="${intercom.id}" data-cost="${intercom.cost}">Купить</button>`;
+                }
+                
+                intercomsHTML += `
+                    <div class="shop-item">
+                        <div class="shop-item-header">
+                            <div class="shop-item-name">🚪 ${intercom.name}</div>
+                        </div>
+                        <div class="shop-item-desc">${intercom.desc}</div>
+                        <div class="shop-item-footer">
+                            <div class="shop-item-cost">${intercom.cost === 0 ? 'БЕСПЛАТНО' : intercom.cost.toLocaleString() + ' 🧀'}</div>
+                            ${buttonHTML}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('intercomsTab').innerHTML = intercomsHTML;
+
+            // Соусы
+            let saucesHTML = '';
+            saucesList.forEach(sauce => {
+                const owned = gameData.sauces.includes(sauce.id);
+                const active = gameData.currentSauce === sauce.id;
+                
+                let buttonHTML = '';
+                if (sauce.id === 'basic') {
+                    buttonHTML = `<button class="select-btn ${active ? 'active' : ''}" data-select-sauce="${sauce.id}">Выбран</button>`;
+                } else if (owned) {
+                    buttonHTML = `<button class="select-btn ${active ? 'active' : ''}" data-select-sauce="${sauce.id}">${active ? 'Выбран' : 'Выбрать'}</button>`;
+                } else {
+                    buttonHTML = `<button class="buy-btn" data-buy-sauce="${sauce.id}" data-cost="${sauce.cost}">Купить</button>`;
+                }
+                
+                saucesHTML += `
+                    <div class="shop-item">
+                        <div class="shop-item-header">
+                            <div class="shop-item-name">🧀 ${sauce.name}</div>
+                        </div>
+                        <div class="shop-item-desc">${sauce.desc}</div>
+                        <div class="shop-item-footer">
+                            <div class="shop-item-cost">${sauce.cost === 0 ? 'БЕСПЛАТНО' : sauce.cost.toLocaleString() + ' 🧀'}</div>
+                            ${buttonHTML}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('sauceTab').innerHTML = saucesHTML;
+        }
+
         document.getElementById('intercom').addEventListener('click', function(event) {
             const clickPower = gameData.clickPower + gameData.sauceBonus;
             const bonusMultiplier = 1 + gameData.rebirths * 0.1;
@@ -1170,19 +1119,18 @@
             
             gameData.cheese += totalGain;
             gameData.totalCheese += totalGain;
+            gameData.allTimeCheese += totalGain;
 
-            // Анимация сыра
             createCheeseSplash(event.clientX, event.clientY, totalGain);
 
             updateUI();
             checkLevelUp();
         });
 
-        // Создание анимации капель сыра
         function createCheeseSplash(x, y, amount) {
             const splash = document.createElement('div');
             splash.className = 'cheese-splash';
-            splash.textContent = `+${amount} 🧀`;
+            splash.textContent = `+${amount.toLocaleString()} 🧀`;
             splash.style.left = x + 'px';
             splash.style.top = y + 'px';
             document.body.appendChild(splash);
@@ -1190,195 +1138,141 @@
             setTimeout(() => splash.remove(), 1500);
         }
 
-        // Настройка обработчиков событий
         function setupEventListeners() {
-            // Покупка улучшений
-            document.querySelectorAll('[data-upgrade]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    buyUpgrade(this.dataset.upgrade);
-                });
+            document.addEventListener('click', function(e) {
+                if (e.target.dataset.upgrade) {
+                    buyUpgrade(e.target.dataset.upgrade);
+                } else if (e.target.dataset.buyIntercom) {
+                    buyIntercom(e.target.dataset.buyIntercom, parseInt(e.target.dataset.cost));
+                } else if (e.target.dataset.selectIntercom) {
+                    selectIntercom(e.target.dataset.selectIntercom);
+                } else if (e.target.dataset.buySauce) {
+                    buySauce(e.target.dataset.buySauce, parseInt(e.target.dataset.cost));
+                } else if (e.target.dataset.selectSauce) {
+                    selectSauce(e.target.dataset.selectSauce);
+                }
             });
 
-            // Покупка домофонов
-            document.querySelectorAll('[data-buy-intercom]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    buyIntercom(this.dataset.buyIntercom, parseInt(this.dataset.cost));
-                });
-            });
-
-            // Выбор домофона
-            document.querySelectorAll('[data-select-intercom]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    selectIntercom(this.dataset.selectIntercom);
-                });
-            });
-
-            // Покупка соусов
-            document.querySelectorAll('[data-buy-sauce]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    buySauce(this.dataset.buySauce, parseInt(this.dataset.cost));
-                });
-            });
-
-            // Выбор соуса
-            document.querySelectorAll('[data-select-sauce]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    selectSauce(this.dataset.selectSauce);
-                });
-            });
-
-            // Переключение вкладок магазина
             document.querySelectorAll('.shop-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     switchShopTab(this.dataset.tab);
                 });
             });
 
-            // Перерождение
             document.getElementById('rebirthBtn').addEventListener('click', doRebirth);
         }
 
-        // Покупка улучшения
-        function buyUpgrade(type) {
-            const costs = {
-                finger: Math.floor(10 * Math.pow(1.5, gameData.upgrades.finger)),
-                auto: Math.floor(50 * Math.pow(1.7, gameData.upgrades.auto)),
-                sponge: Math.floor(200 * Math.pow(1.8, gameData.upgrades.sponge)),
-                brush: Math.floor(1000 * Math.pow(1.9, gameData.upgrades.brush)),
-                spray: Math.floor(5000 * Math.pow(2, gameData.upgrades.spray)),
-                gun: Math.floor(25000 * Math.pow(2.1, gameData.upgrades.gun)),
-                factory: Math.floor(100000 * Math.pow(2.2, gameData.upgrades.factory))
-            };
+        function buyUpgrade(id) {
+            const upgrade = upgradesList.find(u => u.id === id);
+            if (!upgrade) return;
 
-            const cost = costs[type];
+            const level = gameData.upgrades[id] || 0;
+            const cost = Math.floor(upgrade.baseCost * Math.pow(upgrade.scale, level) * Math.pow(1.2, gameData.rebirths));
 
             if (gameData.cheese >= cost) {
                 gameData.cheese -= cost;
-                gameData.upgrades[type]++;
+                gameData.upgrades[id]++;
 
-                // Увеличиваем производство
-                if (type === 'finger') {
-                    gameData.clickPower++;
-                } else if (type === 'auto') {
-                    gameData.cheesePerSecond += 1;
-                } else if (type === 'sponge') {
-                    gameData.cheesePerSecond += 5;
-                } else if (type === 'brush') {
-                    gameData.cheesePerSecond += 15;
-                } else if (type === 'spray') {
-                    gameData.cheesePerSecond += 50;
-                } else if (type === 'gun') {
-                    gameData.cheesePerSecond += 200;
-                } else if (type === 'factory') {
-                    gameData.cheesePerSecond += 1000;
+                if (upgrade.type === 'click') {
+                    gameData.clickPower += upgrade.power;
+                } else if (upgrade.type === 'auto') {
+                    gameData.cheesePerSecond += upgrade.power;
                 }
 
+                renderShop();
                 updateUI();
                 saveGame();
             }
         }
 
-        // Покупка домофона
         function buyIntercom(type, cost) {
             if (gameData.cheese >= cost && !gameData.intercoms.includes(type)) {
                 gameData.cheese -= cost;
                 gameData.intercoms.push(type);
                 selectIntercom(type);
+                renderShop();
                 updateUI();
                 saveGame();
             }
         }
 
-        // Выбор домофона
         function selectIntercom(type) {
             gameData.currentIntercom = type;
-            
-            const bonuses = {
-                cyfral: 1,
-                metakom: 1.1,
-                vizit: 1.25,
-                eltis: 1.5,
-                stalker: 2
-            };
-
-            const names = {
-                cyfral: 'CYFRAL',
-                metakom: 'МЕТАКОМ',
-                vizit: 'VIZIT',
-                eltis: 'ELTIS',
-                stalker: 'СТАЛКЕР'
-            };
-
-            gameData.intercomBonus = bonuses[type];
-            document.getElementById('intercomName').textContent = names[type];
+            const intercom = intercomsList.find(i => i.id === type);
+            if (intercom) {
+                gameData.intercomBonus = intercom.bonus;
+                document.getElementById('intercomName').textContent = intercom.name;
+            }
+            renderShop();
             updateUI();
             saveGame();
         }
 
-        // Покупка соуса
         function buySauce(type, cost) {
             if (gameData.cheese >= cost && !gameData.sauces.includes(type)) {
                 gameData.cheese -= cost;
                 gameData.sauces.push(type);
                 selectSauce(type);
+                renderShop();
                 updateUI();
                 saveGame();
             }
         }
 
-        // Выбор соуса
         function selectSauce(type) {
             gameData.currentSauce = type;
-            
-            const bonuses = {
-                basic: 0,
-                cheddar: 5,
-                mozzarella: 15,
-                parmesan: 50,
-                gorgonzola: 150,
-                dorblue: 500
-            };
-
-            gameData.sauceBonus = bonuses[type];
+            const sauce = saucesList.find(s => s.id === type);
+            if (sauce) {
+                gameData.sauceBonus = sauce.bonus;
+            }
+            renderShop();
             updateUI();
             saveGame();
         }
 
-        // Перерождение
+        function getRebirthCost() {
+            return Math.floor(1000000 * Math.pow(5, gameData.rebirths));
+        }
+
         function doRebirth() {
-            if (gameData.totalCheese >= 1000000) {
-                if (confirm('Вы уверены? Все улучшения будут сброшены, но вы получите постоянный бонус +10% к производству!')) {
+            const rebirthCost = getRebirthCost();
+            if (gameData.totalCheese >= rebirthCost) {
+                if (confirm(`Вы уверены? Все улучшения, домофоны и соусы будут сброшены.\nВы получите постоянный бонус +10% к производству!\n\nТекущие перерождения: ${gameData.rebirths}\nСледующая стоимость: ${(rebirthCost * 5).toLocaleString()} 🧀`)) {
                     gameData.rebirths++;
                     gameData.cheese = 0;
                     gameData.totalCheese = 0;
                     gameData.level = 1;
                     gameData.clickPower = 1;
                     gameData.cheesePerSecond = 0;
-                    gameData.upgrades = {
-                        finger: 0,
-                        auto: 0,
-                        sponge: 0,
-                        brush: 0,
-                        spray: 0,
-                        gun: 0,
-                        factory: 0
-                    };
+                    
+                    // Сброс всех улучшений
+                    upgradesList.forEach(u => {
+                        gameData.upgrades[u.id] = 0;
+                    });
+                    
+                    // Сброс домофонов и соусов
+                    gameData.intercoms = ['cyfral'];
+                    gameData.currentIntercom = 'cyfral';
+                    gameData.sauces = ['basic'];
+                    gameData.currentSauce = 'basic';
+                    gameData.intercomBonus = 1;
+                    gameData.sauceBonus = 0;
+                    
+                    renderShop();
                     updateUI();
                     saveGame();
                 }
             }
         }
 
-        // Проверка повышения уровня
         function checkLevelUp() {
-            const nextLevel = gameData.level * 1000;
+            const nextLevel = gameData.level * 5000;
             if (gameData.totalCheese >= nextLevel) {
                 gameData.level++;
                 updateUI();
             }
         }
 
-        // Переключение вкладок магазина
         function switchShopTab(tab) {
             document.querySelectorAll('.shop-tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
@@ -1396,92 +1290,29 @@
             }
         }
 
-        // Обновление UI
         function updateUI() {
             document.getElementById('cheeseCount').textContent = Math.floor(gameData.cheese).toLocaleString();
-            document.getElementById('totalCheese').textContent = Math.floor(gameData.totalCheese).toLocaleString();
+            document.getElementById('totalCheese').textContent = Math.floor(gameData.allTimeCheese).toLocaleString();
             document.getElementById('levelDisplay').textContent = gameData.level;
             document.getElementById('rebirthCount').textContent = gameData.rebirths;
             document.getElementById('rebirthBonus').textContent = (1 + gameData.rebirths * 0.1).toFixed(1);
-            document.getElementById('clickPower').textContent = Math.floor(gameData.clickPower + gameData.sauceBonus);
+            document.getElementById('clickPower').textContent = Math.floor(gameData.clickPower + gameData.sauceBonus).toLocaleString();
             
             const cps = Math.floor(gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1));
             document.getElementById('cheesePerSec').textContent = cps.toLocaleString();
-            document.getElementById('intercomsSmeared').textContent = Math.floor(gameData.totalCheese / 100);
+            document.getElementById('intercomsSmeared').textContent = Math.floor(gameData.allTimeCheese / 100);
 
-            // Обновление стоимости улучшений
-            document.getElementById('fingerLevel').textContent = gameData.upgrades.finger;
-            document.getElementById('fingerCost').textContent = Math.floor(10 * Math.pow(1.5, gameData.upgrades.finger)).toLocaleString();
-
-            document.getElementById('autoLevel').textContent = gameData.upgrades.auto;
-            document.getElementById('autoCost').textContent = Math.floor(50 * Math.pow(1.7, gameData.upgrades.auto)).toLocaleString();
-
-            document.getElementById('spongeLevel').textContent = gameData.upgrades.sponge;
-            document.getElementById('spongeCost').textContent = Math.floor(200 * Math.pow(1.8, gameData.upgrades.sponge)).toLocaleString();
-
-            document.getElementById('brushLevel').textContent = gameData.upgrades.brush;
-            document.getElementById('brushCost').textContent = Math.floor(1000 * Math.pow(1.9, gameData.upgrades.brush)).toLocaleString();
-
-            document.getElementById('sprayLevel').textContent = gameData.upgrades.spray;
-            document.getElementById('sprayCost').textContent = Math.floor(5000 * Math.pow(2, gameData.upgrades.spray)).toLocaleString();
-
-            document.getElementById('gunLevel').textContent = gameData.upgrades.gun;
-            document.getElementById('gunCost').textContent = Math.floor(25000 * Math.pow(2.1, gameData.upgrades.gun)).toLocaleString();
-
-            document.getElementById('factoryLevel').textContent = gameData.upgrades.factory;
-            document.getElementById('factoryCost').textContent = Math.floor(100000 * Math.pow(2.2, gameData.upgrades.factory)).toLocaleString();
-
-            // Кнопка перерождения
+            const rebirthCost = getRebirthCost();
+            document.getElementById('rebirthCost').textContent = rebirthCost.toLocaleString();
+            
             const rebirthBtn = document.getElementById('rebirthBtn');
-            if (gameData.totalCheese >= 1000000) {
+            if (gameData.totalCheese >= rebirthCost) {
                 rebirthBtn.disabled = false;
             } else {
                 rebirthBtn.disabled = true;
             }
-
-            // Обновляем кнопки домофонов
-            updateIntercomButtons();
-            updateSauceButtons();
         }
 
-        function updateIntercomButtons() {
-            const intercoms = {
-                metakom: 5000,
-                vizit: 15000,
-                eltis: 50000,
-                stalker: 200000
-            };
-            
-            Object.keys(intercoms).forEach(intercom => {
-                const btn = document.querySelector(`[data-buy-intercom="${intercom}"]`);
-                if (btn && gameData.intercoms.includes(intercom)) {
-                    btn.textContent = 'Куплен';
-                    btn.style.background = '#95a5a6';
-                    btn.disabled = true;
-                }
-            });
-        }
-
-        function updateSauceButtons() {
-            const sauces = {
-                cheddar: 3000,
-                mozzarella: 10000,
-                parmesan: 35000,
-                gorgonzola: 100000,
-                dorblue: 500000
-            };
-            
-            Object.keys(sauces).forEach(sauce => {
-                const btn = document.querySelector(`[data-buy-sauce="${sauce}"]`);
-                if (btn && gameData.sauces.includes(sauce)) {
-                    btn.textContent = 'Куплен';
-                    btn.style.background = '#95a5a6';
-                    btn.disabled = true;
-                }
-            });
-        }
-
-        // Загрузка лидерборда
         async function loadLeaderboard() {
             const leaderboardRef = ref(database, 'leaderboard');
             onValue(leaderboardRef, (snapshot) => {
@@ -1508,17 +1339,16 @@
             });
         }
 
-        // Игровой цикл
         function startGameLoop() {
             setInterval(() => {
                 const cps = gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1);
                 gameData.cheese += cps / 10;
                 gameData.totalCheese += cps / 10;
+                gameData.allTimeCheese += cps / 10;
                 updateUI();
                 checkLevelUp();
             }, 100);
 
-            // Автосохранение каждые 10 секунд
             setInterval(() => {
                 saveGame();
             }, 10000);
