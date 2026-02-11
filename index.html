@@ -51,6 +51,21 @@
             }
         }
 
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes rainbow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
         /* === ЭКРАН АВТОРИЗАЦИИ === */
         .auth-screen {
             display: flex;
@@ -163,37 +178,30 @@
             box-shadow: 0 10px 30px rgba(243, 156, 18, 0.4);
         }
 
-        .auth-button:active {
-            transform: translateY(-1px);
+        .error-message, .success-message {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+            animation: slideIn 0.3s ease;
         }
 
         .error-message {
             background: #e74c3c;
             color: white;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 14px;
-            animation: slideIn 0.3s ease;
         }
 
         .success-message {
             background: #27ae60;
             color: white;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 14px;
-            animation: slideIn 0.3s ease;
         }
 
         /* === ИГРОВОЙ ЭКРАН === */
         .game-screen {
             display: none;
             padding: 20px;
-            max-width: 1600px;
+            max-width: 1800px;
             margin: 0 auto;
         }
 
@@ -222,9 +230,13 @@
             font-size: 0.9em;
         }
 
-        .logout-btn {
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .logout-btn, .admin-btn, .transfer-btn {
             padding: 12px 25px;
-            background: #e74c3c;
             border: none;
             border-radius: 12px;
             color: white;
@@ -233,18 +245,409 @@
             transition: all 0.3s;
         }
 
+        .logout-btn {
+            background: #e74c3c;
+        }
+
         .logout-btn:hover {
             background: #c0392b;
             transform: translateY(-2px);
         }
 
+        .admin-btn {
+            background: #9b59b6;
+        }
+
+        .admin-btn:hover {
+            background: #8e44ad;
+            transform: translateY(-2px);
+        }
+
+        .transfer-btn {
+            background: #3498db;
+        }
+
+        .transfer-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* === ГЛОБАЛЬНОЕ СООБЩЕНИЕ === */
+        .global-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            color: #f39c12;
+            padding: 40px 60px;
+            border-radius: 20px;
+            font-size: 2em;
+            font-weight: 700;
+            text-align: center;
+            z-index: 10001;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            animation: slideIn 0.5s ease;
+            max-width: 80%;
+            border: 3px solid #f39c12;
+        }
+
+        .global-message .author {
+            color: #e67e22;
+            font-size: 0.6em;
+            margin-bottom: 10px;
+        }
+
+        /* === УВЕДОМЛЕНИЯ === */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: rgba(52, 152, 219, 0.95);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            animation: slideIn 0.5s ease;
+            max-width: 400px;
+        }
+
+        .notification.success {
+            background: rgba(39, 174, 96, 0.95);
+        }
+
+        .notification.error {
+            background: rgba(231, 76, 60, 0.95);
+        }
+
+        /* === ЕВЕНТЫ === */
+        .event-banner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 50px;
+            border-radius: 30px;
+            z-index: 9999;
+            text-align: center;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
+            animation: slideIn 0.7s ease;
+            border: 4px solid;
+        }
+
+        .event-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .event-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .event-starter {
+            font-size: 1.2em;
+            color: #bdc3c7;
+            margin-bottom: 20px;
+        }
+
+        .event-multiplier {
+            font-size: 3em;
+            font-weight: 700;
+            color: #f39c12;
+            margin: 20px 0;
+        }
+
+        .event-timer {
+            font-size: 1.5em;
+            color: #ecf0f1;
+        }
+
+        .event-indicator {
+            position: fixed;
+            top: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 30px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 9998;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .event-indicator .icon {
+            font-size: 2em;
+        }
+
+        .event-indicator .info {
+            text-align: left;
+        }
+
+        .event-indicator .name {
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .event-indicator .time {
+            color: #bdc3c7;
+            font-size: 0.9em;
+        }
+
+        /* Эффекты евентов */
+        .event-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9997;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        .orbit-particle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            animation: orbit 10s linear infinite;
+        }
+
+        .rainbow-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(255,0,0,0.1), 
+                rgba(255,154,0,0.1), 
+                rgba(208,222,33,0.1), 
+                rgba(79,220,74,0.1), 
+                rgba(63,218,216,0.1), 
+                rgba(47,201,226,0.1), 
+                rgba(28,127,238,0.1), 
+                rgba(95,21,242,0.1), 
+                rgba(186,12,248,0.1));
+            animation: rainbow 5s linear infinite;
+            pointer-events: none;
+            z-index: 9997;
+        }
+
+        /* === МОДАЛЬНЫЕ ОКНА === */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #2c3e50;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 2em;
+            color: #f39c12;
+        }
+
+        .close-modal {
+            background: #e74c3c;
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            background: #c0392b;
+            transform: rotate(90deg);
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .modal-tab {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .modal-tab.active {
+            background: #f39c12;
+        }
+
+        .admin-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .admin-section h3 {
+            color: #f39c12;
+            margin-bottom: 15px;
+        }
+
+        .admin-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .admin-input:focus {
+            outline: none;
+            border-color: #f39c12;
+        }
+
+        .admin-button {
+            padding: 12px 25px;
+            background: #27ae60;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .admin-button:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .admin-button.danger {
+            background: #e74c3c;
+        }
+
+        .admin-button.danger:hover {
+            background: #c0392b;
+        }
+
+        .user-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-item.banned {
+            opacity: 0.5;
+            border: 2px solid #e74c3c;
+        }
+
+        .event-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .event-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #f39c12;
+            transform: translateY(-5px);
+        }
+
+        .event-card .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .event-card .name {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .event-card .mult {
+            color: #f39c12;
+            font-size: 1.2em;
+        }
+
         .main-content {
             display: grid;
-            grid-template-columns: 300px 1fr 320px;
+            grid-template-columns: 320px 1fr 340px;
             gap: 20px;
         }
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
@@ -428,10 +831,12 @@
             display: flex;
             gap: 5px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .shop-tab {
             flex: 1;
+            min-width: 80px;
             padding: 10px 5px;
             background: rgba(255, 255, 255, 0.05);
             border: none;
@@ -470,7 +875,7 @@
 
         .shop-item-name {
             font-weight: 700;
-            font-size: 1em;
+            font-size: 0.95em;
         }
 
         .shop-item-level {
@@ -495,14 +900,13 @@
         }
 
         .shop-item-cost {
-            font-size: 1.1em;
+            font-size: 1.05em;
             font-weight: 700;
             color: #f39c12;
         }
 
-        .buy-btn {
+        .buy-btn, .select-btn {
             padding: 10px 20px;
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
             border: none;
             border-radius: 10px;
             color: white;
@@ -510,6 +914,10 @@
             cursor: pointer;
             transition: all 0.3s;
             font-size: 14px;
+        }
+
+        .buy-btn {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
         }
 
         .buy-btn:hover:not(:disabled) {
@@ -523,15 +931,7 @@
         }
 
         .select-btn {
-            padding: 10px 20px;
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
         }
 
         .select-btn:hover {
@@ -557,6 +957,28 @@
             text-align: center;
             margin-bottom: 20px;
             font-size: 1.8em;
+        }
+
+        .leaderboard-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .leaderboard-tab {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .leaderboard-tab.active {
+            background: #f39c12;
         }
 
         .leaderboard-item {
@@ -633,6 +1055,45 @@
         .hidden {
             display: none !important;
         }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #f39c12;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #f39c12;
+        }
+
+        select option {
+            background: #2c3e50;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -676,7 +1137,11 @@
                 <h1>🧀 SOysdomofon</h1>
                 <p>Игрок: <span id="playerName"></span></p>
             </div>
-            <button class="logout-btn" id="logoutBtn">Выход</button>
+            <div class="header-buttons">
+                <button class="transfer-btn" id="transferBtn">💸 Перевод</button>
+                <button class="admin-btn hidden" id="adminBtn">⚙️ Админ</button>
+                <button class="logout-btn" id="logoutBtn">Выход</button>
+            </div>
         </div>
 
         <div class="main-content">
@@ -755,6 +1220,13 @@
 
                 <div class="leaderboard">
                     <h2>🏆 Топ Игроков</h2>
+                    
+                    <div class="leaderboard-tabs">
+                        <button class="leaderboard-tab active" data-lb-tab="balance">По балансу</button>
+                        <button class="leaderboard-tab" data-lb-tab="rebirths">По перерождениям</button>
+                        <button class="leaderboard-tab" data-lb-tab="all">Общий топ</button>
+                    </div>
+
                     <div id="leaderboardList">
                         <div style="text-align: center; color: #bdc3c7; padding: 20px;">
                             Загрузка лидеров...
@@ -780,9 +1252,45 @@
         </div>
     </div>
 
+    <!-- МОДАЛКА ПЕРЕВОДА -->
+    <div id="transferModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💸 Перевод сыра</h2>
+                <button class="close-modal" onclick="closeTransferModal()">×</button>
+            </div>
+
+            <div class="admin-section">
+                <input type="text" class="admin-input" id="transferRecipient" placeholder="Логин получателя">
+                <input type="number" class="admin-input" id="transferAmount" placeholder="Количество сыра">
+                <button class="admin-button" onclick="sendTransfer()">Отправить перевод</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- АДМИН ПАНЕЛЬ -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Админ Панель</h2>
+                <button class="close-modal" onclick="closeAdminModal()">×</button>
+            </div>
+
+            <div class="modal-tabs">
+                <button class="modal-tab active" data-admin-tab="users">Пользователи</button>
+                <button class="modal-tab" data-admin-tab="broadcast">Объявление</button>
+                <button class="modal-tab" data-admin-tab="events">Евенты</button>
+            </div>
+
+            <div id="usersAdminTab" class="admin-tab-content"></div>
+            <div id="broadcastAdminTab" class="admin-tab-content hidden"></div>
+            <div id="eventsAdminTab" class="admin-tab-content hidden"></div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, set, get, onValue, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { getDatabase, ref, set, get, onValue, update, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
         const firebaseConfig = {
             databaseURL: "https://sirnik-3356a-default-rtdb.firebaseio.com/"
@@ -793,6 +1301,8 @@
 
         let currentUser = null;
         let isAuthMode = true;
+        let currentEventMultiplier = 1;
+        let currentEventData = null;
         let gameData = {
             cheese: 0,
             totalCheese: 0,
@@ -807,11 +1317,14 @@
             sauces: ['basic'],
             currentSauce: 'basic',
             intercomBonus: 1,
-            sauceBonus: 0
+            sauceBonus: 0,
+            isAdmin: false,
+            isBanned: false
         };
 
-        // МАССИВНЫЕ УЛУЧШЕНИЯ
+        // Огромный список улучшений (40+ штук)
         const upgradesList = [
+            // Улучшения кликов
             { id: 'finger', name: '👆 Сильный палец', desc: '+1 сыра за клик', baseCost: 50, type: 'click', power: 1, scale: 1.5 },
             { id: 'glove', name: '🧤 Резиновая перчатка', desc: '+3 сыра за клик', baseCost: 250, type: 'click', power: 3, scale: 1.5 },
             { id: 'brush2', name: '🖌️ Кисточка', desc: '+8 сыра за клик', baseCost: 1000, type: 'click', power: 8, scale: 1.6 },
@@ -820,7 +1333,12 @@
             { id: 'bucket', name: '🪣 Ведро с сыром', desc: '+150 сыра за клик', baseCost: 100000, type: 'click', power: 150, scale: 1.7 },
             { id: 'hose', name: '🚿 Шланг', desc: '+400 сыра за клик', baseCost: 500000, type: 'click', power: 400, scale: 1.8 },
             { id: 'cannon', name: '💣 Сырная пушка', desc: '+1000 сыра за клик', baseCost: 2500000, type: 'click', power: 1000, scale: 1.8 },
+            { id: 'catapult', name: '🏹 Катапульта', desc: '+2500 сыра за клик', baseCost: 10000000, type: 'click', power: 2500, scale: 1.9 },
+            { id: 'trebuchet', name: '⚔️ Требушет', desc: '+7000 сыра за клик', baseCost: 50000000, type: 'click', power: 7000, scale: 1.9 },
+            { id: 'ballista', name: '🏹 Баллиста', desc: '+20000 сыра за клик', baseCost: 250000000, type: 'click', power: 20000, scale: 2.0 },
+            { id: 'nuke', name: '☢️ Ядерная бомба', desc: '+60000 сыра за клик', baseCost: 1000000000, type: 'click', power: 60000, scale: 2.0 },
             
+            // Авто-производство
             { id: 'auto', name: '🤖 Робот-губка', desc: '+1 сыра/сек', baseCost: 100, type: 'auto', power: 1, scale: 1.7 },
             { id: 'sponge', name: '🧽 Умная губка', desc: '+5 сыра/сек', baseCost: 500, type: 'auto', power: 5, scale: 1.7 },
             { id: 'drone', name: '🚁 Дрон-обмазыватель', desc: '+15 сыра/сек', baseCost: 2500, type: 'auto', power: 15, scale: 1.8 },
@@ -833,6 +1351,16 @@
             { id: 'megafactory', name: '🏢 Мега-фабрика', desc: '+50000 сыра/сек', baseCost: 100000000, type: 'auto', power: 50000, scale: 2.1 },
             { id: 'corporation', name: '🌐 Корпорация', desc: '+150000 сыра/сек', baseCost: 500000000, type: 'auto', power: 150000, scale: 2.2 },
             { id: 'empire', name: '👑 Сырная империя', desc: '+500000 сыра/сек', baseCost: 2500000000, type: 'auto', power: 500000, scale: 2.2 },
+            { id: 'galaxy', name: '🌌 Галактическая сеть', desc: '+1500000 сыра/сек', baseCost: 10000000000, type: 'auto', power: 1500000, scale: 2.3 },
+            { id: 'universe', name: '🌟 Вселенский союз', desc: '+5000000 сыра/сек', baseCost: 50000000000, type: 'auto', power: 5000000, scale: 2.3 },
+            { id: 'multiverse', name: '♾️ Мультивселенная', desc: '+15000000 сыра/сек', baseCost: 250000000000, type: 'auto', power: 15000000, scale: 2.4 },
+            { id: 'dimension', name: '🔮 Измерение сыра', desc: '+50000000 сыра/сек', baseCost: 1000000000000, type: 'auto', power: 50000000, scale: 2.4 },
+            
+            // Специальные улучшения
+            { id: 'timewarp', name: '⏰ Искажение времени', desc: '+100000000 сыра/сек', baseCost: 5000000000000, type: 'auto', power: 100000000, scale: 2.5 },
+            { id: 'blackhole', name: '⚫ Черная дыра', desc: '+300000000 сыра/сек', baseCost: 25000000000000, type: 'auto', power: 300000000, scale: 2.5 },
+            { id: 'quantum', name: '⚛️ Квантовый реактор', desc: '+1000000000 сыра/сек', baseCost: 100000000000000, type: 'auto', power: 1000000000, scale: 2.6 },
+            { id: 'infinity', name: '∞ Бесконечность', desc: '+3000000000 сыра/сек', baseCost: 500000000000000, type: 'auto', power: 3000000000, scale: 2.6 },
         ];
 
         const intercomsList = [
@@ -844,6 +1372,8 @@
             { id: 'factorial', name: 'ФАКТОРИАЛ', bonus: 2.5, cost: 10000000, desc: '+150% к производству' },
             { id: 'smartlock', name: 'SMARTLOCK', bonus: 3.0, cost: 50000000, desc: '+200% к производству' },
             { id: 'quantum', name: 'QUANTUM', bonus: 4.0, cost: 250000000, desc: '+300% к производству' },
+            { id: 'neuralnet', name: 'NEURALNET', bonus: 5.0, cost: 1000000000, desc: '+400% к производству' },
+            { id: 'ai', name: 'AI-CORE', bonus: 7.0, cost: 5000000000, desc: '+600% к производству' },
         ];
 
         const saucesList = [
@@ -855,9 +1385,38 @@
             { id: 'dorblue', name: 'Дор Блю', bonus: 1000, cost: 10000000, desc: '+1000 сыра за клик' },
             { id: 'roquefort', name: 'Рокфор', bonus: 3000, cost: 50000000, desc: '+3000 сыра за клик' },
             { id: 'brie', name: 'Бри', bonus: 10000, cost: 250000000, desc: '+10000 сыра за клик' },
+            { id: 'camembert', name: 'Камамбер', bonus: 30000, cost: 1000000000, desc: '+30000 сыра за клик' },
+            { id: 'gruyere', name: 'Грюйер', bonus: 100000, cost: 5000000000, desc: '+100000 сыра за клик' },
         ];
 
-        // Инициализация улучшений
+        // 20+ ЕВЕНТОВ с уникальными эффектами
+        const eventsList = [
+            { id: 'double', name: 'Двойной сыр', icon: '🧀🧀', multiplier: 2, color: '#f39c12', effect: 'normal' },
+            { id: 'triple', name: 'Тройной сыр', icon: '🧀×3', multiplier: 3, color: '#e67e22', effect: 'normal' },
+            { id: 'mega', name: 'Мега бонус', icon: '💰', multiplier: 5, color: '#d35400', effect: 'rainbow' },
+            { id: 'ultra', name: 'Ультра бонус', icon: '🌟', multiplier: 10, color: '#f1c40f', effect: 'stars' },
+            { id: 'cosmic', name: 'Космический', icon: '🌌', multiplier: 15, color: '#9b59b6', effect: 'cosmic' },
+            { id: 'nuclear', name: 'Ядерный взрыв', icon: '☢️', multiplier: 20, color: '#27ae60', effect: 'rainbow' },
+            { id: 'quantum', name: 'Квантовый', icon: '⚛️', multiplier: 25, color: '#3498db', effect: 'cosmic' },
+            { id: 'infinity', name: 'Бесконечность', icon: '∞', multiplier: 50, color: '#8e44ad', effect: 'rainbow' },
+            { id: 'godmode', name: 'Режим бога', icon: '👑', multiplier: 100, color: '#e74c3c', effect: 'stars' },
+            { id: 'lucky', name: 'Счастливчик', icon: '🍀', multiplier: 7, color: '#2ecc71', effect: 'normal' },
+            { id: 'golden', name: 'Золотой час', icon: '🏆', multiplier: 12, color: '#f39c12', effect: 'rainbow' },
+            { id: 'diamond', name: 'Бриллиантовый', icon: '💎', multiplier: 30, color: '#3498db', effect: 'stars' },
+            { id: 'rainbow', name: 'Радуга удачи', icon: '🌈', multiplier: 8, color: '#e91e63', effect: 'rainbow' },
+            { id: 'fire', name: 'Огненный', icon: '🔥', multiplier: 6, color: '#e67e22', effect: 'normal' },
+            { id: 'ice', name: 'Ледяной', icon: '❄️', multiplier: 6, color: '#3498db', effect: 'stars' },
+            { id: 'thunder', name: 'Грозовой', icon: '⚡', multiplier: 9, color: '#f1c40f', effect: 'normal' },
+            { id: 'time', name: 'Остановка времени', icon: '⏰', multiplier: 35, color: '#34495e', effect: 'cosmic' },
+            { id: 'space', name: 'Космос', icon: '🚀', multiplier: 18, color: '#2c3e50', effect: 'cosmic' },
+            { id: 'galaxy', name: 'Галактика', icon: '🌠', multiplier: 40, color: '#8e44ad', effect: 'cosmic' },
+            { id: 'bigbang', name: 'Большой взрыв', icon: '💥', multiplier: 75, color: '#c0392b', effect: 'rainbow' },
+            { id: 'magic', name: 'Магический', icon: '🔮', multiplier: 14, color: '#9b59b6', effect: 'stars' },
+            { id: 'halloween', name: 'Хэллоуин', icon: '🎃', multiplier: 13, color: '#e67e22', effect: 'normal' },
+            { id: 'christmas', name: 'Рождество', icon: '🎄', multiplier: 13, color: '#27ae60', effect: 'stars' },
+            { id: 'newyear', name: 'Новый год', icon: '🎆', multiplier: 13, color: '#f39c12', effect: 'rainbow' },
+        ];
+
         upgradesList.forEach(u => {
             if (gameData.upgrades[u.id] === undefined) {
                 gameData.upgrades[u.id] = 0;
@@ -868,6 +1427,50 @@
         if (savedUser) {
             currentUser = savedUser;
             loadGameData();
+        }
+
+        // Слушаем глобальные сообщения
+        const globalMsgRef = ref(database, 'globalMessage');
+        onValue(globalMsgRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.message && data.timestamp > Date.now() - 10000) {
+                showGlobalMessage(data.author, data.message);
+            }
+        });
+
+        // Слушаем активные евенты
+        const eventRef = ref(database, 'activeEvent');
+        onValue(eventRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.endTime > Date.now()) {
+                activateEvent(data);
+            } else {
+                deactivateEvent();
+            }
+        });
+
+        // Слушаем трансферы
+        if (currentUser) {
+            const transfersRef = ref(database, 'transfers/' + currentUser);
+            onValue(transfersRef, async (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    for (let key in data) {
+                        const transfer = data[key];
+                        if (!transfer.processed) {
+                            gameData.cheese += transfer.amount;
+                            gameData.totalCheese += transfer.amount;
+                            gameData.allTimeCheese += transfer.amount;
+                            
+                            showNotification(`Получен перевод ${transfer.amount.toLocaleString()} 🧀 от ${transfer.from}`, 'success');
+                            
+                            await update(ref(database, `transfers/${currentUser}/${key}`), { processed: true });
+                            updateUI();
+                            saveGame();
+                        }
+                    }
+                }
+            });
         }
 
         document.getElementById('loginTab').addEventListener('click', function() {
@@ -921,6 +1524,11 @@
                         return;
                     }
 
+                    if (userData.gameData && userData.gameData.isBanned) {
+                        showError('Ваш аккаунт заблокирован!');
+                        return;
+                    }
+
                     currentUser = login;
                     localStorage.setItem('soysdomofon_user', login);
                     showSuccess('Вход выполнен!');
@@ -931,6 +1539,9 @@
                         showError('Этот логин уже занят!');
                         return;
                     }
+
+                    const isAdmin = login === 'qwenixDev01';
+                    gameData.isAdmin = isAdmin;
 
                     await set(userRef, {
                         password: password,
@@ -981,8 +1592,14 @@
                     ...loadedData,
                     upgrades: loadedData.upgrades || {}
                 };
+
+                if (gameData.isBanned) {
+                    alert('Ваш аккаунт заблокирован!');
+                    localStorage.removeItem('soysdomofon_user');
+                    location.reload();
+                    return;
+                }
                 
-                // Инициализируем отсутствующие улучшения
                 upgradesList.forEach(u => {
                     if (gameData.upgrades[u.id] === undefined) {
                         gameData.upgrades[u.id] = 0;
@@ -990,6 +1607,11 @@
                 });
                 
                 document.getElementById('playerName').textContent = currentUser;
+
+                if (gameData.isAdmin || currentUser === 'qwenixDev01') {
+                    gameData.isAdmin = true;
+                    document.getElementById('adminBtn').classList.remove('hidden');
+                }
             }
 
             document.getElementById('authScreen').style.display = 'none';
@@ -1008,6 +1630,409 @@
             location.reload();
         });
 
+        document.getElementById('transferBtn').addEventListener('click', function() {
+            document.getElementById('transferModal').classList.add('active');
+        });
+
+        document.getElementById('adminBtn').addEventListener('click', function() {
+            openAdminPanel();
+        });
+
+        window.closeTransferModal = function() {
+            document.getElementById('transferModal').classList.remove('active');
+        };
+
+        window.closeAdminModal = function() {
+            document.getElementById('adminModal').classList.remove('active');
+        };
+
+        window.sendTransfer = async function() {
+            const recipient = document.getElementById('transferRecipient').value.trim();
+            const amount = parseInt(document.getElementById('transferAmount').value);
+
+            if (!recipient || !amount || amount <= 0) {
+                showNotification('Заполните все поля корректно', 'error');
+                return;
+            }
+
+            if (amount > gameData.cheese) {
+                showNotification('Недостаточно сыра', 'error');
+                return;
+            }
+
+            if (recipient === currentUser) {
+                showNotification('Нельзя переводить самому себе', 'error');
+                return;
+            }
+
+            const recipientRef = ref(database, 'users/' + recipient);
+            const recipientSnapshot = await get(recipientRef);
+
+            if (!recipientSnapshot.exists()) {
+                showNotification('Получатель не найден', 'error');
+                return;
+            }
+
+            gameData.cheese -= amount;
+            
+            const transferId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            await set(ref(database, `transfers/${recipient}/${transferId}`), {
+                from: currentUser,
+                amount: amount,
+                timestamp: Date.now(),
+                processed: false
+            });
+
+            showNotification(`Перевод ${amount.toLocaleString()} 🧀 отправлен пользователю ${recipient}`, 'success');
+            updateUI();
+            saveGame();
+            closeTransferModal();
+            
+            document.getElementById('transferRecipient').value = '';
+            document.getElementById('transferAmount').value = '';
+        };
+
+        function showNotification(message, type = 'success') {
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+
+            setTimeout(() => {
+                notif.remove();
+            }, 5000);
+        }
+
+        function showGlobalMessage(author, message) {
+            const msg = document.createElement('div');
+            msg.className = 'global-message';
+            msg.innerHTML = `
+                <div class="author">${author}</div>
+                <div>${message}</div>
+            `;
+            document.body.appendChild(msg);
+
+            setTimeout(() => {
+                msg.remove();
+            }, 10000);
+        }
+
+        async function openAdminPanel() {
+            document.getElementById('adminModal').classList.add('active');
+            await loadUsersAdmin();
+            renderBroadcastTab();
+            renderEventsTab();
+        }
+
+        async function loadUsersAdmin() {
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            let html = '<div class="user-list">';
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let login in users) {
+                    const user = users[login];
+                    const userData = user.gameData || {};
+                    const isBanned = userData.isBanned || false;
+                    
+                    html += `
+                        <div class="user-item ${isBanned ? 'banned' : ''}">
+                            <div>
+                                <strong>${login}</strong><br>
+                                <small>Баланс: ${Math.floor(userData.cheese || 0).toLocaleString()} 🧀</small><br>
+                                <small>Перерождения: ${userData.rebirths || 0}</small>
+                                ${isBanned ? '<br><span style="color: #e74c3c;">ЗАБЛОКИРОВАН</span>' : ''}
+                                ${userData.isAdmin ? '<br><span style="color: #f39c12;">АДМИН</span>' : ''}
+                            </div>
+                            <div>
+                                <button class="admin-button" onclick="viewUserLogs('${login}')">Логи</button>
+                                <button class="admin-button" onclick="giveBalance('${login}')">Выдать сыр</button>
+                                ${!userData.isAdmin ? `<button class="admin-button" onclick="toggleAdmin('${login}', ${!userData.isAdmin})">Дать админку</button>` : `<button class="admin-button danger" onclick="toggleAdmin('${login}', false)">Забрать админку</button>`}
+                                ${!isBanned ? `<button class="admin-button danger" onclick="banUser('${login}')">Забанить</button>` : `<button class="admin-button" onclick="unbanUser('${login}')">Разбанить</button>`}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            html += '</div>';
+            document.getElementById('usersAdminTab').innerHTML = html;
+        }
+
+        function renderBroadcastTab() {
+            const html = `
+                <div class="admin-section">
+                    <h3>Глобальное объявление</h3>
+                    <textarea id="broadcastMessage" placeholder="Введите сообщение для всех игроков"></textarea>
+                    <button class="admin-button" onclick="sendBroadcast()">Отправить всем</button>
+                </div>
+            `;
+            document.getElementById('broadcastAdminTab').innerHTML = html;
+        }
+
+        function renderEventsTab() {
+            let html = `
+                <div class="admin-section">
+                    <h3>Запуск евентов</h3>
+                    <div class="form-group">
+                        <label>Длительность (минуты)</label>
+                        <input type="number" class="admin-input" id="eventDuration" value="10" min="1" max="1440">
+                    </div>
+                    <div class="event-list">
+            `;
+
+            eventsList.forEach(event => {
+                html += `
+                    <div class="event-card" onclick="startEvent('${event.id}')">
+                        <div class="icon">${event.icon}</div>
+                        <div class="name">${event.name}</div>
+                        <div class="mult">x${event.multiplier}</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+            document.getElementById('eventsAdminTab').innerHTML = html;
+        }
+
+        window.viewUserLogs = async function(login) {
+            const userRef = ref(database, 'users/' + login);
+            const snapshot = await get(userRef);
+            
+            if (snapshot.exists()) {
+                const user = snapshot.val();
+                const data = user.gameData || {};
+                
+                alert(`Логи пользователя ${login}:\n\n` +
+                    `Баланс: ${Math.floor(data.cheese || 0).toLocaleString()} 🧀\n` +
+                    `Всего заработано: ${Math.floor(data.allTimeCheese || 0).toLocaleString()} 🧀\n` +
+                    `Уровень: ${data.level || 1}\n` +
+                    `Перерождения: ${data.rebirths || 0}\n` +
+                    `Сыра/сек: ${Math.floor(data.cheesePerSecond || 0).toLocaleString()}\n` +
+                    `Сыр за клик: ${Math.floor(data.clickPower || 0).toLocaleString()}\n` +
+                    `Зарегистрирован: ${new Date(user.createdAt).toLocaleString()}`
+                );
+            }
+        };
+
+        window.giveBalance = async function(login) {
+            const amount = prompt(`Сколько сыра выдать пользователю ${login}?`);
+            if (!amount || isNaN(amount)) return;
+
+            const userRef = ref(database, `users/${login}/gameData`);
+            const snapshot = await get(userRef);
+            
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                await update(userRef, {
+                    cheese: (data.cheese || 0) + parseInt(amount),
+                    totalCheese: (data.totalCheese || 0) + parseInt(amount),
+                    allTimeCheese: (data.allTimeCheese || 0) + parseInt(amount)
+                });
+                
+                showNotification(`Выдано ${parseInt(amount).toLocaleString()} 🧀 пользователю ${login}`, 'success');
+                loadUsersAdmin();
+            }
+        };
+
+        window.toggleAdmin = async function(login, makeAdmin) {
+            const userRef = ref(database, `users/${login}/gameData`);
+            await update(userRef, { isAdmin: makeAdmin });
+            showNotification(`Админка ${makeAdmin ? 'выдана' : 'забрана'} пользователю ${login}`, 'success');
+            loadUsersAdmin();
+        };
+
+        window.banUser = async function(login) {
+            if (!confirm(`Вы уверены, что хотите забанить ${login}?`)) return;
+            
+            const userRef = ref(database, `users/${login}/gameData`);
+            await update(userRef, { isBanned: true });
+            showNotification(`Пользователь ${login} заблокирован`, 'success');
+            loadUsersAdmin();
+        };
+
+        window.unbanUser = async function(login) {
+            const userRef = ref(database, `users/${login}/gameData`);
+            await update(userRef, { isBanned: false });
+            showNotification(`Пользователь ${login} разблокирован`, 'success');
+            loadUsersAdmin();
+        };
+
+        window.sendBroadcast = async function() {
+            const message = document.getElementById('broadcastMessage').value.trim();
+            if (!message) {
+                showNotification('Введите сообщение', 'error');
+                return;
+            }
+
+            await set(ref(database, 'globalMessage'), {
+                author: currentUser,
+                message: message,
+                timestamp: Date.now()
+            });
+
+            showNotification('Сообщение отправлено всем игрокам', 'success');
+            document.getElementById('broadcastMessage').value = '';
+        };
+
+        window.startEvent = async function(eventId) {
+            const duration = parseInt(document.getElementById('eventDuration').value) || 10;
+            const event = eventsList.find(e => e.id === eventId);
+            
+            if (!event) return;
+
+            const eventData = {
+                ...event,
+                starter: currentUser,
+                startTime: Date.now(),
+                endTime: Date.now() + (duration * 60 * 1000),
+                duration: duration
+            };
+
+            await set(ref(database, 'activeEvent'), eventData);
+            
+            await set(ref(database, 'globalMessage'), {
+                author: currentUser,
+                message: `Запустил евент "${event.name}" ${event.icon} (x${event.multiplier}) на ${duration} минут!`,
+                timestamp: Date.now()
+            });
+
+            showNotification('Евент запущен!', 'success');
+        };
+
+        function activateEvent(eventData) {
+            currentEventData = eventData;
+            currentEventMultiplier = eventData.multiplier;
+
+            // Показываем баннер евента
+            if (!document.getElementById('eventBanner')) {
+                const banner = document.createElement('div');
+                banner.id = 'eventBanner';
+                banner.className = 'event-banner';
+                banner.style.borderColor = eventData.color;
+                banner.innerHTML = `
+                    <div class="event-icon">${eventData.icon}</div>
+                    <div class="event-title" style="color: ${eventData.color}">${eventData.name}</div>
+                    <div class="event-starter">Запустил: ${eventData.starter}</div>
+                    <div class="event-multiplier">x${eventData.multiplier}</div>
+                    <div class="event-timer" id="eventTimerBanner">Осталось: ...</div>
+                `;
+                document.body.appendChild(banner);
+
+                setTimeout(() => {
+                    banner.remove();
+                }, 8000);
+            }
+
+            // Показываем индикатор евента
+            if (!document.getElementById('eventIndicator')) {
+                const indicator = document.createElement('div');
+                indicator.id = 'eventIndicator';
+                indicator.className = 'event-indicator';
+                indicator.style.borderColor = eventData.color;
+                indicator.innerHTML = `
+                    <div class="icon">${eventData.icon}</div>
+                    <div class="info">
+                        <div class="name" style="color: ${eventData.color}">${eventData.name} x${eventData.multiplier}</div>
+                        <div class="time" id="eventTimerIndicator">...</div>
+                    </div>
+                `;
+                document.body.appendChild(indicator);
+            }
+
+            // Добавляем визуальные эффекты
+            createEventEffects(eventData.effect);
+
+            updateEventTimer();
+        }
+
+        function deactivateEvent() {
+            currentEventMultiplier = 1;
+            currentEventData = null;
+
+            const banner = document.getElementById('eventBanner');
+            if (banner) banner.remove();
+
+            const indicator = document.getElementById('eventIndicator');
+            if (indicator) indicator.remove();
+
+            const effects = document.getElementById('eventEffects');
+            if (effects) effects.remove();
+        }
+
+        function updateEventTimer() {
+            if (!currentEventData) return;
+
+            const remaining = currentEventData.endTime - Date.now();
+            if (remaining <= 0) {
+                deactivateEvent();
+                return;
+            }
+
+            const minutes = Math.floor(remaining / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000);
+            const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            const bannerTimer = document.getElementById('eventTimerBanner');
+            if (bannerTimer) bannerTimer.textContent = `Осталось: ${timeStr}`;
+
+            const indicatorTimer = document.getElementById('eventTimerIndicator');
+            if (indicatorTimer) indicatorTimer.textContent = `Осталось: ${timeStr}`;
+
+            setTimeout(updateEventTimer, 1000);
+        }
+
+        function createEventEffects(effectType) {
+            let existingEffects = document.getElementById('eventEffects');
+            if (existingEffects) existingEffects.remove();
+
+            const container = document.createElement('div');
+            container.id = 'eventEffects';
+            container.className = 'event-effect';
+
+            if (effectType === 'stars') {
+                for (let i = 0; i < 50; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDelay = Math.random() * 2 + 's';
+                    container.appendChild(star);
+                }
+            } else if (effectType === 'cosmic') {
+                for (let i = 0; i < 20; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'orbit-particle';
+                    particle.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                    particle.style.left = '50%';
+                    particle.style.top = '50%';
+                    particle.style.animationDuration = (5 + Math.random() * 10) + 's';
+                    particle.style.animationDelay = Math.random() * 5 + 's';
+                    container.appendChild(particle);
+                }
+
+                for (let i = 0; i < 100; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDelay = Math.random() * 2 + 's';
+                    container.appendChild(star);
+                }
+            } else if (effectType === 'rainbow') {
+                const rainbow = document.createElement('div');
+                rainbow.className = 'rainbow-effect';
+                container.appendChild(rainbow);
+            }
+
+            document.body.appendChild(container);
+        }
+
         async function saveGame() {
             if (!currentUser) return;
             
@@ -1018,7 +2043,8 @@
                 const leaderboardRef = ref(database, 'leaderboard/' + currentUser);
                 await set(leaderboardRef, {
                     login: currentUser,
-                    totalCheese: gameData.allTimeCheese,
+                    cheese: gameData.cheese,
+                    allTimeCheese: gameData.allTimeCheese,
                     rebirths: gameData.rebirths,
                     level: gameData.level
                 });
@@ -1027,9 +2053,7 @@
             }
         }
 
-        // Рендер магазина
         function renderShop() {
-            // Улучшения
             let upgradesHTML = '';
             upgradesList.forEach(upgrade => {
                 const level = gameData.upgrades[upgrade.id] || 0;
@@ -1051,7 +2075,6 @@
             });
             document.getElementById('upgradesTab').innerHTML = upgradesHTML;
 
-            // Домофоны
             let intercomsHTML = '';
             intercomsList.forEach(intercom => {
                 const owned = gameData.intercoms.includes(intercom.id);
@@ -1081,7 +2104,6 @@
             });
             document.getElementById('intercomsTab').innerHTML = intercomsHTML;
 
-            // Соусы
             let saucesHTML = '';
             saucesList.forEach(sauce => {
                 const owned = gameData.sauces.includes(sauce.id);
@@ -1113,7 +2135,7 @@
         }
 
         document.getElementById('intercom').addEventListener('click', function(event) {
-            const clickPower = gameData.clickPower + gameData.sauceBonus;
+            const clickPower = (gameData.clickPower + gameData.sauceBonus) * currentEventMultiplier;
             const bonusMultiplier = 1 + gameData.rebirths * 0.1;
             const totalGain = Math.floor(clickPower * bonusMultiplier);
             
@@ -1159,7 +2181,37 @@
                 });
             });
 
+            document.querySelectorAll('.modal-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchAdminTab(this.dataset.adminTab);
+                });
+            });
+
+            document.querySelectorAll('.leaderboard-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchLeaderboardTab(this.dataset.lbTab);
+                });
+            });
+
             document.getElementById('rebirthBtn').addEventListener('click', doRebirth);
+        }
+
+        function switchAdminTab(tab) {
+            document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('usersAdminTab').classList.add('hidden');
+            document.getElementById('broadcastAdminTab').classList.add('hidden');
+            document.getElementById('eventsAdminTab').classList.add('hidden');
+
+            if (tab === 'users') {
+                document.getElementById('usersAdminTab').classList.remove('hidden');
+                loadUsersAdmin();
+            } else if (tab === 'broadcast') {
+                document.getElementById('broadcastAdminTab').classList.remove('hidden');
+            } else if (tab === 'events') {
+                document.getElementById('eventsAdminTab').classList.remove('hidden');
+            }
         }
 
         function buyUpgrade(id) {
@@ -1236,7 +2288,7 @@
 
         function doRebirth() {
             const rebirthCost = getRebirthCost();
-            if (gameData.totalCheese >= rebirthCost) {
+            if (gameData.cheese >= rebirthCost) {
                 if (confirm(`Вы уверены? Все улучшения, домофоны и соусы будут сброшены.\nВы получите постоянный бонус +10% к производству!\n\nТекущие перерождения: ${gameData.rebirths}\nСледующая стоимость: ${(rebirthCost * 5).toLocaleString()} 🧀`)) {
                     gameData.rebirths++;
                     gameData.cheese = 0;
@@ -1245,12 +2297,10 @@
                     gameData.clickPower = 1;
                     gameData.cheesePerSecond = 0;
                     
-                    // Сброс всех улучшений
                     upgradesList.forEach(u => {
                         gameData.upgrades[u.id] = 0;
                     });
                     
-                    // Сброс домофонов и соусов
                     gameData.intercoms = ['cyfral'];
                     gameData.currentIntercom = 'cyfral';
                     gameData.sauces = ['basic'];
@@ -1290,15 +2340,24 @@
             }
         }
 
+        let currentLeaderboardTab = 'balance';
+
+        function switchLeaderboardTab(tab) {
+            currentLeaderboardTab = tab;
+            document.querySelectorAll('.leaderboard-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            loadLeaderboard();
+        }
+
         function updateUI() {
             document.getElementById('cheeseCount').textContent = Math.floor(gameData.cheese).toLocaleString();
             document.getElementById('totalCheese').textContent = Math.floor(gameData.allTimeCheese).toLocaleString();
             document.getElementById('levelDisplay').textContent = gameData.level;
             document.getElementById('rebirthCount').textContent = gameData.rebirths;
             document.getElementById('rebirthBonus').textContent = (1 + gameData.rebirths * 0.1).toFixed(1);
-            document.getElementById('clickPower').textContent = Math.floor(gameData.clickPower + gameData.sauceBonus).toLocaleString();
+            document.getElementById('clickPower').textContent = Math.floor((gameData.clickPower + gameData.sauceBonus) * currentEventMultiplier).toLocaleString();
             
-            const cps = Math.floor(gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1));
+            const cps = Math.floor(gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1) * currentEventMultiplier);
             document.getElementById('cheesePerSec').textContent = cps.toLocaleString();
             document.getElementById('intercomsSmeared').textContent = Math.floor(gameData.allTimeCheese / 100);
 
@@ -1306,7 +2365,7 @@
             document.getElementById('rebirthCost').textContent = rebirthCost.toLocaleString();
             
             const rebirthBtn = document.getElementById('rebirthBtn');
-            if (gameData.totalCheese >= rebirthCost) {
+            if (gameData.cheese >= rebirthCost) {
                 rebirthBtn.disabled = false;
             } else {
                 rebirthBtn.disabled = true;
@@ -1322,15 +2381,39 @@
                     return;
                 }
 
-                const leaders = Object.values(data).sort((a, b) => b.totalCheese - a.totalCheese).slice(0, 10);
+                let leaders = Object.values(data);
+
+                if (currentLeaderboardTab === 'balance') {
+                    leaders.sort((a, b) => b.cheese - a.cheese);
+                } else if (currentLeaderboardTab === 'rebirths') {
+                    leaders.sort((a, b) => b.rebirths - a.rebirths);
+                } else if (currentLeaderboardTab === 'all') {
+                    leaders.sort((a, b) => {
+                        const scoreA = b.allTimeCheese + (b.rebirths * 1000000);
+                        const scoreB = a.allTimeCheese + (a.rebirths * 1000000);
+                        return scoreA - scoreB;
+                    });
+                }
+
+                leaders = leaders.slice(0, 10);
                 
                 const leaderboardHTML = leaders.map((leader, index) => {
                     const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+                    
+                    let scoreText = '';
+                    if (currentLeaderboardTab === 'balance') {
+                        scoreText = `${Math.floor(leader.cheese || 0).toLocaleString()} 🧀`;
+                    } else if (currentLeaderboardTab === 'rebirths') {
+                        scoreText = `⭐ ${leader.rebirths || 0}`;
+                    } else {
+                        scoreText = `${Math.floor(leader.allTimeCheese || 0).toLocaleString()} 🧀 + ⭐${leader.rebirths || 0}`;
+                    }
+                    
                     return `
                         <div class="leaderboard-item">
                             <div class="leaderboard-rank ${rankClass}">${index + 1}</div>
                             <div class="leaderboard-player">${leader.login}</div>
-                            <div class="leaderboard-score">${Math.floor(leader.totalCheese).toLocaleString()} 🧀</div>
+                            <div class="leaderboard-score">${scoreText}</div>
                         </div>
                     `;
                 }).join('');
@@ -1341,7 +2424,7 @@
 
         function startGameLoop() {
             setInterval(() => {
-                const cps = gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1);
+                const cps = gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1) * currentEventMultiplier;
                 gameData.cheese += cps / 10;
                 gameData.totalCheese += cps / 10;
                 gameData.allTimeCheese += cps / 10;
