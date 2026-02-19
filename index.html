@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧀 SOysdomofon - Симулятор Обмазывания Домофона 🚪</title>
+    <title>🧀 SOysdomofon - PVP Edition 🚪</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -73,6 +73,17 @@
             0% { opacity: 1; }
             50% { opacity: 0; }
             100% { opacity: 1; }
+        }
+
+        @keyframes sauceAppear {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+            100% { transform: scale(1) rotate(360deg); opacity: 1; }
+        }
+
+        @keyframes rankShine {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
         }
 
         /* === AUTH SCREEN === */
@@ -285,6 +296,12 @@
             box-shadow: 0 5px 20px rgba(59, 130, 246, 0.3);
         }
 
+        .pvp-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 5px 20px rgba(239, 68, 68, 0.3);
+            animation: pulse 2s infinite;
+        }
+
         .global-message {
             position: fixed;
             top: 50%;
@@ -334,6 +351,171 @@
         .notification.error {
             border-color: rgba(239, 68, 68, 0.5);
         }
+
+        /* === PVP ARENA === */
+        .pvp-arena {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 20000;
+            display: none;
+        }
+
+        .pvp-arena.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pvp-header {
+            padding: 30px;
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pvp-player-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .pvp-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: 900;
+        }
+
+        .pvp-stats {
+            text-align: left;
+        }
+
+        .pvp-name {
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .pvp-hits {
+            font-size: 2em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pvp-battlefield {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pvp-sauce {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            animation: sauceAppear 0.3s ease;
+            transition: all 0.1s;
+            font-size: 4em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 0 20px currentColor);
+        }
+
+        .pvp-sauce:hover {
+            transform: scale(1.2);
+        }
+
+        .pvp-sauce:active {
+            transform: scale(0.9);
+        }
+
+        .pvp-timer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+            font-weight: 900;
+            color: #fbbf24;
+            text-shadow: 0 0 30px #fbbf24;
+            z-index: 1;
+        }
+
+        .pvp-result {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 60px;
+            border-radius: 30px;
+            text-align: center;
+            border: 3px solid;
+            z-index: 2;
+        }
+
+        .pvp-result.win {
+            border-color: #10b981;
+        }
+
+        .pvp-result.lose {
+            border-color: #ef4444;
+        }
+
+        .pvp-result h2 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .pvp-result.win h2 {
+            color: #10b981;
+        }
+
+        .pvp-result.lose h2 {
+            color: #ef4444;
+        }
+
+        .pvp-reward {
+            font-size: 2em;
+            margin: 20px 0;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        /* === RANK SYSTEM === */
+        .rank-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            background-size: 200% auto;
+            animation: rankShine 3s linear infinite;
+        }
+
+        .rank-novice { background: linear-gradient(90deg, #71717a, #a1a1aa, #71717a); }
+        .rank-bronze { background: linear-gradient(90deg, #d97706, #f59e0b, #d97706); }
+        .rank-silver { background: linear-gradient(90deg, #71717a, #d4d4d8, #71717a); }
+        .rank-gold { background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b); }
+        .rank-platinum { background: linear-gradient(90deg, #3b82f6, #60a5fa, #3b82f6); }
+        .rank-diamond { background: linear-gradient(90deg, #06b6d4, #22d3ee, #06b6d4); }
+        .rank-master { background: linear-gradient(90deg, #8b5cf6, #a78bfa, #8b5cf6); }
+        .rank-grandmaster { background: linear-gradient(90deg, #ef4444, #f87171, #ef4444); }
 
         /* === EVENT EFFECTS === */
         .event-banner {
@@ -774,6 +956,17 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .location-indicator {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
         .intercom-container {
             position: relative;
             display: inline-block;
@@ -1211,7 +1404,7 @@
         <div class="auth-container">
             <div class="auth-logo">
                 <h1>🧀 SOysdomofon</h1>
-                <p>Симулятор Обмазывания Домофона</p>
+                <p>PVP Edition - Битва за Сыр</p>
             </div>
 
             <div class="auth-tabs">
@@ -1242,9 +1435,10 @@
         <div class="header">
             <div class="header-left">
                 <h1>🧀 SOysdomofon</h1>
-                <p>Игрок: <span id="playerName"></span></p>
+                <p>Игрок: <span id="playerName"></span> | <span id="playerRank" class="rank-badge rank-novice">Новичок</span> | MMR: <span id="playerMMR">1000</span></p>
             </div>
             <div class="header-buttons">
+                <button class="btn pvp-btn" id="pvpBtn">⚔️ PVP АРЕНА</button>
                 <button class="btn transfer-btn" id="transferBtn">💸 Перевод</button>
                 <button class="btn admin-btn hidden" id="adminBtn">⚙️ Админ</button>
                 <button class="btn logout-btn" id="logoutBtn">Выход</button>
@@ -1254,6 +1448,16 @@
         <div class="main-content">
             <div class="stats-panel">
                 <h2>📊 Статистика</h2>
+                
+                <div class="stat-item">
+                    <div class="stat-label">Текущая локация</div>
+                    <div class="stat-value" id="currentLocation" style="font-size: 1.3em;">🏠 Подъезд</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-label">Множитель локации</div>
+                    <div class="stat-value">x<span id="locationMultiplier">1</span></div>
+                </div>
                 
                 <div class="stat-item">
                     <div class="stat-label">Сыра в секунду</div>
@@ -1268,6 +1472,11 @@
                 <div class="stat-item">
                     <div class="stat-label">Всего заработано</div>
                     <div class="stat-value" id="totalCheese">0</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-label">PVP побед / поражений</div>
+                    <div class="stat-value" style="font-size: 1.3em;"><span id="pvpWins">0</span> / <span id="pvpLosses">0</span></div>
                 </div>
 
                 <div class="rebirth-section" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
@@ -1287,6 +1496,8 @@
 
             <div>
                 <div class="game-area">
+                    <div class="location-indicator" id="locationName">🏠 Подъезд (x1)</div>
+
                     <div class="cheese-counter">
                         🧀 <span id="cheeseCount">0</span>
                     </div>
@@ -1314,7 +1525,7 @@
                     </div>
 
                     <div class="click-info">
-                        ⚡ +<span id="clickPower">1</span> сыра за клик
+                        ⚡ +<span id="clickPower">1</span> сыра за клик | <span id="currentSauce">🧀 Сыр</span>
                     </div>
                 </div>
 
@@ -1323,8 +1534,8 @@
                     
                     <div class="leaderboard-tabs">
                         <button class="leaderboard-tab active" data-lb-tab="balance">По балансу</button>
-                        <button class="leaderboard-tab" data-lb-tab="rebirths">По перерождениям</button>
-                        <button class="leaderboard-tab" data-lb-tab="all">Общий топ</button>
+                        <button class="leaderboard-tab" data-lb-tab="pvp">PVP рейтинг</button>
+                        <button class="leaderboard-tab" data-lb-tab="rebirths">Перерождения</button>
                     </div>
 
                     <div id="leaderboardList">
@@ -1342,12 +1553,41 @@
                     <button class="shop-tab active" data-tab="upgrades">Улучшения</button>
                     <button class="shop-tab" data-tab="intercoms">Домофоны</button>
                     <button class="shop-tab" data-tab="sauce">Соусы</button>
+                    <button class="shop-tab" data-tab="locations">Локации</button>
                 </div>
 
                 <div id="upgradesTab" class="shop-content"></div>
                 <div id="intercomsTab" class="shop-content hidden"></div>
                 <div id="sauceTab" class="shop-content hidden"></div>
+                <div id="locationsTab" class="shop-content hidden"></div>
             </div>
+        </div>
+    </div>
+
+    <!-- PVP ARENA -->
+    <div id="pvpArena" class="pvp-arena">
+        <div class="pvp-header">
+            <div class="pvp-player-info">
+                <div class="pvp-avatar">👤</div>
+                <div class="pvp-stats">
+                    <div class="pvp-name" id="pvpPlayer1Name">Вы</div>
+                    <div class="pvp-hits">Хиты: <span id="pvpPlayer1Hits">0</span></div>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 2em; font-weight: 900; color: #fbbf24;">⚔️</div>
+                <div style="font-size: 1.5em; font-weight: 700;">Ставка: <span id="pvpBet">0</span> 🧀</div>
+            </div>
+            <div class="pvp-player-info">
+                <div class="pvp-stats" style="text-align: right;">
+                    <div class="pvp-name" id="pvpPlayer2Name">Противник</div>
+                    <div class="pvp-hits">Хиты: <span id="pvpPlayer2Hits">0</span></div>
+                </div>
+                <div class="pvp-avatar">🤖</div>
+            </div>
+        </div>
+        <div class="pvp-battlefield" id="pvpBattlefield">
+            <div class="pvp-timer" id="pvpTimer">3</div>
         </div>
     </div>
 
@@ -1361,6 +1601,57 @@
                 <input type="text" class="admin-input" id="transferRecipient" placeholder="Логин получателя">
                 <input type="number" class="admin-input" id="transferAmount" placeholder="Количество сыра">
                 <button class="admin-button" onclick="sendTransfer()">Отправить</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pvpModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>⚔️ PVP Арена</h2>
+                <button class="close-modal" onclick="closePVPModal()">×</button>
+            </div>
+            <div class="admin-section">
+                <h3>Ваша статистика</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div style="text-align: center; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                        <div style="color: #94a3b8; font-size: 0.9em; margin-bottom: 5px;">Ранг</div>
+                        <div id="pvpModalRank" class="rank-badge rank-novice" style="font-size: 1.1em;">Новичок</div>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                        <div style="color: #94a3b8; font-size: 0.9em; margin-bottom: 5px;">MMR</div>
+                        <div style="font-size: 1.8em; font-weight: 800; color: #fbbf24;"><span id="pvpModalMMR">1000</span></div>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                        <div style="color: #94a3b8; font-size: 0.9em; margin-bottom: 5px;">Побед</div>
+                        <div style="font-size: 1.8em; font-weight: 800; color: #10b981;"><span id="pvpModalWins">0</span></div>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                        <div style="color: #94a3b8; font-size: 0.9em; margin-bottom: 5px;">Поражений</div>
+                        <div style="font-size: 1.8em; font-weight: 800; color: #ef4444;"><span id="pvpModalLosses">0</span></div>
+                    </div>
+                </div>
+
+                <h3>Выберите ставку</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                    <button class="admin-button" onclick="startPVP(1000)">1,000 🧀</button>
+                    <button class="admin-button" onclick="startPVP(5000)">5,000 🧀</button>
+                    <button class="admin-button" onclick="startPVP(10000)">10,000 🧀</button>
+                    <button class="admin-button" onclick="startPVP(50000)">50,000 🧀</button>
+                    <button class="admin-button" onclick="startPVP(100000)">100,000 🧀</button>
+                    <button class="admin-button" onclick="startPVP(500000)">500,000 🧀</button>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 12px;">
+                    <div style="font-weight: 700; margin-bottom: 10px;">⚔️ Правила PVP:</div>
+                    <div style="font-size: 0.9em; color: #94a3b8; line-height: 1.6;">
+                        • На экране будут появляться соусы<br>
+                        • Кликайте по ним быстрее противника<br>
+                        • Кто первым нанесет 20 хитов - побеждает<br>
+                        • Победитель забирает обе ставки<br>
+                        • За победу/поражение изменяется MMR
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1415,7 +1706,12 @@
             intercomBonus: 1,
             sauceBonus: 0,
             isAdmin: false,
-            isBanned: false
+            isBanned: false,
+            currentLocation: 'entrance',
+            locationMultiplier: 1,
+            pvpWins: 0,
+            pvpLosses: 0,
+            pvpMMR: 1000
         };
 
         const upgradesList = [
@@ -1444,11 +1740,25 @@
         ];
 
         const saucesList = [
-            { id: 'basic', name: 'Обычный', bonus: 0, cost: 0 },
-            { id: 'cheddar', name: 'Чеддер', bonus: 10, cost: 15000 },
-            { id: 'mozzarella', name: 'Моцарелла', bonus: 30, cost: 75000 },
-            { id: 'parmesan', name: 'Пармезан', bonus: 100, cost: 400000 },
-            { id: 'gorgonzola', name: 'Горгонзола', bonus: 300, cost: 2000000 },
+            { id: 'basic', name: 'Сыр', icon: '🧀', bonus: 0, cost: 0 },
+            { id: 'mayo', name: 'Майонез', icon: '🥛', bonus: 10, cost: 15000 },
+            { id: 'ketchup', name: 'Кетчуп', icon: '🍅', bonus: 30, cost: 75000 },
+            { id: 'mustard', name: 'Горчица', icon: '🌭', bonus: 100, cost: 400000 },
+            { id: 'soy', name: 'Соевый', icon: '🍶', bonus: 300, cost: 2000000 },
+            { id: 'bbq', name: 'Барбекю', icon: '🍖', bonus: 1000, cost: 10000000 },
+            { id: 'honey', name: 'Медовый', icon: '🍯', bonus: 3000, cost: 50000000 },
+            { id: 'chili', name: 'Чили', icon: '🌶️', bonus: 10000, cost: 250000000 },
+        ];
+
+        const locationsList = [
+            { id: 'entrance', name: 'Подъезд', icon: '🏠', multiplier: 1.0, cost: 0, requiredRebirths: 0 },
+            { id: 'district', name: 'Район', icon: '🏘️', multiplier: 1.5, cost: 100000, requiredRebirths: 1 },
+            { id: 'city', name: 'Город', icon: '🏙️', multiplier: 2.0, cost: 1000000, requiredRebirths: 3 },
+            { id: 'megapolis', name: 'Мегаполис', icon: '🌆', multiplier: 3.0, cost: 10000000, requiredRebirths: 5 },
+            { id: 'country', name: 'Страна', icon: '🗺️', multiplier: 5.0, cost: 100000000, requiredRebirths: 10 },
+            { id: 'continent', name: 'Континент', icon: '🌍', multiplier: 8.0, cost: 1000000000, requiredRebirths: 20 },
+            { id: 'planet', name: 'Планета', icon: '🌎', multiplier: 15.0, cost: 10000000000, requiredRebirths: 35 },
+            { id: 'galaxy', name: 'Галактика', icon: '🌌', multiplier: 25.0, cost: 100000000000, requiredRebirths: 50 },
         ];
 
         const eventsList = [
@@ -1461,38 +1771,27 @@
             { id: 'quantum', name: 'Квантовый', icon: '⚛️', multiplier: 25, color: '#3b82f6', effect: 'cosmic' },
             { id: 'infinity', name: 'Бесконечность', icon: '∞', multiplier: 50, color: '#8b5cf6', effect: 'rainbow' },
             { id: 'godmode', name: 'Режим бога', icon: '👑', multiplier: 100, color: '#ef4444', effect: 'fireworks' },
-            { id: 'lucky', name: 'Счастливчик', icon: '🍀', multiplier: 7, color: '#22c55e', effect: 'normal' },
-            { id: 'golden', name: 'Золотой час', icon: '🏆', multiplier: 12, color: '#fbbf24', effect: 'rainbow' },
-            { id: 'diamond', name: 'Бриллиант', icon: '💎', multiplier: 30, color: '#3b82f6', effect: 'stars' },
-            { id: 'rainbow', name: 'Радуга', icon: '🌈', multiplier: 8, color: '#ec4899', effect: 'rainbow' },
-            { id: 'fire', name: 'Огненный', icon: '🔥', multiplier: 6, color: '#f97316', effect: 'fire' },
-            { id: 'ice', name: 'Ледяной', icon: '❄️', multiplier: 6, color: '#3b82f6', effect: 'snow' },
-            { id: 'thunder', name: 'Грозовой', icon: '⚡', multiplier: 9, color: '#fbbf24', effect: 'lightning' },
-            { id: 'time', name: 'Остановка времени', icon: '⏰', multiplier: 35, color: '#64748b', effect: 'cosmic' },
-            { id: 'space', name: 'Космос', icon: '🚀', multiplier: 18, color: '#1e40af', effect: 'cosmic' },
-            { id: 'galaxy', name: 'Галактика', icon: '🌠', multiplier: 40, color: '#8b5cf6', effect: 'cosmic' },
-            { id: 'bigbang', name: 'Большой взрыв', icon: '💥', multiplier: 75, color: '#dc2626', effect: 'fireworks' },
-            { id: 'magic', name: 'Магический', icon: '🔮', multiplier: 14, color: '#a855f7', effect: 'stars' },
-            { id: 'halloween', name: 'Хэллоуин', icon: '🎃', multiplier: 13, color: '#f97316', effect: 'normal' },
-            { id: 'christmas', name: 'Рождество', icon: '🎄', multiplier: 13, color: '#10b981', effect: 'snow' },
-            { id: 'newyear', name: 'Новый год', icon: '🎆', multiplier: 13, color: '#fbbf24', effect: 'fireworks' },
-            { id: 'meteor', name: 'Метеорит', icon: '☄️', multiplier: 22, color: '#ef4444', effect: 'cosmic' },
-            { id: 'supernova', name: 'Супернова', icon: '💫', multiplier: 45, color: '#fbbf24', effect: 'fireworks' },
-            { id: 'blackhole', name: 'Черная дыра', icon: '⚫', multiplier: 60, color: '#0f172a', effect: 'cosmic' },
-            { id: 'wormhole', name: 'Червоточина', icon: '🌀', multiplier: 28, color: '#8b5cf6', effect: 'cosmic' },
-            { id: 'tsunami', name: 'Цунами', icon: '🌊', multiplier: 16, color: '#3b82f6', effect: 'waves' },
-            { id: 'volcano', name: 'Вулкан', icon: '🌋', multiplier: 19, color: '#ef4444', effect: 'fire' },
-            { id: 'tornado', name: 'Торнадо', icon: '🌪️', multiplier: 17, color: '#94a3b8', effect: 'cosmic' },
-            { id: 'aurora', name: 'Сияние', icon: '🌌', multiplier: 21, color: '#14b8a6', effect: 'rainbow' },
-            { id: 'eclipse', name: 'Затмение', icon: '🌑', multiplier: 26, color: '#1e293b', effect: 'cosmic' },
-            { id: 'comet', name: 'Комета', icon: '☄️', multiplier: 24, color: '#3b82f6', effect: 'cosmic' },
-            { id: 'starfall', name: 'Звездопад', icon: '✨', multiplier: 32, color: '#fbbf24', effect: 'stars' },
-            { id: 'phoenix', name: 'Феникс', icon: '🔥🦅', multiplier: 38, color: '#ef4444', effect: 'fire' },
-            { id: 'dragon', name: 'Дракон', icon: '🐉', multiplier: 42, color: '#10b981', effect: 'fire' },
-            { id: 'unicorn', name: 'Единорог', icon: '🦄', multiplier: 33, color: '#ec4899', effect: 'rainbow' },
-            { id: 'alien', name: 'Пришельцы', icon: '👽', multiplier: 29, color: '#22c55e', effect: 'cosmic' },
-            { id: 'robot', name: 'Роботы', icon: '🤖', multiplier: 27, color: '#94a3b8', effect: 'cosmic' },
         ];
+
+        const rankThresholds = [
+            { name: 'Новичок', mmr: 0, class: 'rank-novice' },
+            { name: 'Бронза', mmr: 1200, class: 'rank-bronze' },
+            { name: 'Серебро', mmr: 1400, class: 'rank-silver' },
+            { name: 'Золото', mmr: 1600, class: 'rank-gold' },
+            { name: 'Платина', mmr: 1800, class: 'rank-platinum' },
+            { name: 'Алмаз', mmr: 2000, class: 'rank-diamond' },
+            { name: 'Мастер', mmr: 2300, class: 'rank-master' },
+            { name: 'Гранд-Мастер', mmr: 2600, class: 'rank-grandmaster' },
+        ];
+
+        function getRankFromMMR(mmr) {
+            for (let i = rankThresholds.length - 1; i >= 0; i--) {
+                if (mmr >= rankThresholds[i].mmr) {
+                    return rankThresholds[i];
+                }
+            }
+            return rankThresholds[0];
+        }
 
         upgradesList.forEach(u => {
             if (gameData.upgrades[u.id] === undefined) {
@@ -1650,6 +1949,13 @@
                     upgrades: loadedData.upgrades || {}
                 };
 
+                // Инициализация значений по умолчанию для PVP
+                if (gameData.pvpMMR === undefined) gameData.pvpMMR = 1000;
+                if (gameData.pvpWins === undefined) gameData.pvpWins = 0;
+                if (gameData.pvpLosses === undefined) gameData.pvpLosses = 0;
+                if (gameData.currentLocation === undefined) gameData.currentLocation = 'entrance';
+                if (gameData.locationMultiplier === undefined) gameData.locationMultiplier = 1;
+
                 if (gameData.isBanned) {
                     alert('Ваш аккаунт заблокирован!');
                     localStorage.removeItem('soysdomofon_user');
@@ -1665,6 +1971,12 @@
                 
                 document.getElementById('playerName').textContent = currentUser;
 
+                const rank = getRankFromMMR(gameData.pvpMMR);
+                const rankBadge = document.getElementById('playerRank');
+                rankBadge.textContent = rank.name;
+                rankBadge.className = 'rank-badge ' + rank.class;
+                document.getElementById('playerMMR').textContent = gameData.pvpMMR;
+
                 if (gameData.isAdmin || currentUser === 'qwenixDev01') {
                     gameData.isAdmin = true;
                     document.getElementById('adminBtn').classList.remove('hidden');
@@ -1675,6 +1987,7 @@
             document.getElementById('gameScreen').style.display = 'block';
             
             updateIntercomVisual(gameData.currentIntercom);
+            updateLocationDisplay();
             renderShop();
             updateUI();
             startGameLoop();
@@ -1692,6 +2005,16 @@
             }
         }
 
+        function updateLocationDisplay() {
+            const location = locationsList.find(l => l.id === gameData.currentLocation);
+            if (location) {
+                document.getElementById('currentLocation').textContent = `${location.icon} ${location.name}`;
+                document.getElementById('locationName').textContent = `${location.icon} ${location.name} (x${location.multiplier})`;
+                document.getElementById('locationMultiplier').textContent = location.multiplier;
+                gameData.locationMultiplier = location.multiplier;
+            }
+        }
+
         document.getElementById('logoutBtn').addEventListener('click', async function() {
             await saveGame();
             localStorage.removeItem('soysdomofon_user');
@@ -1702,12 +2025,29 @@
             document.getElementById('transferModal').classList.add('active');
         });
 
+        document.getElementById('pvpBtn').addEventListener('click', function() {
+            document.getElementById('pvpModal').classList.add('active');
+            
+            const rank = getRankFromMMR(gameData.pvpMMR);
+            const rankBadge = document.getElementById('pvpModalRank');
+            rankBadge.textContent = rank.name;
+            rankBadge.className = 'rank-badge ' + rank.class;
+            
+            document.getElementById('pvpModalMMR').textContent = gameData.pvpMMR;
+            document.getElementById('pvpModalWins').textContent = gameData.pvpWins;
+            document.getElementById('pvpModalLosses').textContent = gameData.pvpLosses;
+        });
+
         document.getElementById('adminBtn').addEventListener('click', function() {
             openAdminPanel();
         });
 
         window.closeTransferModal = function() {
             document.getElementById('transferModal').classList.remove('active');
+        };
+
+        window.closePVPModal = function() {
+            document.getElementById('pvpModal').classList.remove('active');
         };
 
         window.closeAdminModal = function() {
@@ -1746,6 +2086,171 @@
             
             document.getElementById('transferRecipient').value = '';
             document.getElementById('transferAmount').value = '';
+        };
+
+        // PVP СИСТЕМА
+        let pvpGameState = {
+            active: false,
+            bet: 0,
+            player1Hits: 0,
+            player2Hits: 0,
+            countdown: 3,
+            botDifficulty: 0.7
+        };
+
+        window.startPVP = async function(bet) {
+            if (gameData.cheese < bet) {
+                showNotification('Недостаточно сыра для ставки', 'error');
+                return;
+            }
+
+            gameData.cheese -= bet;
+            updateUI();
+            saveGame();
+
+            closePVPModal();
+
+            pvpGameState = {
+                active: true,
+                bet: bet,
+                player1Hits: 0,
+                player2Hits: 0,
+                countdown: 3,
+                botDifficulty: 0.7 + (gameData.pvpMMR - 1000) / 5000
+            };
+
+            document.getElementById('pvpArena').classList.add('active');
+            document.getElementById('pvpPlayer1Name').textContent = currentUser;
+            document.getElementById('pvpPlayer2Name').textContent = 'Бот';
+            document.getElementById('pvpBet').textContent = (bet * 2).toLocaleString();
+            document.getElementById('pvpPlayer1Hits').textContent = '0';
+            document.getElementById('pvpPlayer2Hits').textContent = '0';
+
+            await countdownPVP();
+            startPVPGame();
+        };
+
+        async function countdownPVP() {
+            const timer = document.getElementById('pvpTimer');
+            
+            for (let i = 3; i > 0; i--) {
+                timer.textContent = i;
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+
+            timer.textContent = 'БОЙ!';
+            await new Promise(resolve => setTimeout(resolve, 500));
+            timer.style.display = 'none';
+        }
+
+        function startPVPGame() {
+            spawnPVPSauce();
+        }
+
+        function spawnPVPSauce() {
+            if (!pvpGameState.active) return;
+
+            const battlefield = document.getElementById('pvpBattlefield');
+            const sauce = document.createElement('div');
+            sauce.className = 'pvp-sauce';
+            
+            const randomSauce = saucesList[Math.floor(Math.random() * saucesList.length)];
+            sauce.textContent = randomSauce.icon;
+            
+            const maxX = battlefield.clientWidth - 80;
+            const maxY = battlefield.clientHeight - 80;
+            sauce.style.left = Math.random() * maxX + 'px';
+            sauce.style.top = Math.random() * maxY + 'px';
+
+            sauce.addEventListener('click', function() {
+                if (!pvpGameState.active) return;
+                
+                pvpGameState.player1Hits++;
+                document.getElementById('pvpPlayer1Hits').textContent = pvpGameState.player1Hits;
+                sauce.remove();
+
+                if (pvpGameState.player1Hits >= 20) {
+                    endPVP(true);
+                    return;
+                }
+
+                setTimeout(() => spawnPVPSauce(), 300);
+            });
+
+            battlefield.appendChild(sauce);
+
+            // Бот кликает с вероятностью
+            setTimeout(() => {
+                if (sauce.parentElement && pvpGameState.active && Math.random() < pvpGameState.botDifficulty) {
+                    pvpGameState.player2Hits++;
+                    document.getElementById('pvpPlayer2Hits').textContent = pvpGameState.player2Hits;
+                    sauce.remove();
+
+                    if (pvpGameState.player2Hits >= 20) {
+                        endPVP(false);
+                        return;
+                    }
+
+                    setTimeout(() => spawnPVPSauce(), 300);
+                }
+            }, 200 + Math.random() * 300);
+        }
+
+        async function endPVP(playerWon) {
+            pvpGameState.active = false;
+
+            const battlefield = document.getElementById('pvpBattlefield');
+            battlefield.innerHTML = '';
+
+            const result = document.createElement('div');
+            result.className = 'pvp-result ' + (playerWon ? 'win' : 'lose');
+            
+            const reward = pvpGameState.bet * 2;
+            const mmrChange = playerWon ? Math.floor(20 + Math.random() * 10) : -Math.floor(15 + Math.random() * 10);
+
+            if (playerWon) {
+                gameData.cheese += reward;
+                gameData.pvpWins++;
+                gameData.pvpMMR += mmrChange;
+                
+                result.innerHTML = `
+                    <h2>🎉 ПОБЕДА!</h2>
+                    <div class="pvp-reward">+${reward.toLocaleString()} 🧀</div>
+                    <div style="font-size: 1.5em; color: #10b981;">MMR: ${mmrChange > 0 ? '+' : ''}${mmrChange}</div>
+                    <div style="margin-top: 20px;">
+                        <button class="admin-button" onclick="closePVPArena()">Закрыть</button>
+                    </div>
+                `;
+            } else {
+                gameData.pvpLosses++;
+                gameData.pvpMMR += mmrChange;
+                
+                result.innerHTML = `
+                    <h2>💀 ПОРАЖЕНИЕ</h2>
+                    <div class="pvp-reward">-${pvpGameState.bet.toLocaleString()} 🧀</div>
+                    <div style="font-size: 1.5em; color: #ef4444;">MMR: ${mmrChange}</div>
+                    <div style="margin-top: 20px;">
+                        <button class="admin-button" onclick="closePVPArena()">Закрыть</button>
+                    </div>
+                `;
+            }
+
+            // Обновляем ранг
+            const rank = getRankFromMMR(gameData.pvpMMR);
+            const rankBadge = document.getElementById('playerRank');
+            rankBadge.textContent = rank.name;
+            rankBadge.className = 'rank-badge ' + rank.class;
+            document.getElementById('playerMMR').textContent = gameData.pvpMMR;
+
+            battlefield.appendChild(result);
+            updateUI();
+            await saveGame();
+        }
+
+        window.closePVPArena = function() {
+            document.getElementById('pvpArena').classList.remove('active');
+            document.getElementById('pvpBattlefield').innerHTML = '<div class="pvp-timer" id="pvpTimer">3</div>';
+            document.getElementById('pvpTimer').style.display = 'block';
         };
 
         function showNotification(msg, type = 'success') {
@@ -1789,7 +2294,7 @@
                             <div style="flex: 1;">
                                 <strong>${login}</strong><br>
                                 <small>Баланс: ${Math.floor(userData.cheese || 0).toLocaleString()} 🧀</small><br>
-                                <small>Перерождения: ${userData.rebirths || 0}</small>
+                                <small>MMR: ${userData.pvpMMR || 1000} | Побед: ${userData.pvpWins || 0}</small>
                                 ${isBanned ? '<br><span style="color: #fca5a5;">ЗАБЛОКИРОВАН</span>' : ''}
                                 ${userData.isAdmin ? '<br><span style="color: #fbbf24;">АДМИН</span>' : ''}
                             </div>
@@ -1829,8 +2334,8 @@
 
                         <div class="admin-row">
                             <div>
-                                <label style="color: #94a3b8; display: block; margin-bottom: 5px;">Клик</label>
-                                <input type="number" class="admin-input" id="editClickPower">
+                                <label style="color: #94a3b8; display: block; margin-bottom: 5px;">MMR</label>
+                                <input type="number" class="admin-input" id="editMMR">
                             </div>
                             <div>
                                 <label style="color: #94a3b8; display: block; margin-bottom: 5px;">CPS</label>
@@ -1895,8 +2400,8 @@
                     `Всего: ${Math.floor(data.allTimeCheese || 0).toLocaleString()} 🧀\n` +
                     `Уровень: ${data.level || 1}\n` +
                     `Перерождения: ${data.rebirths || 0}\n` +
-                    `CPS: ${Math.floor(data.cheesePerSecond || 0).toLocaleString()}\n` +
-                    `Клик: ${Math.floor(data.clickPower || 0).toLocaleString()}\n` +
+                    `MMR: ${data.pvpMMR || 1000}\n` +
+                    `PVP W/L: ${data.pvpWins || 0}/${data.pvpLosses || 0}\n` +
                     `Создан: ${new Date(user.createdAt).toLocaleString()}`
                 );
             }
@@ -1939,7 +2444,7 @@
             document.getElementById('playerDataEditor').classList.remove('hidden');
             document.getElementById('editCheese').value = Math.floor(userData.cheese || 0);
             document.getElementById('editRebirths').value = userData.rebirths || 0;
-            document.getElementById('editClickPower').value = userData.clickPower || 1;
+            document.getElementById('editMMR').value = userData.pvpMMR || 1000;
             document.getElementById('editCPS').value = userData.cheesePerSecond || 0;
 
             showNotification('Данные загружены', 'success');
@@ -1951,7 +2456,7 @@
 
             const cheese = parseInt(document.getElementById('editCheese').value) || 0;
             const rebirths = parseInt(document.getElementById('editRebirths').value) || 0;
-            const clickPower = parseInt(document.getElementById('editClickPower').value) || 1;
+            const pvpMMR = parseInt(document.getElementById('editMMR').value) || 1000;
             const cheesePerSecond = parseInt(document.getElementById('editCPS').value) || 0;
 
             await update(ref(database, `users/${playerLogin}/gameData`), {
@@ -1959,7 +2464,7 @@
                 totalCheese: cheese,
                 allTimeCheese: cheese,
                 rebirths: rebirths,
-                clickPower: clickPower,
+                pvpMMR: pvpMMR,
                 cheesePerSecond: cheesePerSecond
             });
 
@@ -1989,7 +2494,8 @@
                 upgrades: upgrades,
                 intercoms: intercomsList.map(i => i.id),
                 sauces: saucesList.map(s => s.id),
-                rebirths: 100
+                rebirths: 100,
+                pvpMMR: 3000
             });
 
             showNotification('Макс прокачка выдана!', 'success');
@@ -2018,7 +2524,12 @@
                 sauces: ['basic'],
                 currentSauce: 'basic',
                 intercomBonus: 1,
-                sauceBonus: 0
+                sauceBonus: 0,
+                pvpMMR: 1000,
+                pvpWins: 0,
+                pvpLosses: 0,
+                currentLocation: 'entrance',
+                locationMultiplier: 1
             };
 
             upgradesList.forEach(u => {
@@ -2218,7 +2729,10 @@
                     cheese: gameData.cheese,
                     allTimeCheese: gameData.allTimeCheese,
                     rebirths: gameData.rebirths,
-                    level: gameData.level
+                    level: gameData.level,
+                    pvpMMR: gameData.pvpMMR,
+                    pvpWins: gameData.pvpWins,
+                    pvpLosses: gameData.pvpLosses
                 });
             } catch (error) {
                 console.error('Ошибка сохранения:', error);
@@ -2226,6 +2740,7 @@
         }
 
         function renderShop() {
+            // Upgrades tab
             let upgradesHTML = '';
             upgradesList.forEach(upgrade => {
                 const level = gameData.upgrades[upgrade.id] || 0;
@@ -2247,6 +2762,7 @@
             });
             document.getElementById('upgradesTab').innerHTML = upgradesHTML;
 
+            // Intercoms tab
             let intercomsHTML = '';
             intercomsList.forEach(intercom => {
                 const owned = gameData.intercoms.includes(intercom.id);
@@ -2276,6 +2792,7 @@
             });
             document.getElementById('intercomsTab').innerHTML = intercomsHTML;
 
+            // Sauces tab
             let saucesHTML = '';
             saucesList.forEach(sauce => {
                 const owned = gameData.sauces.includes(sauce.id);
@@ -2293,7 +2810,7 @@
                 saucesHTML += `
                     <div class="shop-item">
                         <div class="shop-item-header">
-                            <div class="shop-item-name">🧀 ${sauce.name}</div>
+                            <div class="shop-item-name">${sauce.icon} ${sauce.name}</div>
                         </div>
                         <div class="shop-item-desc">+${sauce.bonus} сыра за клик</div>
                         <div class="shop-item-footer">
@@ -2304,10 +2821,42 @@
                 `;
             });
             document.getElementById('sauceTab').innerHTML = saucesHTML;
+
+            // Locations tab
+            let locationsHTML = '';
+            locationsList.forEach(location => {
+                const active = gameData.currentLocation === location.id;
+                const canUnlock = gameData.rebirths >= location.requiredRebirths;
+                
+                let buttonHTML = '';
+                if (location.id === 'entrance') {
+                    buttonHTML = `<button class="select-btn ${active ? 'active' : ''}" data-select-location="${location.id}">Выбрана</button>`;
+                } else if (active) {
+                    buttonHTML = `<button class="select-btn active" data-select-location="${location.id}">Выбрана</button>`;
+                } else if (!canUnlock) {
+                    buttonHTML = `<button class="buy-btn" disabled>Нужно ${location.requiredRebirths} ⭐</button>`;
+                } else {
+                    buttonHTML = `<button class="select-btn" data-select-location="${location.id}">Выбрать</button>`;
+                }
+                
+                locationsHTML += `
+                    <div class="shop-item">
+                        <div class="shop-item-header">
+                            <div class="shop-item-name">${location.icon} ${location.name}</div>
+                        </div>
+                        <div class="shop-item-desc">Множитель: x${location.multiplier} | Нужно ${location.requiredRebirths} ⭐</div>
+                        <div class="shop-item-footer">
+                            <div class="shop-item-cost">${location.cost === 0 ? 'СТАРТОВАЯ' : location.cost.toLocaleString() + ' 🧀'}</div>
+                            ${buttonHTML}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('locationsTab').innerHTML = locationsHTML;
         }
 
         document.getElementById('intercom').addEventListener('click', function(event) {
-            const clickPower = (gameData.clickPower + gameData.sauceBonus) * currentEventMultiplier;
+            const clickPower = (gameData.clickPower + gameData.sauceBonus) * currentEventMultiplier * gameData.locationMultiplier;
             const bonusMultiplier = 1 + gameData.rebirths * 0.1;
             const totalGain = Math.floor(clickPower * bonusMultiplier);
             
@@ -2393,6 +2942,7 @@
                         if (sauce) {
                             gameData.currentSauce = type;
                             gameData.sauceBonus = sauce.bonus;
+                            updateSauceDisplay();
                         }
                         
                         renderShop();
@@ -2405,10 +2955,23 @@
                     const sauce = saucesList.find(s => s.id === type);
                     if (sauce) {
                         gameData.sauceBonus = sauce.bonus;
+                        updateSauceDisplay();
                     }
                     renderShop();
                     updateUI();
                     saveGame();
+                } else if (e.target.dataset.selectLocation) {
+                    const type = e.target.dataset.selectLocation;
+                    const location = locationsList.find(l => l.id === type);
+                    
+                    if (location && gameData.rebirths >= location.requiredRebirths) {
+                        gameData.currentLocation = type;
+                        gameData.locationMultiplier = location.multiplier;
+                        updateLocationDisplay();
+                        renderShop();
+                        updateUI();
+                        saveGame();
+                    }
                 }
             });
 
@@ -2420,6 +2983,7 @@
                     document.getElementById('upgradesTab').classList.add('hidden');
                     document.getElementById('intercomsTab').classList.add('hidden');
                     document.getElementById('sauceTab').classList.add('hidden');
+                    document.getElementById('locationsTab').classList.add('hidden');
 
                     if (this.dataset.tab === 'upgrades') {
                         document.getElementById('upgradesTab').classList.remove('hidden');
@@ -2427,6 +2991,8 @@
                         document.getElementById('intercomsTab').classList.remove('hidden');
                     } else if (this.dataset.tab === 'sauce') {
                         document.getElementById('sauceTab').classList.remove('hidden');
+                    } else if (this.dataset.tab === 'locations') {
+                        document.getElementById('locationsTab').classList.remove('hidden');
                     }
                 });
             });
@@ -2466,6 +3032,13 @@
             document.getElementById('rebirthBtn').addEventListener('click', doRebirth);
         }
 
+        function updateSauceDisplay() {
+            const sauce = saucesList.find(s => s.id === gameData.currentSauce);
+            if (sauce) {
+                document.getElementById('currentSauce').textContent = `${sauce.icon} ${sauce.name}`;
+            }
+        }
+
         function getRebirthCost() {
             return Math.floor(1000000 * Math.pow(5, gameData.rebirths));
         }
@@ -2473,7 +3046,7 @@
         function doRebirth() {
             const rebirthCost = getRebirthCost();
             if (gameData.cheese >= rebirthCost) {
-                if (confirm(`Переродиться? Все сбросится.\n\nБонус: +10%\nСледующая стоимость: ${(rebirthCost * 5).toLocaleString()} 🧀`)) {
+                if (confirm(`Переродиться? Все сбросится.\n\nБонус: +10%\nНовая локация разблокируется?\nСледующая стоимость: ${(rebirthCost * 5).toLocaleString()} 🧀`)) {
                     gameData.rebirths++;
                     gameData.cheese = 0;
                     gameData.totalCheese = 0;
@@ -2493,6 +3066,7 @@
                     gameData.sauceBonus = 0;
                     
                     updateIntercomVisual('cyfral');
+                    updateSauceDisplay();
                     renderShop();
                     updateUI();
                     saveGame();
@@ -2514,10 +3088,13 @@
             document.getElementById('levelDisplay').textContent = gameData.level;
             document.getElementById('rebirthCount').textContent = gameData.rebirths;
             document.getElementById('rebirthBonus').textContent = (1 + gameData.rebirths * 0.1).toFixed(1);
-            document.getElementById('clickPower').textContent = Math.floor((gameData.clickPower + gameData.sauceBonus) * currentEventMultiplier).toLocaleString();
+            document.getElementById('clickPower').textContent = Math.floor((gameData.clickPower + gameData.sauceBonus) * currentEventMultiplier * gameData.locationMultiplier).toLocaleString();
             
-            const cps = Math.floor(gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1) * currentEventMultiplier);
+            const cps = Math.floor(gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1) * currentEventMultiplier * gameData.locationMultiplier);
             document.getElementById('cheesePerSec').textContent = cps.toLocaleString();
+
+            document.getElementById('pvpWins').textContent = gameData.pvpWins;
+            document.getElementById('pvpLosses').textContent = gameData.pvpLosses;
 
             const rebirthCost = getRebirthCost();
             document.getElementById('rebirthCost').textContent = rebirthCost.toLocaleString();
@@ -2538,10 +3115,10 @@
 
             if (currentLeaderboardTab === 'balance') {
                 leaders.sort((a, b) => b.cheese - a.cheese);
+            } else if (currentLeaderboardTab === 'pvp') {
+                leaders.sort((a, b) => (b.pvpMMR || 1000) - (a.pvpMMR || 1000));
             } else if (currentLeaderboardTab === 'rebirths') {
                 leaders.sort((a, b) => b.rebirths - a.rebirths);
-            } else if (currentLeaderboardTab === 'all') {
-                leaders.sort((a, b) => (b.allTimeCheese + b.rebirths * 1000000) - (a.allTimeCheese + a.rebirths * 1000000));
             }
 
             leaders = leaders.slice(0, 10);
@@ -2552,10 +3129,12 @@
                 let scoreText = '';
                 if (currentLeaderboardTab === 'balance') {
                     scoreText = `${Math.floor(leader.cheese || 0).toLocaleString()} 🧀`;
-                } else if (currentLeaderboardTab === 'rebirths') {
-                    scoreText = `⭐ ${leader.rebirths || 0}`;
+                } else if (currentLeaderboardTab === 'pvp') {
+                    const mmr = leader.pvpMMR || 1000;
+                    const rank = getRankFromMMR(mmr);
+                    scoreText = `${mmr} MMR (${rank.name})`;
                 } else {
-                    scoreText = `${Math.floor(leader.allTimeCheese || 0).toLocaleString()} 🧀 + ⭐${leader.rebirths || 0}`;
+                    scoreText = `⭐ ${leader.rebirths || 0}`;
                 }
                 
                 return `
@@ -2572,7 +3151,7 @@
 
         function startGameLoop() {
             setInterval(() => {
-                const cps = gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1) * currentEventMultiplier;
+                const cps = gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1) * currentEventMultiplier * gameData.locationMultiplier;
                 gameData.cheese += cps / 10;
                 gameData.totalCheese += cps / 10;
                 gameData.allTimeCheese += cps / 10;
