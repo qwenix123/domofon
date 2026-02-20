@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧀 SOysdomofon - PVP Edition 🚪</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🧀 SOysdomofon - Ultimate Edition 🚪</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -11,18 +11,41 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
             background: #0a0e27;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.3) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(109, 40, 217, 0.3) 0px, transparent 50%);
             min-height: 100vh;
             color: #fff;
             overflow-x: hidden;
+            position: relative;
         }
+
+        /* ФОНЫ ЛОКАЦИЙ */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease;
+        }
+
+        body.bg-entrance::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%231e3a8a" width="1000" height="1000"/></svg>'); }
+        body.bg-district::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%23065f46" width="1000" height="1000"/></svg>'); }
+        body.bg-city::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%237c2d12" width="1000" height="1000"/></svg>'); }
+        body.bg-megapolis::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%236b21a8" width="1000" height="1000"/></svg>'); }
+        body.bg-country::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%23991b1b" width="1000" height="1000"/></svg>'); }
+        body.bg-continent::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%23b45309" width="1000" height="1000"/></svg>'); }
+        body.bg-planet::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%2314532d" width="1000" height="1000"/></svg>'); }
+        body.bg-galaxy::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%231e1b4b" width="1000" height="1000"/></svg>'); }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
@@ -49,32 +72,6 @@
             50% { box-shadow: 0 0 40px currentColor, 0 0 80px currentColor; }
         }
 
-        @keyframes orbit {
-            from { transform: rotate(0deg) translateX(150px) rotate(0deg); }
-            to { transform: rotate(360deg) translateX(150px) rotate(-360deg); }
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.5); }
-        }
-
-        @keyframes rainbow {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
-
-        @keyframes snow {
-            0% { transform: translateY(-10vh); }
-            100% { transform: translateY(110vh); }
-        }
-
-        @keyframes fadeChange {
-            0% { opacity: 1; }
-            50% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
         @keyframes sauceAppear {
             0% { transform: scale(0) rotate(0deg); opacity: 0; }
             50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
@@ -84,6 +81,17 @@
         @keyframes rankShine {
             0% { background-position: -200% center; }
             100% { background-position: 200% center; }
+        }
+
+        @keyframes caseOpen {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        @keyframes itemReveal {
+            0% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+            100% { opacity: 1; transform: scale(1) rotate(360deg); }
         }
 
         /* === AUTH SCREEN === */
@@ -281,11 +289,6 @@
             box-shadow: 0 5px 20px rgba(239, 68, 68, 0.3);
         }
 
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.5);
-        }
-
         .admin-btn {
             background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
             box-shadow: 0 5px 20px rgba(139, 92, 246, 0.3);
@@ -302,30 +305,10 @@
             animation: pulse 2s infinite;
         }
 
-        .global-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            border: 2px solid #fbbf24;
-            color: #fbbf24;
-            padding: 50px 70px;
-            border-radius: 30px;
-            font-size: 2em;
-            font-weight: 700;
-            text-align: center;
-            z-index: 10001;
-            box-shadow: 0 30px 90px rgba(251, 191, 36, 0.5);
-            max-width: 80%;
-            animation: slideIn 0.5s ease;
-        }
-
-        .global-message .author {
-            color: #f59e0b;
-            font-size: 0.6em;
-            margin-bottom: 15px;
+        .cases-btn {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.3);
+            animation: glow 2s infinite;
         }
 
         .notification {
@@ -370,29 +353,31 @@
         }
 
         .pvp-header {
-            padding: 30px;
+            padding: 20px;
             background: rgba(15, 23, 42, 0.8);
             border-bottom: 2px solid rgba(251, 191, 36, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .pvp-player-info {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
 
         .pvp-avatar {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2em;
+            font-size: 1.5em;
             font-weight: 900;
         }
 
@@ -401,12 +386,12 @@
         }
 
         .pvp-name {
-            font-size: 1.3em;
+            font-size: 1.2em;
             font-weight: 700;
         }
 
         .pvp-hits {
-            font-size: 2em;
+            font-size: 1.8em;
             font-weight: 900;
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             -webkit-background-clip: text;
@@ -421,24 +406,21 @@
 
         .pvp-sauce {
             position: absolute;
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             cursor: pointer;
             animation: sauceAppear 0.3s ease;
             transition: all 0.1s;
-            font-size: 4em;
+            font-size: 5em;
             display: flex;
             align-items: center;
             justify-content: center;
             filter: drop-shadow(0 0 20px currentColor);
-        }
-
-        .pvp-sauce:hover {
-            transform: scale(1.2);
+            user-select: none;
         }
 
         .pvp-sauce:active {
-            transform: scale(0.9);
+            transform: scale(0.8);
         }
 
         .pvp-timer {
@@ -489,13 +471,6 @@
             color: #ef4444;
         }
 
-        .pvp-reward {
-            font-size: 2em;
-            margin: 20px 0;
-            font-weight: 700;
-            color: #fbbf24;
-        }
-
         /* === RANK SYSTEM === */
         .rank-badge {
             display: inline-block;
@@ -516,113 +491,6 @@
         .rank-diamond { background: linear-gradient(90deg, #06b6d4, #22d3ee, #06b6d4); }
         .rank-master { background: linear-gradient(90deg, #8b5cf6, #a78bfa, #8b5cf6); }
         .rank-grandmaster { background: linear-gradient(90deg, #ef4444, #f87171, #ef4444); }
-
-        /* === EVENT EFFECTS === */
-        .event-banner {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 60px;
-            border-radius: 30px;
-            z-index: 9999;
-            text-align: center;
-            border: 3px solid;
-            animation: slideIn 0.7s ease;
-            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
-        }
-
-        .event-icon {
-            font-size: 6em;
-            margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .event-title {
-            font-size: 2.5em;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .event-multiplier {
-            font-size: 3.5em;
-            font-weight: 900;
-            color: #fbbf24;
-            margin: 20px 0;
-            animation: pulse 1s infinite;
-        }
-
-        .event-indicator {
-            position: fixed;
-            top: 150px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 15px 30px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 9998;
-            animation: float 3s ease-in-out infinite;
-            border: 2px solid;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .event-effect {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9997;
-        }
-
-        .star {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 10px white;
-            animation: twinkle 2s infinite;
-        }
-
-        .orbit-particle {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            animation: orbit 10s linear infinite;
-            box-shadow: 0 0 30px currentColor;
-        }
-
-        .rainbow-effect {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, 
-                rgba(255,0,0,0.15), rgba(255,154,0,0.15), rgba(208,222,33,0.15), 
-                rgba(79,220,74,0.15), rgba(63,218,216,0.15), rgba(47,201,226,0.15), 
-                rgba(28,127,238,0.15), rgba(95,21,242,0.15), rgba(186,12,248,0.15));
-            animation: rainbow 3s linear infinite;
-            pointer-events: none;
-        }
-
-        .snow-particle {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: snow linear infinite;
-            box-shadow: 0 0 10px white;
-        }
 
         /* === MODALS === */
         .modal {
@@ -688,36 +556,6 @@
             transform: rotate(90deg);
         }
 
-        .modal-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 5px;
-            border-radius: 15px;
-        }
-
-        .modal-tab {
-            flex: 1;
-            min-width: 100px;
-            padding: 10px;
-            background: transparent;
-            border: none;
-            border-radius: 12px;
-            color: #94a3b8;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-family: 'Poppins', sans-serif;
-            font-size: 13px;
-        }
-
-        .modal-tab.active {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: #0a0e27;
-        }
-
         .admin-section {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -779,77 +617,120 @@
             box-shadow: 0 5px 20px rgba(251, 191, 36, 0.3);
         }
 
-        .admin-row {
+        /* === CASES === */
+        .case-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
         }
 
-        .user-list {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .user-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s;
-        }
-
-        .user-item:hover {
+        .case-card {
             background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(251, 191, 36, 0.3);
-        }
-
-        .event-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .event-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
             padding: 20px;
-            border-radius: 15px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
+            position: relative;
         }
 
-        .event-card:hover {
-            background: rgba(255, 255, 255, 0.08);
+        .case-card:hover {
+            transform: translateY(-10px);
             border-color: #fbbf24;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 40px rgba(251, 191, 36, 0.3);
+            box-shadow: 0 20px 60px rgba(251, 191, 36, 0.3);
         }
 
-        .event-card .icon {
-            font-size: 3em;
+        .case-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .case-icon {
+            font-size: 5em;
+            margin-bottom: 15px;
+        }
+
+        .case-name {
+            font-size: 1.3em;
+            font-weight: 700;
             margin-bottom: 10px;
         }
 
-        .event-card .name {
-            font-weight: 700;
-            margin-bottom: 5px;
-            font-size: 0.9em;
+        .case-price {
+            font-size: 1.5em;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 15px;
         }
 
-        .event-card .mult {
-            color: #fbbf24;
-            font-size: 1.3em;
-            font-weight: 800;
+        .case-items-count {
+            font-size: 0.9em;
+            color: #94a3b8;
         }
+
+        .case-opening {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 30000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .case-opening.active {
+            display: flex;
+        }
+
+        .case-animation {
+            text-align: center;
+        }
+
+        .case-box {
+            font-size: 15em;
+            animation: caseOpen 2s ease;
+            margin-bottom: 30px;
+        }
+
+        .case-item-reveal {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 50px;
+            border-radius: 30px;
+            border: 3px solid;
+            animation: itemReveal 0.8s ease;
+        }
+
+        .item-icon {
+            font-size: 8em;
+            margin-bottom: 20px;
+        }
+
+        .item-name {
+            font-size: 2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .item-rarity {
+            font-size: 1.2em;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        .rarity-common { background: #71717a; color: white; }
+        .rarity-uncommon { background: #10b981; color: white; }
+        .rarity-rare { background: #3b82f6; color: white; }
+        .rarity-epic { background: #a855f7; color: white; }
+        .rarity-legendary { background: #f59e0b; color: #0a0e27; }
+        .rarity-mythic { background: #ef4444; color: white; }
 
         /* === MAIN CONTENT === */
         .main-content {
@@ -985,44 +866,19 @@
             animation: fadeChange 0.6s ease;
         }
 
-        .intercom:hover {
-            transform: scale(1.08) rotate(2deg);
-        }
-
         .intercom:active {
             transform: scale(0.95);
         }
 
         /* РАЗНЫЕ СТИЛИ ДОМОФОНОВ */
-        .intercom.cyfral {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1e3a8a 100%);
-            border-color: #3b82f6;
-            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.4);
-        }
-
-        .intercom.metakom {
-            background: linear-gradient(135deg, #065f46 0%, #047857 50%, #065f46 100%);
-            border-color: #10b981;
-            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.4);
-        }
-
-        .intercom.vizit {
-            background: linear-gradient(135deg, #7c2d12 0%, #9a3412 50%, #7c2d12 100%);
-            border-color: #f97316;
-            box-shadow: 0 20px 60px rgba(249, 115, 22, 0.4);
-        }
-
-        .intercom.eltis {
-            background: linear-gradient(135deg, #6b21a8 0%, #7e22ce 50%, #6b21a8 100%);
-            border-color: #a855f7;
-            box-shadow: 0 20px 60px rgba(168, 85, 247, 0.4);
-        }
-
-        .intercom.stalker {
-            background: linear-gradient(135deg, #991b1b 0%, #b91c1c 50%, #991b1b 100%);
-            border-color: #ef4444;
-            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.4);
-        }
+        .intercom.cyfral { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1e3a8a 100%); border-color: #3b82f6; box-shadow: 0 20px 60px rgba(59, 130, 246, 0.4); }
+        .intercom.metakom { background: linear-gradient(135deg, #065f46 0%, #047857 50%, #065f46 100%); border-color: #10b981; box-shadow: 0 20px 60px rgba(16, 185, 129, 0.4); }
+        .intercom.vizit { background: linear-gradient(135deg, #7c2d12 0%, #9a3412 50%, #7c2d12 100%); border-color: #f97316; box-shadow: 0 20px 60px rgba(249, 115, 22, 0.4); }
+        .intercom.eltis { background: linear-gradient(135deg, #6b21a8 0%, #7e22ce 50%, #6b21a8 100%); border-color: #a855f7; box-shadow: 0 20px 60px rgba(168, 85, 247, 0.4); }
+        .intercom.stalker { background: linear-gradient(135deg, #991b1b 0%, #b91c1c 50%, #991b1b 100%); border-color: #ef4444; box-shadow: 0 20px 60px rgba(239, 68, 68, 0.4); }
+        .intercom.quantum { background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #1e3a8a 100%); border-color: #8b5cf6; box-shadow: 0 20px 60px rgba(139, 92, 246, 0.4); }
+        .intercom.neon { background: linear-gradient(135deg, #14b8a6 0%, #06b6d4 50%, #14b8a6 100%); border-color: #22d3ee; box-shadow: 0 20px 60px rgba(34, 211, 238, 0.4); }
+        .intercom.gold { background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #d97706 100%); border-color: #fbbf24; box-shadow: 0 20px 60px rgba(251, 191, 36, 0.4); }
 
         .intercom-screen {
             width: 85%;
@@ -1043,6 +899,9 @@
         .intercom.vizit .intercom-screen { color: #7c2d12; }
         .intercom.eltis .intercom-screen { color: #6b21a8; }
         .intercom.stalker .intercom-screen { color: #991b1b; }
+        .intercom.quantum .intercom-screen { color: #7c3aed; }
+        .intercom.neon .intercom-screen { color: #14b8a6; }
+        .intercom.gold .intercom-screen { color: #d97706; }
 
         .intercom-buttons {
             display: grid;
@@ -1068,9 +927,27 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .intercom-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
+        /* УКРАШЕНИЯ НА ДОМОФОНЕ */
+        .intercom-decoration {
+            position: absolute;
+            font-size: 3em;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        .decoration-top-left { top: 5%; left: 5%; }
+        .decoration-top-right { top: 5%; right: 5%; }
+        .decoration-bottom-left { bottom: 15%; left: 5%; }
+        .decoration-bottom-right { bottom: 15%; right: 5%; }
+
+        /* СОУС ВОЗЛЕ ДОМОФОНА */
+        .sauce-display {
+            position: absolute;
+            top: 10%;
+            right: -60px;
+            font-size: 4em;
+            animation: float 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px currentColor);
         }
 
         .cheese-splash {
@@ -1125,14 +1002,14 @@
 
         .shop-tab {
             flex: 1;
-            min-width: 80px;
+            min-width: 70px;
             padding: 10px 5px;
             background: transparent;
             border: none;
             border-radius: 12px;
             color: #94a3b8;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             transition: all 0.3s;
             font-family: 'Poppins', sans-serif;
@@ -1371,10 +1248,6 @@
             border-radius: 10px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        }
-
         .hidden {
             display: none !important;
         }
@@ -1396,15 +1269,33 @@
             outline: none;
             border-color: #fbbf24;
         }
+
+        @media (max-width: 768px) {
+            .intercom {
+                width: 280px;
+                height: 360px;
+            }
+
+            .pvp-sauce {
+                width: 80px;
+                height: 80px;
+                font-size: 4em;
+            }
+
+            .sauce-display {
+                right: -50px;
+                font-size: 3em;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="bg-entrance">
 
     <div id="authScreen" class="auth-screen">
         <div class="auth-container">
             <div class="auth-logo">
                 <h1>🧀 SOysdomofon</h1>
-                <p>PVP Edition - Битва за Сыр</p>
+                <p>Ultimate Edition - Кейсы & PVP</p>
             </div>
 
             <div class="auth-tabs">
@@ -1438,9 +1329,10 @@
                 <p>Игрок: <span id="playerName"></span> | <span id="playerRank" class="rank-badge rank-novice">Новичок</span> | MMR: <span id="playerMMR">1000</span></p>
             </div>
             <div class="header-buttons">
-                <button class="btn pvp-btn" id="pvpBtn">⚔️ PVP АРЕНА</button>
-                <button class="btn transfer-btn" id="transferBtn">💸 Перевод</button>
-                <button class="btn admin-btn hidden" id="adminBtn">⚙️ Админ</button>
+                <button class="btn cases-btn" id="casesBtn">📦 КЕЙСЫ</button>
+                <button class="btn pvp-btn" id="pvpBtn">⚔️ PVP</button>
+                <button class="btn transfer-btn" id="transferBtn">💸</button>
+                <button class="btn admin-btn hidden" id="adminBtn">⚙️</button>
                 <button class="btn logout-btn" id="logoutBtn">Выход</button>
             </div>
         </div>
@@ -1470,11 +1362,6 @@
                 </div>
 
                 <div class="stat-item">
-                    <div class="stat-label">Всего заработано</div>
-                    <div class="stat-value" id="totalCheese">0</div>
-                </div>
-
-                <div class="stat-item">
                     <div class="stat-label">PVP побед / поражений</div>
                     <div class="stat-value" style="font-size: 1.3em;"><span id="pvpWins">0</span> / <span id="pvpLosses">0</span></div>
                 </div>
@@ -1483,10 +1370,6 @@
                     <div class="stat-item">
                         <div class="stat-label">⭐ Перерождения</div>
                         <div class="stat-value" id="rebirthCount">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Множитель</div>
-                        <div class="stat-value">x<span id="rebirthBonus">1</span></div>
                     </div>
                     <button class="rebirth-btn" id="rebirthBtn">
                         ⭐ ПЕРЕРОДИТЬСЯ (<span id="rebirthCost">1,000,000</span> 🧀)
@@ -1521,11 +1404,13 @@
                                 <div class="intercom-btn">0</div>
                                 <div class="intercom-btn">#</div>
                             </div>
+                            <div id="intercomDecorations"></div>
                         </div>
+                        <div class="sauce-display" id="sauceDisplay">🧀</div>
                     </div>
 
                     <div class="click-info">
-                        ⚡ +<span id="clickPower">1</span> сыра за клик | <span id="currentSauce">🧀 Сыр</span>
+                        ⚡ +<span id="clickPower">1</span> сыра за клик
                     </div>
                 </div>
 
@@ -1533,8 +1418,8 @@
                     <h2>🏆 Топ Игроков</h2>
                     
                     <div class="leaderboard-tabs">
-                        <button class="leaderboard-tab active" data-lb-tab="balance">По балансу</button>
-                        <button class="leaderboard-tab" data-lb-tab="pvp">PVP рейтинг</button>
+                        <button class="leaderboard-tab active" data-lb-tab="balance">Баланс</button>
+                        <button class="leaderboard-tab" data-lb-tab="pvp">PVP</button>
                         <button class="leaderboard-tab" data-lb-tab="rebirths">Перерождения</button>
                     </div>
 
@@ -1591,6 +1476,25 @@
         </div>
     </div>
 
+    <!-- CASES MODAL -->
+    <div id="casesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📦 Кейсы</h2>
+                <button class="close-modal" onclick="closeCasesModal()">×</button>
+            </div>
+            <div class="case-grid" id="caseGrid"></div>
+        </div>
+    </div>
+
+    <!-- CASE OPENING -->
+    <div id="caseOpening" class="case-opening">
+        <div class="case-animation">
+            <div class="case-box" id="caseBox">📦</div>
+            <div id="caseResult"></div>
+        </div>
+    </div>
+
     <div id="transferModal" class="modal">
         <div class="modal-content" style="max-width: 500px;">
             <div class="modal-header">
@@ -1632,24 +1536,23 @@
                     </div>
                 </div>
 
-                <h3>Выберите ставку</h3>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                    <button class="admin-button" onclick="startPVP(1000)">1,000 🧀</button>
-                    <button class="admin-button" onclick="startPVP(5000)">5,000 🧀</button>
-                    <button class="admin-button" onclick="startPVP(10000)">10,000 🧀</button>
-                    <button class="admin-button" onclick="startPVP(50000)">50,000 🧀</button>
-                    <button class="admin-button" onclick="startPVP(100000)">100,000 🧀</button>
-                    <button class="admin-button" onclick="startPVP(500000)">500,000 🧀</button>
+                <h3>Выберите ставку (только бот)</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+                    <button class="admin-button" onclick="startPVP(1000)">1K 🧀<br><small style="opacity: 0.7;">Легко</small></button>
+                    <button class="admin-button" onclick="startPVP(5000)">5K 🧀<br><small style="opacity: 0.7;">Норм</small></button>
+                    <button class="admin-button" onclick="startPVP(10000)">10K 🧀<br><small style="opacity: 0.7;">Средне</small></button>
+                    <button class="admin-button" onclick="startPVP(50000)">50K 🧀<br><small style="opacity: 0.7;">Сложно</small></button>
+                    <button class="admin-button" onclick="startPVP(100000)">100K 🧀<br><small style="opacity: 0.7;">Очень</small></button>
+                    <button class="admin-button" onclick="startPVP(500000)">500K 🧀<br><small style="opacity: 0.7;">БЕЗУМИЕ</small></button>
                 </div>
 
-                <div style="margin-top: 20px; padding: 15px; background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 12px;">
-                    <div style="font-weight: 700; margin-bottom: 10px;">⚔️ Правила PVP:</div>
+                <div style="padding: 15px; background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 12px;">
+                    <div style="font-weight: 700; margin-bottom: 10px;">⚔️ Правила:</div>
                     <div style="font-size: 0.9em; color: #94a3b8; line-height: 1.6;">
-                        • На экране будут появляться соусы<br>
-                        • Кликайте по ним быстрее противника<br>
-                        • Кто первым нанесет 20 хитов - побеждает<br>
-                        • Победитель забирает обе ставки<br>
-                        • За победу/поражение изменяется MMR
+                        • Кликайте по соусам быстрее бота<br>
+                        • Кто первым нанесет 20 хитов - победит<br>
+                        • Чем выше ставка - тем сложнее бот<br>
+                        • Победитель забирает обе ставки
                     </div>
                 </div>
             </div>
@@ -1659,21 +1562,10 @@
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>⚙️ Админ Панель</h2>
+                <h2>⚙️ Админ</h2>
                 <button class="close-modal" onclick="closeAdminModal()">×</button>
             </div>
-
-            <div class="modal-tabs">
-                <button class="modal-tab active" data-admin-tab="users">Пользователи</button>
-                <button class="modal-tab" data-admin-tab="player">Управление</button>
-                <button class="modal-tab" data-admin-tab="broadcast">Объявление</button>
-                <button class="modal-tab" data-admin-tab="events">Евенты</button>
-            </div>
-
-            <div id="usersAdminTab" class="admin-tab-content"></div>
-            <div id="playerAdminTab" class="admin-tab-content hidden"></div>
-            <div id="broadcastAdminTab" class="admin-tab-content hidden"></div>
-            <div id="eventsAdminTab" class="admin-tab-content hidden"></div>
+            <div id="adminContent"></div>
         </div>
     </div>
 
@@ -1688,8 +1580,6 @@
 
         let currentUser = null;
         let isAuthMode = true;
-        let currentEventMultiplier = 1;
-        let currentEventData = null;
         let gameData = {
             cheese: 0,
             totalCheese: 0,
@@ -1711,32 +1601,41 @@
             locationMultiplier: 1,
             pvpWins: 0,
             pvpLosses: 0,
-            pvpMMR: 1000
+            pvpMMR: 1000,
+            inventory: {
+                decorations: [],
+                backgrounds: []
+            },
+            equipped: {
+                decoration: null
+            },
+            openedCases: {}
         };
 
         const upgradesList = [
-            { id: 'finger', name: '👆 Сильный палец', desc: '+1 сыра за клик', baseCost: 50, type: 'click', power: 1, scale: 1.5 },
-            { id: 'glove', name: '🧤 Перчатка', desc: '+3 сыра за клик', baseCost: 250, type: 'click', power: 3, scale: 1.5 },
-            { id: 'brush2', name: '🖌️ Кисточка', desc: '+8 сыра за клик', baseCost: 1000, type: 'click', power: 8, scale: 1.6 },
-            { id: 'roller', name: '🎨 Валик', desc: '+20 сыра за клик', baseCost: 5000, type: 'click', power: 20, scale: 1.6 },
-            { id: 'sprayer', name: '💧 Пульверизатор', desc: '+50 сыра за клик', baseCost: 25000, type: 'click', power: 50, scale: 1.7 },
-            { id: 'bucket', name: '🪣 Ведро', desc: '+150 сыра за клик', baseCost: 100000, type: 'click', power: 150, scale: 1.7 },
-            { id: 'auto', name: '🤖 Робот', desc: '+1 сыра/сек', baseCost: 100, type: 'auto', power: 1, scale: 1.7 },
-            { id: 'sponge', name: '🧽 Губка', desc: '+5 сыра/сек', baseCost: 500, type: 'auto', power: 5, scale: 1.7 },
-            { id: 'drone', name: '🚁 Дрон', desc: '+15 сыра/сек', baseCost: 2500, type: 'auto', power: 15, scale: 1.8 },
-            { id: 'brush', name: '🖌️ Авто-кисть', desc: '+50 сыра/сек', baseCost: 10000, type: 'auto', power: 50, scale: 1.8 },
-            { id: 'spray', name: '💦 Распылитель', desc: '+150 сыра/сек', baseCost: 50000, type: 'auto', power: 150, scale: 1.9 },
-            { id: 'machine', name: '⚙️ Машина', desc: '+500 сыра/сек', baseCost: 250000, type: 'auto', power: 500, scale: 1.9 },
-            { id: 'gun', name: '🔫 Пушка', desc: '+1500 сыра/сек', baseCost: 1000000, type: 'auto', power: 1500, scale: 2.0 },
-            { id: 'factory', name: '🏭 Фабрика', desc: '+5000 сыра/сек', baseCost: 5000000, type: 'auto', power: 5000, scale: 2.1 },
+            { id: 'finger', name: '👆 Палец', desc: '+1 сыра/клик', baseCost: 50, type: 'click', power: 1, scale: 1.5 },
+            { id: 'glove', name: '🧤 Перчатка', desc: '+3 сыра/клик', baseCost: 250, type: 'click', power: 3, scale: 1.5 },
+            { id: 'brush2', name: '🖌️ Кисть', desc: '+8 сыра/клик', baseCost: 1000, type: 'click', power: 8, scale: 1.6 },
+            { id: 'roller', name: '🎨 Валик', desc: '+20 сыра/клик', baseCost: 5000, type: 'click', power: 20, scale: 1.6 },
+            { id: 'sprayer', name: '💧 Спрей', desc: '+50 сыра/клик', baseCost: 25000, type: 'click', power: 50, scale: 1.7 },
+            { id: 'bucket', name: '🪣 Ведро', desc: '+150 сыра/клик', baseCost: 100000, type: 'click', power: 150, scale: 1.7 },
+            { id: 'auto', name: '🤖 Робот', desc: '+1 сыр/сек', baseCost: 100, type: 'auto', power: 1, scale: 1.7 },
+            { id: 'sponge', name: '🧽 Губка', desc: '+5 сыр/сек', baseCost: 500, type: 'auto', power: 5, scale: 1.7 },
+            { id: 'drone', name: '🚁 Дрон', desc: '+15 сыр/сек', baseCost: 2500, type: 'auto', power: 15, scale: 1.8 },
+            { id: 'brush', name: '🖌️ Авто-кисть', desc: '+50 сыр/сек', baseCost: 10000, type: 'auto', power: 50, scale: 1.8 },
+            { id: 'spray', name: '💦 Распылитель', desc: '+150 сыр/сек', baseCost: 50000, type: 'auto', power: 150, scale: 1.9 },
+            { id: 'machine', name: '⚙️ Машина', desc: '+500 сыр/сек', baseCost: 250000, type: 'auto', power: 500, scale: 1.9 },
         ];
 
         const intercomsList = [
             { id: 'cyfral', name: 'CYFRAL', bonus: 1.0, cost: 0 },
-            { id: 'metakom', name: 'МЕТАКОМ', bonus: 1.15, cost: 25000 },
-            { id: 'vizit', name: 'VIZIT', bonus: 1.35, cost: 100000 },
-            { id: 'eltis', name: 'ELTIS', bonus: 1.60, cost: 500000 },
-            { id: 'stalker', name: 'СТАЛКЕР', bonus: 2.0, cost: 2500000 },
+            { id: 'metakom', name: 'МЕТАКОМ', bonus: 1.10, cost: 25000 },
+            { id: 'vizit', name: 'VIZIT', bonus: 1.20, cost: 100000 },
+            { id: 'eltis', name: 'ELTIS', bonus: 1.30, cost: 500000 },
+            { id: 'stalker', name: 'СТАЛКЕР', bonus: 1.40, cost: 2500000 },
+            { id: 'quantum', name: 'QUANTUM', bonus: 1.50, cost: 10000000 },
+            { id: 'neon', name: 'NEON', bonus: 1.60, cost: 50000000 },
+            { id: 'gold', name: 'GOLD', bonus: 2.0, cost: 250000000 },
         ];
 
         const saucesList = [
@@ -1748,29 +1647,63 @@
             { id: 'bbq', name: 'Барбекю', icon: '🍖', bonus: 1000, cost: 10000000 },
             { id: 'honey', name: 'Медовый', icon: '🍯', bonus: 3000, cost: 50000000 },
             { id: 'chili', name: 'Чили', icon: '🌶️', bonus: 10000, cost: 250000000 },
+            { id: 'wasabi', name: 'Васаби', icon: '🟢', bonus: 30000, cost: 1000000000 },
+            { id: 'truffle', name: 'Трюфель', icon: '🍄', bonus: 100000, cost: 5000000000 },
         ];
 
         const locationsList = [
             { id: 'entrance', name: 'Подъезд', icon: '🏠', multiplier: 1.0, cost: 0, requiredRebirths: 0 },
-            { id: 'district', name: 'Район', icon: '🏘️', multiplier: 1.5, cost: 100000, requiredRebirths: 1 },
-            { id: 'city', name: 'Город', icon: '🏙️', multiplier: 2.0, cost: 1000000, requiredRebirths: 3 },
-            { id: 'megapolis', name: 'Мегаполис', icon: '🌆', multiplier: 3.0, cost: 10000000, requiredRebirths: 5 },
-            { id: 'country', name: 'Страна', icon: '🗺️', multiplier: 5.0, cost: 100000000, requiredRebirths: 10 },
-            { id: 'continent', name: 'Континент', icon: '🌍', multiplier: 8.0, cost: 1000000000, requiredRebirths: 20 },
-            { id: 'planet', name: 'Планета', icon: '🌎', multiplier: 15.0, cost: 10000000000, requiredRebirths: 35 },
-            { id: 'galaxy', name: 'Галактика', icon: '🌌', multiplier: 25.0, cost: 100000000000, requiredRebirths: 50 },
+            { id: 'district', name: 'Район', icon: '🏘️', multiplier: 1.2, cost: 100000, requiredRebirths: 1 },
+            { id: 'city', name: 'Город', icon: '🏙️', multiplier: 1.4, cost: 1000000, requiredRebirths: 3 },
+            { id: 'megapolis', name: 'Мегаполис', icon: '🌆', multiplier: 1.7, cost: 10000000, requiredRebirths: 5 },
+            { id: 'country', name: 'Страна', icon: '🗺️', multiplier: 2.0, cost: 100000000, requiredRebirths: 10 },
+            { id: 'continent', name: 'Континент', icon: '🌍', multiplier: 2.5, cost: 1000000000, requiredRebirths: 20 },
+            { id: 'planet', name: 'Планета', icon: '🌎', multiplier: 3.0, cost: 10000000000, requiredRebirths: 35 },
+            { id: 'galaxy', name: 'Галактика', icon: '🌌', multiplier: 4.0, cost: 100000000000, requiredRebirths: 50 },
         ];
 
-        const eventsList = [
-            { id: 'double', name: 'Двойной сыр', icon: '🧀🧀', multiplier: 2, color: '#fbbf24', effect: 'normal' },
-            { id: 'triple', name: 'Тройной сыр', icon: '🧀×3', multiplier: 3, color: '#f59e0b', effect: 'normal' },
-            { id: 'mega', name: 'Мега бонус', icon: '💰', multiplier: 5, color: '#d97706', effect: 'rainbow' },
-            { id: 'ultra', name: 'Ультра бонус', icon: '🌟', multiplier: 10, color: '#f1c40f', effect: 'stars' },
-            { id: 'cosmic', name: 'Космический', icon: '🌌', multiplier: 15, color: '#9b59b6', effect: 'cosmic' },
-            { id: 'nuclear', name: 'Ядерный', icon: '☢️', multiplier: 20, color: '#10b981', effect: 'fireworks' },
-            { id: 'quantum', name: 'Квантовый', icon: '⚛️', multiplier: 25, color: '#3b82f6', effect: 'cosmic' },
-            { id: 'infinity', name: 'Бесконечность', icon: '∞', multiplier: 50, color: '#8b5cf6', effect: 'rainbow' },
-            { id: 'godmode', name: 'Режим бога', icon: '👑', multiplier: 100, color: '#ef4444', effect: 'fireworks' },
+        // СИСТЕМА КЕЙСОВ
+        const casesList = [
+            {
+                id: 'starter',
+                name: 'Стартовый кейс',
+                icon: '📦',
+                price: 1000,
+                items: [
+                    { id: 'keychain1', name: 'Брелок сыр', icon: '🧀', rarity: 'common', type: 'decoration' },
+                    { id: 'keychain2', name: 'Брелок ключ', icon: '🔑', rarity: 'common', type: 'decoration' },
+                    { id: 'keychain3', name: 'Брелок сердце', icon: '❤️', rarity: 'uncommon', type: 'decoration' },
+                    { id: 'keychain4', name: 'Брелок звезда', icon: '⭐', rarity: 'uncommon', type: 'decoration' },
+                    { id: 'keychain5', name: 'Брелок корона', icon: '👑', rarity: 'rare', type: 'decoration' },
+                ]
+            },
+            {
+                id: 'premium',
+                name: 'Премиум кейс',
+                icon: '🎁',
+                price: 10000,
+                items: [
+                    { id: 'keychain6', name: 'Брелок алмаз', icon: '💎', rarity: 'rare', type: 'decoration' },
+                    { id: 'keychain7', name: 'Брелок молния', icon: '⚡', rarity: 'rare', type: 'decoration' },
+                    { id: 'keychain8', name: 'Брелок огонь', icon: '🔥', rarity: 'epic', type: 'decoration' },
+                    { id: 'keychain9', name: 'Брелок череп', icon: '💀', rarity: 'epic', type: 'decoration' },
+                    { id: 'keychain10', name: 'Брелок дракон', icon: '🐉', rarity: 'legendary', type: 'decoration' },
+                    { id: 'keychain11', name: 'Брелок единорог', icon: '🦄', rarity: 'legendary', type: 'decoration' },
+                ]
+            },
+            {
+                id: 'elite',
+                name: 'Элитный кейс',
+                icon: '💼',
+                price: 100000,
+                items: [
+                    { id: 'keychain12', name: 'Брелок галактика', icon: '🌌', rarity: 'legendary', type: 'decoration' },
+                    { id: 'keychain13', name: 'Брелок радуга', icon: '🌈', rarity: 'legendary', type: 'decoration' },
+                    { id: 'keychain14', name: 'Брелок космос', icon: '🚀', rarity: 'mythic', type: 'decoration' },
+                    { id: 'keychain15', name: 'Брелок инфинити', icon: '∞', rarity: 'mythic', type: 'decoration' },
+                    { id: 'keychain16', name: 'Брелок бог', icon: '☀️', rarity: 'mythic', type: 'decoration' },
+                ]
+            },
         ];
 
         const rankThresholds = [
@@ -1803,44 +1736,6 @@
         if (savedUser) {
             currentUser = savedUser;
             loadGameData();
-        }
-
-        onValue(ref(database, 'globalMessage'), (snapshot) => {
-            const data = snapshot.val();
-            if (data && data.message && data.timestamp > Date.now() - 10000) {
-                showGlobalMessage(data.author, data.message);
-            }
-        });
-
-        onValue(ref(database, 'activeEvent'), (snapshot) => {
-            const data = snapshot.val();
-            if (data && data.endTime > Date.now()) {
-                activateEvent(data);
-            } else {
-                deactivateEvent();
-            }
-        });
-
-        if (currentUser) {
-            onValue(ref(database, 'transfers/' + currentUser), async (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    for (let key in data) {
-                        const transfer = data[key];
-                        if (!transfer.processed) {
-                            gameData.cheese += transfer.amount;
-                            gameData.totalCheese += transfer.amount;
-                            gameData.allTimeCheese += transfer.amount;
-                            
-                            showNotification(`Получен перевод ${transfer.amount.toLocaleString()} 🧀 от ${transfer.from}`, 'success');
-                            
-                            await update(ref(database, `transfers/${currentUser}/${key}`), { processed: true });
-                            updateUI();
-                            saveGame();
-                        }
-                    }
-                }
-            });
         }
 
         document.getElementById('loginTab').addEventListener('click', function() {
@@ -1946,10 +1841,12 @@
                 gameData = {
                     ...gameData,
                     ...loadedData,
-                    upgrades: loadedData.upgrades || {}
+                    upgrades: loadedData.upgrades || {},
+                    inventory: loadedData.inventory || { decorations: [], backgrounds: [] },
+                    equipped: loadedData.equipped || { decoration: null },
+                    openedCases: loadedData.openedCases || {}
                 };
 
-                // Инициализация значений по умолчанию для PVP
                 if (gameData.pvpMMR === undefined) gameData.pvpMMR = 1000;
                 if (gameData.pvpWins === undefined) gameData.pvpWins = 0;
                 if (gameData.pvpLosses === undefined) gameData.pvpLosses = 0;
@@ -1988,6 +1885,8 @@
             
             updateIntercomVisual(gameData.currentIntercom);
             updateLocationDisplay();
+            updateSauceDisplay();
+            updateDecoration();
             renderShop();
             updateUI();
             startGameLoop();
@@ -2012,6 +1911,37 @@
                 document.getElementById('locationName').textContent = `${location.icon} ${location.name} (x${location.multiplier})`;
                 document.getElementById('locationMultiplier').textContent = location.multiplier;
                 gameData.locationMultiplier = location.multiplier;
+
+                // Меняем фон
+                document.body.className = 'bg-' + location.id;
+            }
+        }
+
+        function updateSauceDisplay() {
+            const sauce = saucesList.find(s => s.id === gameData.currentSauce);
+            if (sauce) {
+                document.getElementById('sauceDisplay').textContent = sauce.icon;
+            }
+        }
+
+        function updateDecoration() {
+            const container = document.getElementById('intercomDecorations');
+            container.innerHTML = '';
+
+            if (gameData.equipped.decoration) {
+                const decoration = casesList
+                    .flatMap(c => c.items)
+                    .find(i => i.id === gameData.equipped.decoration);
+
+                if (decoration) {
+                    const positions = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+                    positions.forEach(pos => {
+                        const decEl = document.createElement('div');
+                        decEl.className = `intercom-decoration decoration-${pos}`;
+                        decEl.textContent = decoration.icon;
+                        container.appendChild(decEl);
+                    });
+                }
             }
         }
 
@@ -2038,8 +1968,13 @@
             document.getElementById('pvpModalLosses').textContent = gameData.pvpLosses;
         });
 
+        document.getElementById('casesBtn').addEventListener('click', function() {
+            document.getElementById('casesModal').classList.add('active');
+            renderCases();
+        });
+
         document.getElementById('adminBtn').addEventListener('click', function() {
-            openAdminPanel();
+            document.getElementById('adminModal').classList.add('active');
         });
 
         window.closeTransferModal = function() {
@@ -2048,6 +1983,10 @@
 
         window.closePVPModal = function() {
             document.getElementById('pvpModal').classList.remove('active');
+        };
+
+        window.closeCasesModal = function() {
+            document.getElementById('casesModal').classList.remove('active');
         };
 
         window.closeAdminModal = function() {
@@ -2095,12 +2034,13 @@
             player1Hits: 0,
             player2Hits: 0,
             countdown: 3,
-            botDifficulty: 0.7
+            botDifficulty: 0.3,
+            botSpeed: 800
         };
 
         window.startPVP = async function(bet) {
             if (gameData.cheese < bet) {
-                showNotification('Недостаточно сыра для ставки', 'error');
+                showNotification('Недостаточно сыра', 'error');
                 return;
             }
 
@@ -2110,13 +2050,36 @@
 
             closePVPModal();
 
+            // Сложность зависит от ставки
+            let difficulty, speed;
+            if (bet <= 1000) {
+                difficulty = 0.3;
+                speed = 800;
+            } else if (bet <= 5000) {
+                difficulty = 0.4;
+                speed = 700;
+            } else if (bet <= 10000) {
+                difficulty = 0.5;
+                speed = 600;
+            } else if (bet <= 50000) {
+                difficulty = 0.6;
+                speed = 500;
+            } else if (bet <= 100000) {
+                difficulty = 0.7;
+                speed = 400;
+            } else {
+                difficulty = 0.85;
+                speed = 300;
+            }
+
             pvpGameState = {
                 active: true,
                 bet: bet,
                 player1Hits: 0,
                 player2Hits: 0,
                 countdown: 3,
-                botDifficulty: 0.7 + (gameData.pvpMMR - 1000) / 5000
+                botDifficulty: difficulty,
+                botSpeed: speed
             };
 
             document.getElementById('pvpArena').classList.add('active');
@@ -2157,13 +2120,16 @@
             const randomSauce = saucesList[Math.floor(Math.random() * saucesList.length)];
             sauce.textContent = randomSauce.icon;
             
-            const maxX = battlefield.clientWidth - 80;
-            const maxY = battlefield.clientHeight - 80;
+            const maxX = battlefield.clientWidth - 100;
+            const maxY = battlefield.clientHeight - 100;
             sauce.style.left = Math.random() * maxX + 'px';
             sauce.style.top = Math.random() * maxY + 'px';
 
+            let clicked = false;
+
             sauce.addEventListener('click', function() {
-                if (!pvpGameState.active) return;
+                if (!pvpGameState.active || clicked) return;
+                clicked = true;
                 
                 pvpGameState.player1Hits++;
                 document.getElementById('pvpPlayer1Hits').textContent = pvpGameState.player1Hits;
@@ -2174,14 +2140,15 @@
                     return;
                 }
 
-                setTimeout(() => spawnPVPSauce(), 300);
+                setTimeout(() => spawnPVPSauce(), 200);
             });
 
             battlefield.appendChild(sauce);
 
-            // Бот кликает с вероятностью
+            // Бот кликает
             setTimeout(() => {
-                if (sauce.parentElement && pvpGameState.active && Math.random() < pvpGameState.botDifficulty) {
+                if (sauce.parentElement && pvpGameState.active && !clicked && Math.random() < pvpGameState.botDifficulty) {
+                    clicked = true;
                     pvpGameState.player2Hits++;
                     document.getElementById('pvpPlayer2Hits').textContent = pvpGameState.player2Hits;
                     sauce.remove();
@@ -2191,9 +2158,9 @@
                         return;
                     }
 
-                    setTimeout(() => spawnPVPSauce(), 300);
+                    setTimeout(() => spawnPVPSauce(), 200);
                 }
-            }, 200 + Math.random() * 300);
+            }, pvpGameState.botSpeed);
         }
 
         async function endPVP(playerWon) {
@@ -2215,9 +2182,9 @@
                 
                 result.innerHTML = `
                     <h2>🎉 ПОБЕДА!</h2>
-                    <div class="pvp-reward">+${reward.toLocaleString()} 🧀</div>
-                    <div style="font-size: 1.5em; color: #10b981;">MMR: ${mmrChange > 0 ? '+' : ''}${mmrChange}</div>
-                    <div style="margin-top: 20px;">
+                    <div style="font-size: 2em; color: #fbbf24; margin: 20px 0;">+${reward.toLocaleString()} 🧀</div>
+                    <div style="font-size: 1.5em; color: #10b981;">MMR: +${mmrChange}</div>
+                    <div style="margin-top: 30px;">
                         <button class="admin-button" onclick="closePVPArena()">Закрыть</button>
                     </div>
                 `;
@@ -2227,15 +2194,14 @@
                 
                 result.innerHTML = `
                     <h2>💀 ПОРАЖЕНИЕ</h2>
-                    <div class="pvp-reward">-${pvpGameState.bet.toLocaleString()} 🧀</div>
+                    <div style="font-size: 2em; color: #ef4444; margin: 20px 0;">-${pvpGameState.bet.toLocaleString()} 🧀</div>
                     <div style="font-size: 1.5em; color: #ef4444;">MMR: ${mmrChange}</div>
-                    <div style="margin-top: 20px;">
+                    <div style="margin-top: 30px;">
                         <button class="admin-button" onclick="closePVPArena()">Закрыть</button>
                     </div>
                 `;
             }
 
-            // Обновляем ранг
             const rank = getRankFromMMR(gameData.pvpMMR);
             const rankBadge = document.getElementById('playerRank');
             rankBadge.textContent = rank.name;
@@ -2253,470 +2219,116 @@
             document.getElementById('pvpTimer').style.display = 'block';
         };
 
+        // СИСТЕМА КЕЙСОВ
+        function renderCases() {
+            const grid = document.getElementById('caseGrid');
+            grid.innerHTML = '';
+
+            casesList.forEach(caseItem => {
+                const unopenedItems = caseItem.items.filter(item => 
+                    !gameData.inventory.decorations.includes(item.id)
+                );
+
+                const allOpened = unopenedItems.length === 0;
+
+                const card = document.createElement('div');
+                card.className = 'case-card' + (allOpened ? ' locked' : '');
+                
+                card.innerHTML = `
+                    <div class="case-icon">${caseItem.icon}</div>
+                    <div class="case-name">${caseItem.name}</div>
+                    <div class="case-price">${caseItem.price.toLocaleString()} 🧀</div>
+                    <div class="case-items-count">${unopenedItems.length}/${caseItem.items.length} предметов</div>
+                    ${allOpened ? '<div style="color: #10b981; font-weight: 700; margin-top: 10px;">ВСЁ ОТКРЫТО</div>' : ''}
+                `;
+
+                if (!allOpened) {
+                    card.addEventListener('click', () => openCase(caseItem.id));
+                }
+
+                grid.appendChild(card);
+            });
+        }
+
+        async function openCase(caseId) {
+            const caseItem = casesList.find(c => c.id === caseId);
+            if (!caseItem) return;
+
+            if (gameData.cheese < caseItem.price) {
+                showNotification('Недостаточно сыра!', 'error');
+                return;
+            }
+
+            const unopenedItems = caseItem.items.filter(item => 
+                !gameData.inventory.decorations.includes(item.id)
+            );
+
+            if (unopenedItems.length === 0) {
+                showNotification('Все предметы из этого кейса уже открыты!', 'error');
+                return;
+            }
+
+            gameData.cheese -= caseItem.price;
+            updateUI();
+
+            closeCasesModal();
+
+            document.getElementById('caseOpening').classList.add('active');
+            document.getElementById('caseBox').textContent = caseItem.icon;
+
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            const wonItem = unopenedItems[Math.floor(Math.random() * unopenedItems.length)];
+            gameData.inventory.decorations.push(wonItem.id);
+
+            document.getElementById('caseResult').innerHTML = `
+                <div class="case-item-reveal" style="border-color: ${getRarityColor(wonItem.rarity)}">
+                    <div class="item-icon">${wonItem.icon}</div>
+                    <div class="item-name">${wonItem.name}</div>
+                    <div class="item-rarity rarity-${wonItem.rarity}">${getRarityName(wonItem.rarity)}</div>
+                    <button class="admin-button" onclick="closeCaseOpening()">Забрать</button>
+                </div>
+            `;
+
+            await saveGame();
+        }
+
+        window.closeCaseOpening = function() {
+            document.getElementById('caseOpening').classList.remove('active');
+            document.getElementById('caseResult').innerHTML = '';
+            showNotification('Предмет добавлен в инвентарь!', 'success');
+        };
+
+        function getRarityColor(rarity) {
+            const colors = {
+                common: '#71717a',
+                uncommon: '#10b981',
+                rare: '#3b82f6',
+                epic: '#a855f7',
+                legendary: '#f59e0b',
+                mythic: '#ef4444'
+            };
+            return colors[rarity] || '#71717a';
+        }
+
+        function getRarityName(rarity) {
+            const names = {
+                common: 'ОБЫЧНЫЙ',
+                uncommon: 'НЕОБЫЧНЫЙ',
+                rare: 'РЕДКИЙ',
+                epic: 'ЭПИЧЕСКИЙ',
+                legendary: 'ЛЕГЕНДАРНЫЙ',
+                mythic: 'МИФИЧЕСКИЙ'
+            };
+            return names[rarity] || 'ОБЫЧНЫЙ';
+        }
+
         function showNotification(msg, type = 'success') {
             const notif = document.createElement('div');
             notif.className = `notification ${type}`;
             notif.textContent = msg;
             document.body.appendChild(notif);
             setTimeout(() => notif.remove(), 5000);
-        }
-
-        function showGlobalMessage(author, message) {
-            const msg = document.createElement('div');
-            msg.className = 'global-message';
-            msg.innerHTML = `<div class="author">${author}</div><div>${message}</div>`;
-            document.body.appendChild(msg);
-            setTimeout(() => msg.remove(), 10000);
-        }
-
-        async function openAdminPanel() {
-            document.getElementById('adminModal').classList.add('active');
-            await loadUsersAdmin();
-            renderPlayerManagementTab();
-            renderBroadcastTab();
-            renderEventsTab();
-        }
-
-        async function loadUsersAdmin() {
-            const snapshot = await get(ref(database, 'users'));
-            
-            let html = '<div class="user-list">';
-            
-            if (snapshot.exists()) {
-                const users = snapshot.val();
-                for (let login in users) {
-                    const user = users[login];
-                    const userData = user.gameData || {};
-                    const isBanned = userData.isBanned || false;
-                    
-                    html += `
-                        <div class="user-item ${isBanned ? 'banned' : ''}">
-                            <div style="flex: 1;">
-                                <strong>${login}</strong><br>
-                                <small>Баланс: ${Math.floor(userData.cheese || 0).toLocaleString()} 🧀</small><br>
-                                <small>MMR: ${userData.pvpMMR || 1000} | Побед: ${userData.pvpWins || 0}</small>
-                                ${isBanned ? '<br><span style="color: #fca5a5;">ЗАБЛОКИРОВАН</span>' : ''}
-                                ${userData.isAdmin ? '<br><span style="color: #fbbf24;">АДМИН</span>' : ''}
-                            </div>
-                            <div style="display: flex; gap: 5px; flex-wrap: wrap;">
-                                <button class="admin-button" style="font-size: 11px; padding: 6px 10px;" onclick="viewUserLogs('${login}')">Логи</button>
-                                ${!userData.isAdmin ? `<button class="admin-button" style="font-size: 11px; padding: 6px 10px;" onclick="toggleAdmin('${login}', true)">Админ</button>` : `<button class="admin-button danger" style="font-size: 11px; padding: 6px 10px;" onclick="toggleAdmin('${login}', false)">-Админ</button>`}
-                                ${!isBanned ? `<button class="admin-button danger" style="font-size: 11px; padding: 6px 10px;" onclick="banUser('${login}')">Бан</button>` : `<button class="admin-button" style="font-size: 11px; padding: 6px 10px;" onclick="unbanUser('${login}')">Разбан</button>`}
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-            
-            html += '</div>';
-            document.getElementById('usersAdminTab').innerHTML = html;
-        }
-
-        function renderPlayerManagementTab() {
-            const html = `
-                <div class="admin-section">
-                    <h3>Управление игроком</h3>
-                    <input type="text" class="admin-input" id="targetPlayer" placeholder="Логин игрока">
-                    <button class="admin-button" onclick="loadPlayerData()">Загрузить данные</button>
-                    <div id="playerDataEditor" class="hidden" style="margin-top: 20px;">
-                        <h4 style="color: #e2e8f0; margin-bottom: 15px;">Редактирование</h4>
-                        
-                        <div class="admin-row">
-                            <div>
-                                <label style="color: #94a3b8; display: block; margin-bottom: 5px;">Баланс</label>
-                                <input type="number" class="admin-input" id="editCheese">
-                            </div>
-                            <div>
-                                <label style="color: #94a3b8; display: block; margin-bottom: 5px;">Перерождения</label>
-                                <input type="number" class="admin-input" id="editRebirths">
-                            </div>
-                        </div>
-
-                        <div class="admin-row">
-                            <div>
-                                <label style="color: #94a3b8; display: block; margin-bottom: 5px;">MMR</label>
-                                <input type="number" class="admin-input" id="editMMR">
-                            </div>
-                            <div>
-                                <label style="color: #94a3b8; display: block; margin-bottom: 5px;">CPS</label>
-                                <input type="number" class="admin-input" id="editCPS">
-                            </div>
-                        </div>
-
-                        <button class="admin-button" onclick="savePlayerData()">💾 СОХРАНИТЬ</button>
-                        <button class="admin-button warning" onclick="maxOutPlayer()">⚡ МАКС ПРОКАЧКА</button>
-                        <button class="admin-button danger" onclick="resetPlayer()">🔄 СБРОС</button>
-                    </div>
-                </div>
-            `;
-            document.getElementById('playerAdminTab').innerHTML = html;
-        }
-
-        function renderBroadcastTab() {
-            const html = `
-                <div class="admin-section">
-                    <h3>Глобальное объявление</h3>
-                    <textarea id="broadcastMessage" placeholder="Сообщение для всех"></textarea>
-                    <button class="admin-button" onclick="sendBroadcast()">Отправить</button>
-                </div>
-            `;
-            document.getElementById('broadcastAdminTab').innerHTML = html;
-        }
-
-        function renderEventsTab() {
-            let html = `
-                <div class="admin-section">
-                    <h3>Запуск евентов</h3>
-                    <div style="margin-bottom: 15px;">
-                        <label style="color: #94a3b8; display: block; margin-bottom: 5px;">Длительность (минуты)</label>
-                        <input type="number" class="admin-input" id="eventDuration" value="10" min="1" max="1440">
-                    </div>
-                    <div class="event-list">
-            `;
-
-            eventsList.forEach(event => {
-                html += `
-                    <div class="event-card" onclick="startEvent('${event.id}')">
-                        <div class="icon">${event.icon}</div>
-                        <div class="name">${event.name}</div>
-                        <div class="mult">x${event.multiplier}</div>
-                    </div>
-                `;
-            });
-
-            html += `</div></div>`;
-            document.getElementById('eventsAdminTab').innerHTML = html;
-        }
-
-        window.viewUserLogs = async function(login) {
-            const snapshot = await get(ref(database, 'users/' + login));
-            
-            if (snapshot.exists()) {
-                const user = snapshot.val();
-                const data = user.gameData || {};
-                
-                alert(`Логи ${login}:\n\n` +
-                    `Баланс: ${Math.floor(data.cheese || 0).toLocaleString()} 🧀\n` +
-                    `Всего: ${Math.floor(data.allTimeCheese || 0).toLocaleString()} 🧀\n` +
-                    `Уровень: ${data.level || 1}\n` +
-                    `Перерождения: ${data.rebirths || 0}\n` +
-                    `MMR: ${data.pvpMMR || 1000}\n` +
-                    `PVP W/L: ${data.pvpWins || 0}/${data.pvpLosses || 0}\n` +
-                    `Создан: ${new Date(user.createdAt).toLocaleString()}`
-                );
-            }
-        };
-
-        window.toggleAdmin = async function(login, makeAdmin) {
-            await update(ref(database, `users/${login}/gameData`), { isAdmin: makeAdmin });
-            showNotification(`Админка ${makeAdmin ? 'выдана' : 'забрана'}`, 'success');
-            loadUsersAdmin();
-        };
-
-        window.banUser = async function(login) {
-            if (!confirm(`Забанить ${login}?`)) return;
-            await update(ref(database, `users/${login}/gameData`), { isBanned: true });
-            showNotification('Заблокирован', 'success');
-            loadUsersAdmin();
-        };
-
-        window.unbanUser = async function(login) {
-            await update(ref(database, `users/${login}/gameData`), { isBanned: false });
-            showNotification('Разблокирован', 'success');
-            loadUsersAdmin();
-        };
-
-        window.loadPlayerData = async function() {
-            const playerLogin = document.getElementById('targetPlayer').value.trim();
-            if (!playerLogin) {
-                showNotification('Введите логин', 'error');
-                return;
-            }
-
-            const snapshot = await get(ref(database, 'users/' + playerLogin));
-            if (!snapshot.exists()) {
-                showNotification('Игрок не найден', 'error');
-                return;
-            }
-
-            const userData = snapshot.val().gameData || {};
-            
-            document.getElementById('playerDataEditor').classList.remove('hidden');
-            document.getElementById('editCheese').value = Math.floor(userData.cheese || 0);
-            document.getElementById('editRebirths').value = userData.rebirths || 0;
-            document.getElementById('editMMR').value = userData.pvpMMR || 1000;
-            document.getElementById('editCPS').value = userData.cheesePerSecond || 0;
-
-            showNotification('Данные загружены', 'success');
-        };
-
-        window.savePlayerData = async function() {
-            const playerLogin = document.getElementById('targetPlayer').value.trim();
-            if (!playerLogin) return;
-
-            const cheese = parseInt(document.getElementById('editCheese').value) || 0;
-            const rebirths = parseInt(document.getElementById('editRebirths').value) || 0;
-            const pvpMMR = parseInt(document.getElementById('editMMR').value) || 1000;
-            const cheesePerSecond = parseInt(document.getElementById('editCPS').value) || 0;
-
-            await update(ref(database, `users/${playerLogin}/gameData`), {
-                cheese: cheese,
-                totalCheese: cheese,
-                allTimeCheese: cheese,
-                rebirths: rebirths,
-                pvpMMR: pvpMMR,
-                cheesePerSecond: cheesePerSecond
-            });
-
-            showNotification('Данные сохранены!', 'success');
-            loadUsersAdmin();
-            
-            if (playerLogin === currentUser) {
-                setTimeout(() => location.reload(), 1000);
-            }
-        };
-
-        window.maxOutPlayer = async function() {
-            const playerLogin = document.getElementById('targetPlayer').value.trim();
-            if (!playerLogin || !confirm('Выдать максимальную прокачку?')) return;
-
-            const upgrades = {};
-            upgradesList.forEach(u => {
-                upgrades[u.id] = 999;
-            });
-
-            await update(ref(database, `users/${playerLogin}/gameData`), {
-                cheese: 999999999999,
-                totalCheese: 999999999999,
-                allTimeCheese: 999999999999,
-                clickPower: 999999999,
-                cheesePerSecond: 999999999,
-                upgrades: upgrades,
-                intercoms: intercomsList.map(i => i.id),
-                sauces: saucesList.map(s => s.id),
-                rebirths: 100,
-                pvpMMR: 3000
-            });
-
-            showNotification('Макс прокачка выдана!', 'success');
-            loadUsersAdmin();
-            
-            if (playerLogin === currentUser) {
-                setTimeout(() => location.reload(), 1000);
-            }
-        };
-
-        window.resetPlayer = async function() {
-            const playerLogin = document.getElementById('targetPlayer').value.trim();
-            if (!playerLogin || !confirm('СБРОСИТЬ ВСЕ?')) return;
-
-            const resetData = {
-                cheese: 0,
-                totalCheese: 0,
-                allTimeCheese: 0,
-                level: 1,
-                rebirths: 0,
-                clickPower: 1,
-                cheesePerSecond: 0,
-                upgrades: {},
-                intercoms: ['cyfral'],
-                currentIntercom: 'cyfral',
-                sauces: ['basic'],
-                currentSauce: 'basic',
-                intercomBonus: 1,
-                sauceBonus: 0,
-                pvpMMR: 1000,
-                pvpWins: 0,
-                pvpLosses: 0,
-                currentLocation: 'entrance',
-                locationMultiplier: 1
-            };
-
-            upgradesList.forEach(u => {
-                resetData.upgrades[u.id] = 0;
-            });
-
-            await update(ref(database, `users/${playerLogin}/gameData`), resetData);
-
-            showNotification('Прогресс сброшен!', 'success');
-            loadUsersAdmin();
-            
-            if (playerLogin === currentUser) {
-                setTimeout(() => location.reload(), 1000);
-            }
-        };
-
-        window.sendBroadcast = async function() {
-            const message = document.getElementById('broadcastMessage').value.trim();
-            if (!message) {
-                showNotification('Введите сообщение', 'error');
-                return;
-            }
-
-            await set(ref(database, 'globalMessage'), {
-                author: currentUser,
-                message: message,
-                timestamp: Date.now()
-            });
-
-            showNotification('Отправлено', 'success');
-            document.getElementById('broadcastMessage').value = '';
-        };
-
-        window.startEvent = async function(eventId) {
-            const duration = parseInt(document.getElementById('eventDuration').value) || 10;
-            const event = eventsList.find(e => e.id === eventId);
-            
-            if (!event) return;
-
-            const eventData = {
-                ...event,
-                starter: currentUser,
-                startTime: Date.now(),
-                endTime: Date.now() + (duration * 60 * 1000),
-                duration: duration
-            };
-
-            await set(ref(database, 'activeEvent'), eventData);
-            
-            await set(ref(database, 'globalMessage'), {
-                author: currentUser,
-                message: `Запустил евент "${event.name}" ${event.icon} (x${event.multiplier}) на ${duration} мин!`,
-                timestamp: Date.now()
-            });
-
-            showNotification('Евент запущен!', 'success');
-        };
-
-        function activateEvent(eventData) {
-            currentEventData = eventData;
-            currentEventMultiplier = eventData.multiplier;
-
-            if (!document.getElementById('eventBanner')) {
-                const banner = document.createElement('div');
-                banner.id = 'eventBanner';
-                banner.className = 'event-banner';
-                banner.style.borderColor = eventData.color;
-                banner.innerHTML = `
-                    <div class="event-icon">${eventData.icon}</div>
-                    <div class="event-title" style="color: ${eventData.color}">${eventData.name}</div>
-                    <div style="font-size: 1.2em; color: #94a3b8; margin-bottom: 20px;">Запустил: ${eventData.starter}</div>
-                    <div class="event-multiplier">x${eventData.multiplier}</div>
-                    <div style="font-size: 1.5em; color: #e2e8f0;" id="eventTimerBanner">...</div>
-                `;
-                document.body.appendChild(banner);
-                setTimeout(() => banner.remove(), 8000);
-            }
-
-            if (!document.getElementById('eventIndicator')) {
-                const indicator = document.createElement('div');
-                indicator.id = 'eventIndicator';
-                indicator.className = 'event-indicator';
-                indicator.style.borderColor = eventData.color;
-                indicator.innerHTML = `
-                    <div style="font-size: 2em;">${eventData.icon}</div>
-                    <div>
-                        <div style="font-weight: 700; font-size: 1.1em; color: ${eventData.color}">${eventData.name} x${eventData.multiplier}</div>
-                        <div style="color: #94a3b8; font-size: 0.9em;" id="eventTimerIndicator">...</div>
-                    </div>
-                `;
-                document.body.appendChild(indicator);
-            }
-
-            createEventEffects(eventData.effect);
-            updateEventTimer();
-        }
-
-        function deactivateEvent() {
-            currentEventMultiplier = 1;
-            currentEventData = null;
-
-            const banner = document.getElementById('eventBanner');
-            if (banner) banner.remove();
-
-            const indicator = document.getElementById('eventIndicator');
-            if (indicator) indicator.remove();
-
-            const effects = document.getElementById('eventEffects');
-            if (effects) effects.remove();
-        }
-
-        function updateEventTimer() {
-            if (!currentEventData) return;
-
-            const remaining = currentEventData.endTime - Date.now();
-            if (remaining <= 0) {
-                deactivateEvent();
-                return;
-            }
-
-            const minutes = Math.floor(remaining / 60000);
-            const seconds = Math.floor((remaining % 60000) / 1000);
-            const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-            const bannerTimer = document.getElementById('eventTimerBanner');
-            if (bannerTimer) bannerTimer.textContent = `Осталось: ${timeStr}`;
-
-            const indicatorTimer = document.getElementById('eventTimerIndicator');
-            if (indicatorTimer) indicatorTimer.textContent = `Осталось: ${timeStr}`;
-
-            setTimeout(updateEventTimer, 1000);
-        }
-
-        function createEventEffects(effectType) {
-            let existingEffects = document.getElementById('eventEffects');
-            if (existingEffects) existingEffects.remove();
-
-            const container = document.createElement('div');
-            container.id = 'eventEffects';
-            container.className = 'event-effect';
-
-            if (effectType === 'stars') {
-                for (let i = 0; i < 50; i++) {
-                    const star = document.createElement('div');
-                    star.className = 'star';
-                    star.style.left = Math.random() * 100 + '%';
-                    star.style.top = Math.random() * 100 + '%';
-                    star.style.animationDelay = Math.random() * 2 + 's';
-                    container.appendChild(star);
-                }
-            } else if (effectType === 'cosmic') {
-                for (let i = 0; i < 20; i++) {
-                    const particle = document.createElement('div');
-                    particle.className = 'orbit-particle';
-                    particle.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
-                    particle.style.left = '50%';
-                    particle.style.top = '50%';
-                    particle.style.animationDuration = (5 + Math.random() * 10) + 's';
-                    particle.style.animationDelay = Math.random() * 5 + 's';
-                    container.appendChild(particle);
-                }
-                for (let i = 0; i < 100; i++) {
-                    const star = document.createElement('div');
-                    star.className = 'star';
-                    star.style.left = Math.random() * 100 + '%';
-                    star.style.top = Math.random() * 100 + '%';
-                    star.style.animationDelay = Math.random() * 2 + 's';
-                    container.appendChild(star);
-                }
-            } else if (effectType === 'rainbow') {
-                const rainbow = document.createElement('div');
-                rainbow.className = 'rainbow-effect';
-                container.appendChild(rainbow);
-            } else if (effectType === 'snow') {
-                for (let i = 0; i < 50; i++) {
-                    const snow = document.createElement('div');
-                    snow.className = 'snow-particle';
-                    snow.style.width = (2 + Math.random() * 6) + 'px';
-                    snow.style.height = snow.style.width;
-                    snow.style.left = Math.random() * 100 + '%';
-                    snow.style.animationDuration = (5 + Math.random() * 10) + 's';
-                    snow.style.animationDelay = Math.random() * 5 + 's';
-                    container.appendChild(snow);
-                }
-            }
-
-            document.body.appendChild(container);
         }
 
         async function saveGame() {
@@ -2740,7 +2352,7 @@
         }
 
         function renderShop() {
-            // Upgrades tab
+            // Upgrades
             let upgradesHTML = '';
             upgradesList.forEach(upgrade => {
                 const level = gameData.upgrades[upgrade.id] || 0;
@@ -2762,7 +2374,7 @@
             });
             document.getElementById('upgradesTab').innerHTML = upgradesHTML;
 
-            // Intercoms tab
+            // Intercoms
             let intercomsHTML = '';
             intercomsList.forEach(intercom => {
                 const owned = gameData.intercoms.includes(intercom.id);
@@ -2792,7 +2404,7 @@
             });
             document.getElementById('intercomsTab').innerHTML = intercomsHTML;
 
-            // Sauces tab
+            // Sauces
             let saucesHTML = '';
             saucesList.forEach(sauce => {
                 const owned = gameData.sauces.includes(sauce.id);
@@ -2822,7 +2434,7 @@
             });
             document.getElementById('sauceTab').innerHTML = saucesHTML;
 
-            // Locations tab
+            // Locations
             let locationsHTML = '';
             locationsList.forEach(location => {
                 const active = gameData.currentLocation === location.id;
@@ -2844,7 +2456,7 @@
                         <div class="shop-item-header">
                             <div class="shop-item-name">${location.icon} ${location.name}</div>
                         </div>
-                        <div class="shop-item-desc">Множитель: x${location.multiplier} | Нужно ${location.requiredRebirths} ⭐</div>
+                        <div class="shop-item-desc">x${location.multiplier} | ${location.requiredRebirths} ⭐</div>
                         <div class="shop-item-footer">
                             <div class="shop-item-cost">${location.cost === 0 ? 'СТАРТОВАЯ' : location.cost.toLocaleString() + ' 🧀'}</div>
                             ${buttonHTML}
@@ -2853,10 +2465,43 @@
                 `;
             });
             document.getElementById('locationsTab').innerHTML = locationsHTML;
+
+            // Decorations
+            const ownedDecorations = casesList
+                .flatMap(c => c.items)
+                .filter(i => gameData.inventory.decorations.includes(i.id));
+
+            if (ownedDecorations.length > 0) {
+                locationsHTML += `
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                        <h3 style="color: #fbbf24; margin-bottom: 15px; text-align: center;">Мои украшения</h3>
+                `;
+
+                ownedDecorations.forEach(decoration => {
+                    const equipped = gameData.equipped.decoration === decoration.id;
+                    
+                    locationsHTML += `
+                        <div class="shop-item">
+                            <div class="shop-item-header">
+                                <div class="shop-item-name">${decoration.icon} ${decoration.name}</div>
+                                <div class="item-rarity rarity-${decoration.rarity}" style="font-size: 0.7em; padding: 3px 8px;">${getRarityName(decoration.rarity)}</div>
+                            </div>
+                            <div class="shop-item-footer">
+                                <button class="select-btn ${equipped ? 'active' : ''}" data-equip-decoration="${decoration.id}">${equipped ? 'Надето' : 'Надеть'}</button>
+                                ${equipped ? '<button class="buy-btn" style="background: #ef4444;" data-unequip-decoration="true">Снять</button>' : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                locationsHTML += '</div>';
+            }
+
+            document.getElementById('locationsTab').innerHTML = locationsHTML;
         }
 
         document.getElementById('intercom').addEventListener('click', function(event) {
-            const clickPower = (gameData.clickPower + gameData.sauceBonus) * currentEventMultiplier * gameData.locationMultiplier;
+            const clickPower = (gameData.clickPower + gameData.sauceBonus) * gameData.locationMultiplier;
             const bonusMultiplier = 1 + gameData.rebirths * 0.1;
             const totalGain = Math.floor(clickPower * bonusMultiplier);
             
@@ -2972,6 +2617,16 @@
                         updateUI();
                         saveGame();
                     }
+                } else if (e.target.dataset.equipDecoration) {
+                    gameData.equipped.decoration = e.target.dataset.equipDecoration;
+                    updateDecoration();
+                    renderShop();
+                    saveGame();
+                } else if (e.target.dataset.unequipDecoration) {
+                    gameData.equipped.decoration = null;
+                    updateDecoration();
+                    renderShop();
+                    saveGame();
                 }
             });
 
@@ -2997,29 +2652,6 @@
                 });
             });
 
-            document.querySelectorAll('.modal-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-
-                    document.getElementById('usersAdminTab').classList.add('hidden');
-                    document.getElementById('playerAdminTab').classList.add('hidden');
-                    document.getElementById('broadcastAdminTab').classList.add('hidden');
-                    document.getElementById('eventsAdminTab').classList.add('hidden');
-
-                    if (this.dataset.adminTab === 'users') {
-                        document.getElementById('usersAdminTab').classList.remove('hidden');
-                        loadUsersAdmin();
-                    } else if (this.dataset.adminTab === 'player') {
-                        document.getElementById('playerAdminTab').classList.remove('hidden');
-                    } else if (this.dataset.adminTab === 'broadcast') {
-                        document.getElementById('broadcastAdminTab').classList.remove('hidden');
-                    } else if (this.dataset.adminTab === 'events') {
-                        document.getElementById('eventsAdminTab').classList.remove('hidden');
-                    }
-                });
-            });
-
             document.querySelectorAll('.leaderboard-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     document.querySelectorAll('.leaderboard-tab').forEach(t => t.classList.remove('active'));
@@ -3032,13 +2664,6 @@
             document.getElementById('rebirthBtn').addEventListener('click', doRebirth);
         }
 
-        function updateSauceDisplay() {
-            const sauce = saucesList.find(s => s.id === gameData.currentSauce);
-            if (sauce) {
-                document.getElementById('currentSauce').textContent = `${sauce.icon} ${sauce.name}`;
-            }
-        }
-
         function getRebirthCost() {
             return Math.floor(1000000 * Math.pow(5, gameData.rebirths));
         }
@@ -3046,7 +2671,7 @@
         function doRebirth() {
             const rebirthCost = getRebirthCost();
             if (gameData.cheese >= rebirthCost) {
-                if (confirm(`Переродиться? Все сбросится.\n\nБонус: +10%\nНовая локация разблокируется?\nСледующая стоимость: ${(rebirthCost * 5).toLocaleString()} 🧀`)) {
+                if (confirm(`Переродиться? Все сбросится.\n\nБонус: +10%\nСледующая стоимость: ${(rebirthCost * 5).toLocaleString()} 🧀`)) {
                     gameData.rebirths++;
                     gameData.cheese = 0;
                     gameData.totalCheese = 0;
@@ -3084,13 +2709,11 @@
 
         function updateUI() {
             document.getElementById('cheeseCount').textContent = Math.floor(gameData.cheese).toLocaleString();
-            document.getElementById('totalCheese').textContent = Math.floor(gameData.allTimeCheese).toLocaleString();
             document.getElementById('levelDisplay').textContent = gameData.level;
             document.getElementById('rebirthCount').textContent = gameData.rebirths;
-            document.getElementById('rebirthBonus').textContent = (1 + gameData.rebirths * 0.1).toFixed(1);
-            document.getElementById('clickPower').textContent = Math.floor((gameData.clickPower + gameData.sauceBonus) * currentEventMultiplier * gameData.locationMultiplier).toLocaleString();
+            document.getElementById('clickPower').textContent = Math.floor((gameData.clickPower + gameData.sauceBonus) * gameData.locationMultiplier).toLocaleString();
             
-            const cps = Math.floor(gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1) * currentEventMultiplier * gameData.locationMultiplier);
+            const cps = Math.floor(gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1) * gameData.locationMultiplier);
             document.getElementById('cheesePerSec').textContent = cps.toLocaleString();
 
             document.getElementById('pvpWins').textContent = gameData.pvpWins;
@@ -3132,7 +2755,7 @@
                 } else if (currentLeaderboardTab === 'pvp') {
                     const mmr = leader.pvpMMR || 1000;
                     const rank = getRankFromMMR(mmr);
-                    scoreText = `${mmr} MMR (${rank.name})`;
+                    scoreText = `${mmr} MMR`;
                 } else {
                     scoreText = `⭐ ${leader.rebirths || 0}`;
                 }
@@ -3151,7 +2774,7 @@
 
         function startGameLoop() {
             setInterval(() => {
-                const cps = gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1) * currentEventMultiplier * gameData.locationMultiplier;
+                const cps = gameData.cheesePerSecond * gameData.intercomBonus * (1 + gameData.rebirths * 0.1) * gameData.locationMultiplier;
                 gameData.cheese += cps / 10;
                 gameData.totalCheese += cps / 10;
                 gameData.allTimeCheese += cps / 10;
