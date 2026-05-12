@@ -2,132 +2,650 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>FATAL ERROR: OWNED BY @BOGCISLI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🧀 SOysdomofon - Ultimate Edition 🚪</title>
     <style>
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            background-color: #000;
-            color: #ff0000;
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0e27;
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ФОНЫ ЛОКАЦИЙ */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease;
+        }
+
+        body.bg-entrance::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%231e3a8a" width="1000" height="1000"/></svg>'); }
+        body.bg-district::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%23065f46" width="1000" height="1000"/></svg>'); }
+        body.bg-city::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%237c2d12" width="1000" height="1000"/></svg>'); }
+        body.bg-megapolis::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%236b21a8" width="1000" height="1000"/></svg>'); }
+        body.bg-country::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%23991b1b" width="1000" height="1000"/></svg>'); }
+        body.bg-continent::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%23b45309" width="1000" height="1000"/></svg>'); }
+        body.bg-planet::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%2314532d" width="1000" height="1000"/></svg>'); }
+        body.bg-galaxy::before { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect fill="%231e1b4b" width="1000" height="1000"/></svg>'); }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cheeseFloat {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-200px) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px currentColor, 0 0 40px currentColor; }
+            50% { box-shadow: 0 0 40px currentColor, 0 0 80px currentColor; }
+        }
+
+        @keyframes sauceAppear {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+            100% { transform: scale(1) rotate(360deg); opacity: 1; }
+        }
+
+        @keyframes rankShine {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes caseOpen {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        @keyframes itemReveal {
+            0% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+            100% { opacity: 1; transform: scale(1) rotate(360deg); }
+        }
+
+        /* === AUTH SCREEN === */
+        .auth-screen {
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: crosshair;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        /* Жесткое мигание (Стробоскоп) */
-        .panic-mode {
-            animation: flash 0.02s infinite;
+        .auth-container {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.5);
+            padding: 50px 40px;
+            max-width: 450px;
+            width: 100%;
+            animation: slideIn 0.6s ease;
         }
 
-        @keyframes flash {
-            0% { background-color: #f00; filter: invert(0); }
-            50% { background-color: #fff; filter: invert(1); }
-            100% { background-color: #000; }
+        .auth-logo h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 800;
         }
 
-        .overlay {
+        .auth-logo p {
+            color: #94a3b8;
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px;
+            border-radius: 15px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .auth-tab.active {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #0a0e27;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e2e8f0;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 16px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #fbbf24;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .auth-button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #0a0e27;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.3);
+        }
+
+        .auth-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(251, 191, 36, 0.5);
+        }
+
+        .error-message, .success-message {
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+            font-size: 14px;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            color: #86efac;
+        }
+
+        /* === GAME SCREEN === */
+        .game-screen {
+            display: none;
+            padding: 20px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-left h1 {
+            font-size: 2em;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .header-left p {
+            color: #94a3b8;
+            font-weight: 300;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 5px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .admin-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .transfer-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .pvp-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 5px 20px rgba(239, 68, 68, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .cases-btn {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.3);
+            animation: glow 2s infinite;
+        }
+
+        .notification {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGpneXp3Z3p3eXp3eXp3eXp3eXp3eXp3eXp3eXp3eXp3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/YQitE4YNQNahy/giphy.gif') no-repeat center center;
-            background-size: cover;
-            opacity: 0.15;
+            top: 100px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            z-index: 10000;
+            animation: slideIn 0.5s ease;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .notification.success {
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+
+        .notification.error {
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        /* === PVP ARENA === */
+        .pvp-arena {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 20000;
+            display: none;
+        }
+
+        .pvp-arena.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pvp-header {
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .pvp-player-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .pvp-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: 900;
+        }
+
+        .pvp-stats {
+            text-align: left;
+        }
+
+        .pvp-name {
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .pvp-hits {
+            font-size: 1.8em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pvp-battlefield {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pvp-sauce {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            animation: sauceAppear 0.3s ease;
+            transition: all 0.1s;
+            font-size: 5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 0 20px currentColor);
+            user-select: none;
+        }
+
+        .pvp-sauce:active {
+            transform: scale(0.8);
+        }
+
+        .pvp-timer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+            font-weight: 900;
+            color: #fbbf24;
+            text-shadow: 0 0 30px #fbbf24;
             z-index: 1;
         }
 
-        .content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            background: rgba(0,0,0,0.95);
+        .pvp-result {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
             padding: 60px;
-            border: 15px double #ff0000;
-            box-shadow: 0 0 100px #ff0000;
+            border-radius: 30px;
+            text-align: center;
+            border: 3px solid;
+            z-index: 2;
         }
 
-        h1 { font-size: 5.5rem; margin: 0; color: #ff0000; text-shadow: 10px 10px #000; }
-        .warning { font-size: 2.2rem; color: #fff; background: #ff0000; margin: 25px 0; padding: 10px; font-weight: bold; }
-        
-        .log-box { 
-            color: #0f0; 
-            text-align: left; 
-            font-size: 1.4rem; 
-            border-left: 5px solid #0f0; 
-            padding-left: 20px;
+        .pvp-result.win {
+            border-color: #10b981;
         }
 
-        #trigger {
-            font-size: 3rem;
-            color: #ffff00;
-            animation: blink 0.3s infinite;
-            margin-top: 30px;
+        .pvp-result.lose {
+            border-color: #ef4444;
+        }
+
+        .pvp-result h2 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .pvp-result.win h2 {
+            color: #10b981;
+        }
+
+        .pvp-result.lose h2 {
+            color: #ef4444;
+        }
+
+        /* === RANK SYSTEM === */
+        .rank-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            background-size: 200% auto;
+            animation: rankShine 3s linear infinite;
+        }
+
+        .rank-novice { background: linear-gradient(90deg, #71717a, #a1a1aa, #71717a); }
+        .rank-bronze { background: linear-gradient(90deg, #d97706, #f59e0b, #d97706); }
+        .rank-silver { background: linear-gradient(90deg, #71717a, #d4d4d8, #71717a); }
+        .rank-gold { background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b); }
+        .rank-platinum { background: linear-gradient(90deg, #3b82f6, #60a5fa, #3b82f6); }
+        .rank-diamond { background: linear-gradient(90deg, #06b6d4, #22d3ee, #06b6d4); }
+        .rank-master { background: linear-gradient(90deg, #8b5cf6, #a78bfa, #8b5cf6); }
+        .rank-grandmaster { background: linear-gradient(90deg, #ef4444, #f87171, #ef4444); }
+
+        /* === MODALS === */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 2em;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .close-modal {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5em;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
-        @keyframes blink { 50% { opacity: 0; } }
-    </style>
-</head>
-<body onclick="startChaos()">
-
-    <div class="overlay" id="bg"></div>
-
-    <div class="content">
-        <h1 id="main-title">HACKED BY @bogcisli</h1>
-        <div class="warning">ЭТОТ САЙТ ПРОТРАХАН БОГОМ СИСЛИ</div>
-        
-        <div class="log-box">
-            > SYSTEM STATUS: <span style="color:white">DESTROYED</span><br>
-            > DATABASE: <span style="color:white">FUCKED UP</span><br>
-            > ALL FILES: <span style="color:white">ENCRYPTED</span><br>
-            > OWNER: <span style="color:yellow">@bogcisli IS YOUR LORD</span>
-        </div>
-
-        <div id="trigger">ВХОД В СИСТЕМУ...</div>
-    </div>
-
-    <script>
-        function startChaos() {
-            // 1. Визуальный взрыв
-            document.body.classList.add('panic-mode');
-            document.getElementById('bg').style.opacity = "1";
-            document.getElementById('trigger').innerText = "ПРИВЕТ ОТ @bogcisli";
-
-            // 2. Генерация ультра-неприятного звука (диссонанс пилы)
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            
-            const playTone = (freq, type) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = type; 
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(2.5, audioCtx.currentTime); 
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                
-                setInterval(() => {
-                    osc.frequency.linearRampToValueAtTime(Math.random() * 4000 + 100, audioCtx.currentTime + 0.05);
-                }, 30);
-            };
-
-            playTone(800, 'sawtooth');
-            playTone(1200, 'square');
-
-            // 3. Спам новыми окнами (зациклено)
-            setInterval(() => {
-                window.open(window.location.href, '_blank', 'width=300,height=300');
-            }, 400);
-
-            // 4. Бесконечная блокировка алертом
-            setTimeout(() => {
-                while(true) {
-                    alert("ТВОЙ САЙТ И КОМП ТЕПЕРЬ ПОД КОНТРОЛЕМ @bogcisli!");
-                }
-            }, 800);
+        .close-modal:hover {
+            background: rgba(239, 68, 68, 0.4);
+            transform: rotate(90deg);
         }
-    </script>
-</body>
-</html>
+
+        .admin-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .admin-section h3 {
+            color: #fbbf24;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .admin-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .admin-input:focus {
+            outline: none;
+            border-color: #fbbf24;
+        }
+
+        .admin-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .admin-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5);
+        }
+
+        .admin-button.danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 5px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .admin-button.warning {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.3);
+        }
+
+        /* === CASES === */
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .case-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .case-card:hover {
+            transform: translateY(-10px);
+            border-color: #fbbf24;
+            box-shadow: 0 20px 60px rgba(251, 191, 36, 0.3);
+        }
+
+        .case-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .case-icon {
+            font-size: 5em;
+            marg
