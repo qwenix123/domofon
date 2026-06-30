@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🧀 SOysdomofon - Ultimate Edition</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Poppins',sans-serif;background:#0a0e27;min-height:100vh;color:#fff;overflow-x:hidden;position:relative;transition:background .8s}
+body.event-glow{animation:eventGlow 2.5s ease-in-out infinite}
+@keyframes eventGlow{0%,100%{box-shadow:inset 0 0 120px rgba(251,191,36,.25)}50%{box-shadow:inset 0 0 220px rgba(251,191,36,.55)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+@keyframes slideIn{from{opacity:0;transform:translateY(-40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cheeseFloat{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(-180px) rotate(360deg);opacity:0}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px currentColor}50%{box-shadow:0 0 45px currentColor}}
+@keyframes rankShine{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes barFill{from{width:0}}
+@keyframes confettiFall{0%{transform:translateY(-100px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@keyframes winPop{0%{transform:scale(0) rotate(-20deg);opacity:0}60%{transform:scale(1.15) rotate(5deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes rankUpPop{0%{transform:scale(.3);opacity:0}50%{transform:scale(1.3)}100%{transform:scale(1);opacity:1}}
+
+.auth-screen{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.auth-container{background:rgba(15,23,42,.8);backdrop-filter:blur(20px);border-radius:30px;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 90px rgba(0,0,0,.5);padding:50px 40px;max-width:450px;width:100%;animation:slideIn .6s ease}
+.auth-logo h1{font-size:2.6em;background:linear-gradient(135deg,#fbbf24,#f59e0b,#d97706);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;font-weight:800}
+.auth-logo p{color:#94a3b8;text-align:center;margin-bottom:30px}
+.auth-tabs{display:flex;gap:10px;margin-bottom:25px;background:rgba(255,255,255,.05);padding:5px;border-radius:15px}
+.auth-tab{flex:1;padding:12px;border:none;background:transparent;color:#94a3b8;border-radius:12px;cursor:pointer;font-weight:600;font-family:inherit}
+.auth-tab.active{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0a0e27}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;margin-bottom:6px;color:#e2e8f0;font-size:14px}
+.form-group input{width:100%;padding:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;font-size:16px;color:#fff;font-family:inherit}
+.form-group input:focus{outline:none;border-color:#fbbf24}
+.auth-button{width:100%;padding:16px;border:none;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0a0e27;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit}
+.error-message,.success-message{padding:12px;border-radius:12px;margin-bottom:18px;text-align:center;font-size:14px}
+.error-message{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.5);color:#fca5a5}
+.success-message{background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.5);color:#86efac}
+
+.game-screen{display:none;padding:16px;max-width:1800px;margin:0 auto}
+.header{background:rgba(15,23,42,.6);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:18px 26px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+.header-left h1{font-size:1.7em;background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800}
+.header-left p{color:#94a3b8;font-size:.9em}
+.header-buttons{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:11px 20px;border:none;border-radius:12px;color:#fff;cursor:pointer;font-weight:600;font-family:inherit;font-size:13px}
+.logout-btn{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.transfer-btn{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.pvp-btn{background:linear-gradient(135deg,#ef4444,#dc2626);animation:pulse 2s infinite}
+.cases-btn{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0a0e27;animation:glow 2s infinite}
+.elo-cta{background:linear-gradient(135deg,#a855f7,#7c3aed);animation:glow 2.4s infinite}
+
+.event-banner{display:none;background:linear-gradient(90deg,rgba(251,191,36,.18),rgba(245,158,11,.28),rgba(251,191,36,.18));border:1px solid rgba(251,191,36,.5);border-radius:16px;padding:12px 20px;margin-bottom:16px;text-align:center;font-weight:700;animation:pulse 2.5s infinite}
+.event-banner.show{display:block}
+
+.notification{position:fixed;top:90px;right:16px;background:rgba(15,23,42,.95);backdrop-filter:blur(20px);border:1px solid rgba(59,130,246,.5);padding:18px;border-radius:14px;z-index:10000;animation:slideIn .4s ease;max-width:340px}
+.notification.success{border-color:rgba(34,197,94,.5)}
+.notification.error{border-color:rgba(239,68,68,.5)}
+
+/* PVP / ELO ARENA */
+.pvp-arena{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:20000;display:none;flex-direction:column}
+.pvp-arena.active{display:flex}
+.pvp-header{padding:18px;background:rgba(15,23,42,.85);border-bottom:2px solid rgba(251,191,36,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.pvp-player-info{display:flex;align-items:center;gap:12px}
+.pvp-avatar{width:46px;height:46px;background:linear-gradient(135deg,#fbbf24,#f59e0b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3em;font-weight:900}
+.pvp-name{font-weight:700}
+.pvp-hits{font-size:1.6em;font-weight:900;background:linear-gradient(135deg,#ef4444,#dc2626);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pvp-battlefield{flex:1;position:relative;overflow:hidden}
+.pvp-sauce{position:absolute;width:90px;height:90px;cursor:pointer;font-size:4.4em;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 18px currentColor);user-select:none}
+.pvp-sauce:active{transform:scale(.8)}
+.pvp-timer{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:3.6em;font-weight:900;color:#fbbf24;text-shadow:0 0 25px #fbbf24}
+
+.win-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:31000;pointer-events:none}
+.win-overlay.show{display:flex}
+.confetti{position:fixed;top:-20px;width:10px;height:16px;z-index:31000;pointer-events:none;animation:confettiFall linear forwards}
+.win-card{background:rgba(15,23,42,.97);border:3px solid;border-radius:30px;padding:50px 60px;text-align:center;animation:winPop .6s cubic-bezier(.34,1.56,.64,1);pointer-events:auto}
+.win-card.win{border-color:#10b981;box-shadow:0 0 80px rgba(16,185,129,.6)}
+.win-card.lose{border-color:#ef4444;box-shadow:0 0 80px rgba(239,68,68,.5)}
+.win-card h2{font-size:2.6em;margin-bottom:14px;font-weight:900}
+.win-card.win h2{color:#10b981}
+.win-card.lose h2{color:#ef4444}
+
+.rankup-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:32000;background:rgba(0,0,0,.7)}
+.rankup-overlay.show{display:flex}
+.rankup-card{text-align:center;animation:rankUpPop .7s cubic-bezier(.34,1.56,.64,1)}
+.rankup-card .ricon{font-size:6em;filter:drop-shadow(0 0 30px currentColor)}
+.rankup-card h2{font-size:2.2em;margin:14px 0;font-weight:900;color:#fbbf24}
+
+.rank-badge{display:inline-block;padding:6px 14px;border-radius:20px;font-weight:700;font-size:.85em;text-transform:uppercase;background-size:200% auto;animation:rankShine 3s linear infinite;color:#0a0e27}
+
+.elo-progress-wrap{background:rgba(255,255,255,.05);border-radius:20px;padding:14px;margin-top:10px}
+.elo-bar-bg{height:14px;background:rgba(255,255,255,.08);border-radius:10px;overflow:hidden;margin:8px 0}
+.elo-bar-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#fbbf24,#f59e0b);transition:width .8s cubic-bezier(.34,1.56,.64,1)}
+.elo-bar-label{display:flex;justify-content:space-between;font-size:.75em;color:#94a3b8}
+
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;justify-content:center;align-items:center;padding:16px;overflow-y:auto}
+.modal.active{display:flex}
+.modal-content{background:rgba(15,23,42,.96);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:26px;max-width:900px;width:100%;max-height:90vh;overflow-y:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.modal-header h2{font-size:1.7em;background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.close-modal{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.5);color:#fca5a5;width:38px;height:38px;border-radius:50%;font-size:1.4em;cursor:pointer}
+.admin-section{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);padding:18px;border-radius:14px;margin-bottom:18px}
+.admin-input{width:100%;padding:11px;margin-bottom:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:15px;font-family:inherit}
+.admin-button{padding:10px 18px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:10px;color:#fff;font-weight:600;cursor:pointer;margin:0 8px 8px 0;font-family:inherit}
+
+.case-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.case-card{background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;text-align:center;cursor:pointer}
+.case-card:hover{border-color:#fbbf24;transform:translateY(-6px)}
+.case-card.locked{opacity:.5;cursor:not-allowed}
+.case-icon{font-size:4em;margin-bottom:10px}
+.case-name{font-weight:700;margin-bottom:8px}
+.case-price{font-weight:800;color:#fbbf24;margin-bottom:10px}
+.case-items-count{font-size:.85em;color:#94a3b8}
+
+.case-opening{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:30000;display:none;justify-content:center;align-items:center}
+.case-opening.active{display:flex}
+.case-box{font-size:11em;animation:pulse 1.2s ease infinite}
+.case-item-reveal{background:rgba(15,23,42,.95);padding:40px;border-radius:26px;border:3px solid;animation:winPop .6s ease}
+.item-icon{font-size:6em;margin-bottom:14px}
+.item-name{font-size:1.6em;font-weight:800;margin-bottom:8px}
+.item-rarity{font-weight:600;padding:8px 16px;border-radius:18px;display:inline-block;margin-bottom:24px}
+.rarity-common{background:#71717a}
+.rarity-uncommon{background:#10b981}
+.rarity-rare{background:#3b82f6}
+.rarity-epic{background:#a855f7}
+.rarity-legendary{background:#f59e0b;color:#0a0e27}
+.rarity-mythic{background:#ef4444}
+
+.main-content{display:grid;grid-template-columns:320px 1fr 340px;gap:16px}
+@media (max-width:1400px){.main-content{grid-template-columns:1fr}}
+
+.stats-panel,.shop-panel,.leaderboard,.game-area{background:rgba(15,23,42,.6);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:22px}
+.stats-panel h2,.shop-panel h2,.leaderboard h2{font-size:1.3em;margin-bottom:16px;font-weight:700;background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);padding:13px;border-radius:14px;margin-bottom:12px}
+.stat-label{color:#94a3b8;font-size:.8em;margin-bottom:4px}
+.stat-value{font-size:1.5em;font-weight:800;background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.rebirth-btn,.reset-btn{width:100%;padding:14px;border:none;border-radius:14px;color:#fff;font-weight:700;cursor:pointer;margin-top:8px;font-family:inherit}
+.rebirth-btn{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
+.reset-btn{background:linear-gradient(135deg,#64748b,#475569)}
+.rebirth-btn:disabled{opacity:.3;cursor:not-allowed}
+
+.game-area{text-align:center}
+.cheese-counter{font-size:2.8em;font-weight:900;margin-bottom:20px;animation:pulse 2s infinite;background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.location-indicator{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:12px 22px;border-radius:14px;display:inline-block;margin-bottom:16px;font-weight:700}
+.event-countdown{font-size:.8em;color:#fbbf24;margin-top:6px}
+
+.intercom-container{position:relative;display:inline-block;margin:24px 0}
+.intercom{width:280px;height:370px;border-radius:24px;cursor:pointer;transition:transform .25s;position:relative;overflow:hidden;border:3px solid #3b82f6;box-shadow:0 20px 60px rgba(59,130,246,.4);background-size:cover;background-position:center;background-color:#1e3a8a;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.intercom:active{transform:scale(.95)}
+.intercom-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:0}
+.intercom-screen{width:80%;height:60px;margin:20px auto;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;background:rgba(255,255,255,.95);color:#1e3a8a;position:relative;z-index:1;box-shadow:inset 0 4px 16px rgba(0,0,0,.3)}
+.sauce-display{position:absolute;top:8%;right:-50px;font-size:3.4em;animation:float 2.4s ease-in-out infinite;filter:drop-shadow(0 0 16px currentColor)}
+.cheese-splash{position:fixed;pointer-events:none;font-size:2.2em;animation:cheeseFloat 1.4s ease-out forwards;z-index:9999;font-weight:900;text-shadow:0 0 16px currentColor}
+.click-info{margin-top:16px;font-weight:700;background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+.shop-tabs,.leaderboard-tabs{display:flex;gap:5px;margin-bottom:18px;flex-wrap:wrap;background:rgba(255,255,255,.05);padding:5px;border-radius:14px}
+.shop-tab,.leaderboard-tab{flex:1;min-width:64px;padding:9px 4px;background:transparent;border:none;border-radius:10px;color:#94a3b8;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit}
+.shop-tab.active,.leaderboard-tab.active{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0a0e27}
+.shop-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);padding:13px;border-radius:14px;margin-bottom:12px}
+.shop-item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.shop-item-name{font-weight:700;font-size:.92em}
+.shop-item-level{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0a0e27;padding:4px 10px;border-radius:18px;font-size:.8em;font-weight:700}
+.shop-item-desc{color:#94a3b8;font-size:.82em;margin-bottom:8px}
+.shop-item-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.shop-item-cost{font-weight:800;background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.buy-btn,.select-btn{padding:9px 16px;border:none;border-radius:10px;color:#fff;font-weight:700;cursor:pointer;font-size:13px;font-family:inherit}
+.buy-btn{background:linear-gradient(135deg,#10b981,#059669)}
+.buy-btn:disabled{opacity:.3;cursor:not-allowed}
+.select-btn{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.select-btn.active{background:linear-gradient(135deg,#10b981,#059669)}
+
+.leaderboard{margin-top:16px}
+.leaderboard-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);padding:13px;border-radius:12px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center}
+.leaderboard-rank{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900}
+.leaderboard-rank.gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0a0e27}
+.leaderboard-rank.silver{background:linear-gradient(135deg,#94a3b8,#64748b)}
+.leaderboard-rank.bronze{background:linear-gradient(135deg,#f97316,#ea580c)}
+.leaderboard-rank:not(.gold):not(.silver):not(.bronze){background:rgba(255,255,255,.1);color:#94a3b8}
+.leaderboard-player{flex:1;margin-left:12px;font-weight:700;font-size:.9em}
+.leaderboard-score{font-weight:800;background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.streak{font-size:.75em;color:#f97316;font-weight:700}
+
+.quest-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);padding:12px;border-radius:12px;margin-bottom:10px}
+.quest-item.done{border-color:rgba(16,185,129,.5);background:rgba(16,185,129,.08)}
+.quest-bar-bg{height:8px;background:rgba(255,255,255,.08);border-radius:6px;overflow:hidden;margin-top:6px}
+.quest-bar-fill{height:100%;background:linear-gradient(90deg,#10b981,#059669)}
+
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-thumb{background:linear-gradient(135deg,#fbbf24,#f59e0b);border-radius:10px}
+.hidden{display:none!important}
+textarea{width:100%;padding:11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-family:inherit;min-height:90px}
+
+@media (max-width:768px){
+  .intercom{width:230px;height:300px}
+  .pvp-sauce{width:70px;height:70px;font-size:3.4em}
+  .header{padding:14px 16px}
+  .header-left h1{font-size:1.3em}
+  .btn{padding:9px 14px;font-size:12px}
+}
+</style>
+</head>
+<body class="bg-entrance">
+
+<div id="authScreen" class="auth-screen">
+  <div class="auth-container">
+    <div class="auth-logo"><h1>🧀 SOysdomofon</h1><p>Ultimate Edition</p></div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="loginTab">Вход</button>
+      <button class="auth-tab" id="registerTab">Регистрация</button>
+    </div>
+    <div id="errorMessage" class="error-message hidden"></div>
+    <div id="successMessage" class="success-message hidden"></div>
+    <form id="authForm">
+      <div class="form-group"><label>Логин</label><input type="text" id="loginInput" required></div>
+      <div class="form-group"><label>Пароль</label><input type="password" id="passwordInput" required></div>
+      <button type="submit" class="auth-button" id="authButton">ВОЙТИ</button>
+    </form>
+  </div>
+</div>
+
+<div id="gameScreen" class="game-screen">
+  <div class="header">
+    <div class="header-left">
+      <h1>🧀 SOysdomofon</h1>
+      <p>Игрок: <span id="playerName"></span> | <span id="playerRank" class="rank-badge">Новичок I</span> | ELO: <span id="playerMMR">1000</span> <span class="streak" id="streakDisplay"></span></p>
+    </div>
+    <div class="header-buttons">
+      <button class="btn cases-btn" id="casesBtn">📦 КЕЙСЫ</button>
+      <button class="btn elo-cta" id="eloCtaBtn">🏆 В ELO!</button>
+      <button class="btn pvp-btn" id="pvpBtn">⚔️ PVP</button>
+      <button class="btn transfer-btn" id="transferBtn">💸</button>
+      <button class="btn logout-btn" id="logoutBtn">Выход</button>
+    </div>
+  </div>
+
+  <div class="event-banner" id="eventBanner">🔥 <span id="eventText"></span> — множитель x<span id="eventMult"></span> — осталось <span id="eventTimeLeft"></span></div>
+
+  <div class="main-content">
+    <div class="stats-panel">
+      <h2>📊 Статистика</h2>
+      <div class="stat-item"><div class="stat-label">Локация</div><div class="stat-value" id="currentLocation" style="font-size:1.2em">🏠 Подъезд</div></div>
+      <div class="stat-item"><div class="stat-label">Множитель локации</div><div class="stat-value">x<span id="locationMultiplier">1</span></div></div>
+      <div class="stat-item"><div class="stat-label">Сыра в секунду</div><div class="stat-value" id="cheesePerSec">0</div></div>
+      <div class="stat-item"><div class="stat-label">Уровень</div><div class="stat-value" id="levelDisplay">1</div></div>
+      <div class="stat-item"><div class="stat-label">PVP побед / поражений</div><div class="stat-value" style="font-size:1.2em"><span id="pvpWins">0</span> / <span id="pvpLosses">0</span></div></div>
+
+      <div class="elo-progress-wrap">
+        <div class="stat-label">Прогресс до след. ранга</div>
+        <div class="elo-bar-bg"><div class="elo-bar-fill" id="eloBarFill" style="width:0%"></div></div>
+        <div class="elo-bar-label"><span id="eloBarText">0 / 0</span><span id="eloNextRank"></span></div>
+      </div>
+
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)">
+        <div class="stat-item"><div class="stat-label">⭐ Перерождения</div><div class="stat-value" id="rebirthCount">0</div></div>
+        <button class="rebirth-btn" id="rebirthBtn">⭐ ПЕРЕРОДИТЬСЯ (<span id="rebirthCost">0</span> 🧀)</button>
+        <button class="reset-btn" id="resetProgressBtn">♻️ Сбросить прогресс</button>
+      </div>
+
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)">
+        <h2 style="font-size:1.1em">📜 Квесты новичка</h2>
+        <div id="questsList"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="game-area">
+        <div class="location-indicator" id="locationName">🏠 Подъезд (x1)</div>
+        <div class="cheese-counter">🧀 <span id="cheeseCount">0</span></div>
+
+        <div class="intercom-container">
+          <div class="intercom" id="intercom">
+            <div class="intercom-screen"><span id="intercomName">CYFRAL</span></div>
+          </div>
+          <div class="sauce-display" id="sauceDisplay">🧀</div>
+        </div>
+
+        <div class="click-info">⚡ +<span id="clickPower">1</span> сыра за клик</div>
+        <div class="event-countdown" id="eventCountdownSmall"></div>
+      </div>
+
+      <div class="leaderboard">
+        <h2>🏆 Топ Игроков</h2>
+        <div class="leaderboard-tabs">
+          <button class="leaderboard-tab active" data-lb-tab="elo">ELO</button>
+          <button class="leaderboard-tab" data-lb-tab="balance">Баланс</button>
+          <button class="leaderboard-tab" data-lb-tab="rebirths">Перерождения</button>
+        </div>
+        <div style="text-align:center;font-size:.78em;color:#94a3b8;margin-bottom:10px" id="seasonTimer">Сезон ELO: загрузка...</div>
+        <div id="leaderboardList"><div style="text-align:center;color:#94a3b8;padding:18px">Загрузка...</div></div>
+      </div>
+    </div>
+
+    <div class="shop-panel">
+      <h2>🛒 Магазин</h2>
+      <div class="shop-tabs">
+        <button class="shop-tab active" data-tab="upgrades">Улучшения</button>
+        <button class="shop-tab" data-tab="intercoms">Домофоны</button>
+        <button class="shop-tab" data-tab="sauce">Соусы</button>
+        <button class="shop-tab" data-tab="locations">Локации</button>
+        <button class="shop-tab" data-tab="inventory">Инвентарь</button>
+      </div>
+      <div id="upgradesTab" class="shop-content"></div>
+      <div id="intercomsTab" class="shop-content hidden"></div>
+      <div id="sauceTab" class="shop-content hidden"></div>
+      <div id="locationsTab" class="shop-content hidden"></div>
+      <div id="inventoryTab" class="shop-content hidden"></div>
+    </div>
+  </div>
+</div>
+
+<div id="pvpArena" class="pvp-arena">
+  <div class="pvp-header">
+    <div class="pvp-player-info"><div class="pvp-avatar">👤</div><div><div class="pvp-name" id="pvpPlayer1Name">Вы</div><div class="pvp-hits">Хиты: <span id="pvpPlayer1Hits">0</span></div></div></div>
+    <div style="text-align:center"><div style="font-size:1.8em">⚔️</div><div style="font-weight:700" id="pvpModeLabel">Ставка: 0 🧀</div></div>
+    <div class="pvp-player-info"><div style="text-align:right"><div class="pvp-name" id="pvpPlayer2Name">Противник</div><div class="pvp-hits">Хиты: <span id="pvpPlayer2Hits">0</span></div></div><div class="pvp-avatar">🤖</div></div>
+  </div>
+  <div class="pvp-battlefield" id="pvpBattlefield"><div class="pvp-timer" id="pvpTimer">3</div></div>
+</div>
+
+<div id="winOverlay" class="win-overlay"></div>
+<div id="rankupOverlay" class="rankup-overlay"></div>
+
+<div id="casesModal" class="modal"><div class="modal-content"><div class="modal-header"><h2>📦 Кейсы</h2><button class="close-modal" onclick="closeCasesModal()">×</button></div><div class="case-grid" id="caseGrid"></div></div></div>
+<div id="caseOpening" class="case-opening"><div style="text-align:center"><div class="case-box" id="caseBox">📦</div><div id="caseResult"></div></div></div>
+
+<div id="transferModal" class="modal"><div class="modal-content" style="max-width:480px"><div class="modal-header"><h2>💸 Перевод</h2><button class="close-modal" onclick="closeTransferModal()">×</button></div>
+<div class="admin-section"><input type="text" class="admin-input" id="transferRecipient" placeholder="Логин получателя"><input type="number" class="admin-input" id="transferAmount" placeholder="Количество сыра"><button class="admin-button" onclick="sendTransfer()">Отправить</button></div></div></div>
+
+<div id="pvpModal" class="modal"><div class="modal-content" style="max-width:620px"><div class="modal-header"><h2>⚔️ Арена</h2><button class="close-modal" onclick="closePVPModal()">×</button></div>
+<div class="admin-section">
+  <h3 style="color:#fbbf24;margin-bottom:12px">Статистика</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
+    <div style="text-align:center;padding:14px;background:rgba(255,255,255,.05);border-radius:12px"><div style="color:#94a3b8;font-size:.85em">Ранг</div><div id="pvpModalRank" class="rank-badge" style="font-size:1em">Новичок I</div></div>
+    <div style="text-align:center;padding:14px;background:rgba(255,255,255,.05);border-radius:12px"><div style="color:#94a3b8;font-size:.85em">ELO</div><div style="font-size:1.6em;font-weight:800;color:#fbbf24" id="pvpModalMMR">1000</div></div>
+    <div style="text-align:center;padding:14px;background:rgba(255,255,255,.05);border-radius:12px"><div style="color:#94a3b8;font-size:.85em">Побед</div><div style="font-size:1.6em;font-weight:800;color:#10b981" id="pvpModalWins">0</div></div>
+    <div style="text-align:center;padding:14px;background:rgba(255,255,255,.05);border-radius:12px"><div style="color:#94a3b8;font-size:.85em">Винстрик</div><div style="font-size:1.6em;font-weight:800;color:#f97316" id="pvpModalStreak">0</div></div>
+  </div>
+
+  <h3 style="color:#fbbf24;margin-bottom:10px">🏆 Рейтинговый бой (ELO)</h3>
+  <div style="font-size:.82em;color:#94a3b8;margin-bottom:10px">Бесплатно. На кону только ELO. Ставки на деньги недоступны в рейтинговом режиме — это честная игра на ранг.</div>
+  <button class="admin-button" style="width:100%;padding:14px;font-size:1.05em" onclick="startRankedPVP()">⚔️ НАЙТИ СОПЕРНИКА (ELO)</button>
+
+  <h3 style="color:#fbbf24;margin:18px 0 10px">💰 Товарищеский бой (на сыр)</h3>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+    <button class="admin-button" onclick="startCasualPVP(500)">500 🧀</button>
+    <button class="admin-button" onclick="startCasualPVP(2000)">2K 🧀</button>
+    <button class="admin-button" onclick="startCasualPVP(10000)">10K 🧀</button>
+  </div>
+
+  <div style="margin-top:18px;padding:14px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);border-radius:12px;font-size:.85em;color:#94a3b8">
+    Кликайте по соусам быстрее бота. Чем выше ваш ранг — тем сильнее и быстрее становится соперник. Побеждает тот, кто первым наберёт 15 хитов.
+  </div>
+</div></div></div>
+
+<script type="module">
+import PocketBase from 'https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.es.mjs';
+
+const core = new PocketBase('https://qwenix12-pocketbase-game.hf.space');
+
+let currentUser = null;
+let currentUserId = null;
+let isAuthMode = true;
+
+let gameData = {
+  cheese:0, totalCheese:0, allTimeCheese:0, level:1, rebirths:0,
+  clickPower:1, cheesePerSecond:0, upgrades:{}, intercoms:['cyfral'], currentIntercom:'cyfral',
+  sauces:['basic'], currentSauce:'basic', intercomBonus:1, sauceBonus:0, isBanned:false,
+  currentLocation:'entrance', locationMultiplier:1,
+  pvpWins:0, pvpLosses:0, pvpMMR:1000, pvpWinStreak:0, pvpBestStreak:0,
+  inventory:{decorations:[]}, equipped:{decoration:null}, openedCases:{},
+  quests:{}, lastSeasonNumber:0
+};
+
+// === ДОМОФОНЫ КАК КАРТИНКИ (положи рядом файлы с такими именами) ===
+const intercomsList = [
+  { id:'cyfral',  name:'CYFRAL',   bonus:1.00, cost:0,        img:'cyfral.png' },
+  { id:'metakom', name:'МЕТАКОМ',  bonus:1.08, cost:8000,     img:'metakom.png' },
+  { id:'vizit',   name:'VIZIT',    bonus:1.16, cost:30000,    img:'vizit.png' },
+  { id:'eltis',   name:'ELTIS',    bonus:1.25, cost:120000,   img:'eltis.png' },
+  { id:'stalker', name:'СТАЛКЕР',  bonus:1.35, cost:500000,   img:'stalker.png' },
+  { id:'quantum', name:'QUANTUM',  bonus:1.45, cost:2000000,  img:'quantum.png' },
+  { id:'neon',    name:'NEON',     bonus:1.55, cost:8000000,  img:'neon.png' },
+  { id:'gold',    name:'GOLD',     bonus:1.70, cost:30000000, img:'gold.png' },
+];
+
+const upgradesList = [
+  { id:'finger', name:'👆 Палец', desc:'+1 сыра/клик', baseCost:30, type:'click', power:1, scale:1.13 },
+  { id:'glove', name:'🧤 Перчатка', desc:'+3 сыра/клик', baseCost:150, type:'click', power:3, scale:1.13 },
+  { id:'brush2', name:'🖌️ Кисть', desc:'+8 сыра/клик', baseCost:600, type:'click', power:8, scale:1.14 },
+  { id:'roller', name:'🎨 Валик', desc:'+20 сыра/клик', baseCost:2500, type:'click', power:20, scale:1.14 },
+  { id:'sprayer', name:'💧 Спрей', desc:'+50 сыра/клик', baseCost:10000, type:'click', power:50, scale:1.15 },
+  { id:'bucket', name:'🪣 Ведро', desc:'+150 сыра/клик', baseCost:40000, type:'click', power:150, scale:1.15 },
+  { id:'auto', name:'🤖 Робот', desc:'+1 сыр/сек', baseCost:60, type:'auto', power:1, scale:1.15 },
+  { id:'sponge', name:'🧽 Губка', desc:'+5 сыр/сек', baseCost:300, type:'auto', power:5, scale:1.15 },
+  { id:'drone', name:'🚁 Дрон', desc:'+15 сыр/сек', baseCost:1200, type:'auto', power:15, scale:1.16 },
+  { id:'brush', name:'🖌️ Авто-кисть', desc:'+50 сыр/сек', baseCost:5000, type:'auto', power:50, scale:1.16 },
+  { id:'spray', name:'💦 Распылитель', desc:'+150 сыр/сек', baseCost:20000, type:'auto', power:150, scale:1.17 },
+  { id:'machine', name:'⚙️ Машина', desc:'+500 сыр/сек', baseCost:80000, type:'auto', power:500, scale:1.17 },
+];
+
+const saucesList = [
+  { id:'basic', name:'Сыр', icon:'🧀', bonus:0, cost:0 },
+  { id:'mayo', name:'Майонез', icon:'🥛', bonus:8, cost:5000 },
+  { id:'ketchup', name:'Кетчуп', icon:'🍅', bonus:25, cost:20000 },
+  { id:'mustard', name:'Горчица', icon:'🌭', bonus:70, cost:80000 },
+  { id:'soy', name:'Соевый', icon:'🍶', bonus:200, cost:350000 },
+  { id:'bbq', name:'Барбекю', icon:'🍖', bonus:600, cost:1500000 },
+  { id:'honey', name:'Медовый', icon:'🍯', bonus:1800, cost:6000000 },
+  { id:'chili', name:'Чили', icon:'🌶️', bonus:5000, cost:25000000 },
+];
+
+const locationsList = [
+  { id:'entrance', name:'Подъезд', icon:'🏠', multiplier:1.0, cost:0, requiredRebirths:0 },
+  { id:'district', name:'Район', icon:'🏘️', multiplier:1.15, cost:30000, requiredRebirths:1 },
+  { id:'city', name:'Город', icon:'🏙️', multiplier:1.3, cost:200000, requiredRebirths:2 },
+  { id:'megapolis', name:'Мегаполис', icon:'🌆', multiplier:1.5, cost:1500000, requiredRebirths:4 },
+  { id:'country', name:'Страна', icon:'🗺️', multiplier:1.75, cost:10000000, requiredRebirths:6 },
+  { id:'continent', name:'Континент', icon:'🌍', multiplier:2.1, cost:60000000, requiredRebirths:9 },
+  { id:'planet', name:'Планета', icon:'🌎', multiplier:2.6, cost:300000000, requiredRebirths:13 },
+  { id:'galaxy', name:'Галактика', icon:'🌌', multiplier:3.3, cost:1500000000, requiredRebirths:18 },
+];
+
+const casesList = [
+  { id:'starter', name:'Стартовый', icon:'📦', price:300, items:[
+    {id:'k1',name:'Брелок сыр',icon:'🧀',rarity:'common'},{id:'k2',name:'Брелок ключ',icon:'🔑',rarity:'common'},
+    {id:'k3',name:'Брелок сердце',icon:'❤️',rarity:'uncommon'},{id:'k4',name:'Брелок звезда',icon:'⭐',rarity:'uncommon'},
+    {id:'k5',name:'Брелок корона',icon:'👑',rarity:'rare'} ] },
+  { id:'premium', name:'Премиум', icon:'🎁', price:3000, items:[
+    {id:'k6',name:'Брелок алмаз',icon:'💎',rarity:'rare'},{id:'k7',name:'Брелок молния',icon:'⚡',rarity:'rare'},
+    {id:'k8',name:'Брелок огонь',icon:'🔥',rarity:'epic'},{id:'k9',name:'Брелок череп',icon:'💀',rarity:'epic'},
+    {id:'k10',name:'Брелок дракон',icon:'🐉',rarity:'legendary'} ] },
+  { id:'elite', name:'Элитный', icon:'💼', price:25000, items:[
+    {id:'k11',name:'Брелок галактика',icon:'🌌',rarity:'legendary'},{id:'k12',name:'Брелок радуга',icon:'🌈',rarity:'legendary'},
+    {id:'k13',name:'Брелок космос',icon:'🚀',rarity:'mythic'},{id:'k14',name:'Брелок инфинити',icon:'∞',rarity:'mythic'} ] },
+];
+
+// === МНОГО РАНГОВ ===
+const rankThresholds = [
+  { name:'Новичок I',   mmr:0,    color:'#71717a', icon:'🌱', botDiff:.22, botSpeed:900 },
+  { name:'Новичок II',  mmr:200,  color:'#84858a', icon:'🌱', botDiff:.25, botSpeed:870 },
+  { name:'Новичок III', mmr:400,  color:'#9ca3af', icon:'🌱', botDiff:.28, botSpeed:840 },
+  { name:'Бронза I',    mmr:600,  color:'#d97706', icon:'🥉', botDiff:.32, botSpeed:800 },
+  { name:'Бронза II',   mmr:750,  color:'#e0820a', icon:'🥉', botDiff:.35, botSpeed:770 },
+  { name:'Бронза III',  mmr:900,  color:'#f59e0b', icon:'🥉', botDiff:.38, botSpeed:740 },
+  { name:'Серебро I',   mmr:1050, color:'#94a3b8', icon:'🥈', botDiff:.42, botSpeed:700 },
+  { name:'Серебро II',  mmr:1200, color:'#a8b4c4', icon:'🥈', botDiff:.45, botSpeed:670 },
+  { name:'Серебро III', mmr:1350, color:'#cbd5e1', icon:'🥈', botDiff:.48, botSpeed:640 },
+  { name:'Золото I',    mmr:1500, color:'#f59e0b', icon:'🥇', botDiff:.52, botSpeed:600 },
+  { name:'Золото II',   mmr:1650, color:'#fbbf24', icon:'🥇', botDiff:.55, botSpeed:570 },
+  { name:'Золото III',  mmr:1800, color:'#fde047', icon:'🥇', botDiff:.58, botSpeed:540 },
+  { name:'Платина I',   mmr:1950, color:'#3b82f6', icon:'💠', botDiff:.62, botSpeed:500 },
+  { name:'Платина II',  mmr:2100, color:'#60a5fa', icon:'💠', botDiff:.65, botSpeed:470 },
+  { name:'Платина III', mmr:2250, color:'#93c5fd', icon:'💠', botDiff:.68, botSpeed:440 },
+  { name:'Алмаз I',     mmr:2400, color:'#06b6d4', icon:'💎', botDiff:.72, botSpeed:400 },
+  { name:'Алмаз II',    mmr:2550, color:'#22d3ee', icon:'💎', botDiff:.75, botSpeed:380 },
+  { name:'Алмаз III',   mmr:2700, color:'#67e8f9', icon:'💎', botDiff:.78, botSpeed:360 },
+  { name:'Мастер',      mmr:2900, color:'#8b5cf6', icon:'🔮', botDiff:.83, botSpeed:320 },
+  { name:'Грандмастер', mmr:3150, color:'#a78bfa', icon:'👑', botDiff:.88, botSpeed:280 },
+  { name:'Чемпион',     mmr:3450, color:'#ef4444', icon:'🏆', botDiff:.93, botSpeed:240 },
+  { name:'Легенда',     mmr:3800, color:'#f87171', icon:'⚜️', botDiff:.97, botSpeed:200 },
+];
+
+function getRank(mmr){
+  for(let i=rankThresholds.length-1;i>=0;i--) if(mmr>=rankThresholds[i].mmr) return {idx:i,...rankThresholds[i]};
+  return {idx:0,...rankThresholds[0]};
+}
+function getNextRank(mmr){
+  const r=getRank(mmr);
+  return rankThresholds[r.idx+1]||null;
+}
+
+const questDefs = [
+  { id:'first_click', name:'Сделай первый клик по домофону', goal:1, reward:200, track:'clicks' },
+  { id:'click_50', name:'Накликай домофон 50 раз', goal:50, reward:1000, track:'clicks' },
+  { id:'earn_5000', name:'Заработай 5,000 сыра суммарно', goal:5000, reward:1500, track:'totalEarned' },
+  { id:'buy_upgrade', name:'Купи любое улучшение', goal:1, reward:800, track:'upgradesBought' },
+  { id:'first_pvp', name:'Сыграй первый бой в ELO', goal:1, reward:2000, track:'rankedPlayed' },
+  { id:'win_pvp', name:'Победи в рейтинговом бою', goal:1, reward:3000, track:'rankedWins' },
+];
+
+upgradesList.forEach(u=>{ if(gameData.upgrades[u.id]===undefined) gameData.upgrades[u.id]=0; });
+
+const savedUser = localStorage.getItem('soysdomofon_user');
+if (savedUser) { currentUser = savedUser; loadGameData(); }
+
+document.getElementById('loginTab').addEventListener('click', function(){
+  isAuthMode=true; document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  this.classList.add('active'); document.getElementById('authButton').textContent='ВОЙТИ';
+});
+document.getElementById('registerTab').addEventListener('click', function(){
+  isAuthMode=false; document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  this.classList.add('active'); document.getElementById('authButton').textContent='ЗАРЕГИСТРИРОВАТЬСЯ';
+});
+
+document.getElementById('authForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const login = document.getElementById('loginInput').value.trim();
+  const password = document.getElementById('passwordInput').value;
+  if (!login || !password || login.length<3 || password.length<6){ showError('Логин ≥3, пароль ≥6 символов'); return; }
+  try{
+    let existing = null;
+    try{ existing = await core.collection('players').getFirstListItem(`login="${login}"`); }catch(e){ existing = null; }
+
+    if (isAuthMode){
+      if (!existing){ showError('Аккаунт не найден'); return; }
+      if (existing.password !== password){ showError('Неверный пароль'); return; }
+      const gd = existing.gamedata || {};
+      if (gd.isBanned){ showError('Аккаунт заблокирован!'); return; }
+      currentUser = login; currentUserId = existing.id;
+      localStorage.setItem('soysdomofon_user', login);
+      showSuccess('Вход выполнен!'); setTimeout(()=>loadGameData(),400);
+    } else {
+      if (existing){ showError('Логин уже занят'); return; }
+      const rec = await core.collection('players').create({ login, password, gamedata: gameData, createdat: Date.now() });
+      currentUser = login; currentUserId = rec.id;
+      localStorage.setItem('soysdomofon_user', login);
+      showSuccess('Регистрация успешна!'); setTimeout(()=>loadGameData(),400);
+    }
+  }catch(err){ console.error(err); showError('Ошибка соединения'); }
+});
+
+function showError(msg){ const d=document.getElementById('errorMessage'); d.textContent=msg; d.classList.remove('hidden'); document.getElementById('successMessage').classList.add('hidden'); setTimeout(()=>d.classList.add('hidden'),4500); }
+function showSuccess(msg){ const d=document.getElementById('successMessage'); d.textContent=msg; d.classList.remove('hidden'); document.getElementById('errorMessage').classList.add('hidden'); setTimeout(()=>d.classList.add('hidden'),2500); }
+
+async function loadGameData(){
+  try{
+    const rec = await core.collection('players').getFirstListItem(`login="${currentUser}"`);
+    currentUserId = rec.id;
+    const ld = rec.gamedata || {};
+    gameData = { ...gameData, ...ld,
+      upgrades: ld.upgrades||{}, inventory: ld.inventory||{decorations:[]},
+      equipped: ld.equipped||{decoration:null}, openedCases: ld.openedCases||{},
+      quests: ld.quests||{} };
+    if (gameData.isBanned){ alert('Аккаунт заблокирован!'); localStorage.removeItem('soysdomofon_user'); location.reload(); return; }
+    upgradesList.forEach(u=>{ if(gameData.upgrades[u.id]===undefined) gameData.upgrades[u.id]=0; });
+    document.getElementById('playerName').textContent = currentUser;
+    updateRankUI();
+  }catch(e){ console.error(e); }
+
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('gameScreen').style.display='block';
+
+  await checkSeason();
+  updateIntercomVisual(gameData.currentIntercom);
+  updateLocationDisplay();
+  updateSauceDisplay();
+  renderShop();
+  renderQuests();
+  updateUI();
+  startGameLoop();
+  loadLeaderboard();
+  setupEventListeners();
+  listenGlobalEvent();
+}
+
+function updateRankUI(){
+  const rank = getRank(gameData.pvpMMR);
+  const badge = document.getElementById('playerRank');
+  badge.textContent = rank.icon+' '+rank.name;
+  badge.style.background = rank.color;
+  document.getElementById('playerMMR').textContent = gameData.pvpMMR;
+  document.getElementById('streakDisplay').textContent = gameData.pvpWinStreak>1 ? `🔥${gameData.pvpWinStreak} винстрик` : '';
+
+  const next = getNextRank(gameData.pvpMMR);
+  const fill = document.getElementById('eloBarFill');
+  const text = document.getElementById('eloBarText');
+  const nextLabel = document.getElementById('eloNextRank');
+  if (next){
+    const cur = gameData.pvpMMR - rank.mmr;
+    const span = next.mmr - rank.mmr;
+    const pct = Math.min(100, Math.max(0,(cur/span)*100));
+    fill.style.width = pct+'%';
+    text.textContent = `${cur} / ${span}`;
+    nextLabel.textContent = `→ ${next.icon} ${next.name}`;
+  } else {
+    fill.style.width = '100%';
+    text.textContent = 'МАКСИМУМ';
+    nextLabel.textContent = '👑 Топ ранг';
+  }
+}
+
+function updateIntercomVisual(id){
+  const el = document.getElementById('intercom');
+  const data = intercomsList.find(i=>i.id===id) || intercomsList[0];
+  el.style.backgroundImage = `url('${data.img}')`;
+  document.getElementById('intercomName').textContent = data.name;
+}
+
+function updateLocationDisplay(){
+  const loc = locationsList.find(l=>l.id===gameData.currentLocation);
+  if (loc){
+    document.getElementById('currentLocation').textContent = `${loc.icon} ${loc.name}`;
+    document.getElementById('locationName').textContent = `${loc.icon} ${loc.name} (x${loc.multiplier})`;
+    document.getElementById('locationMultiplier').textContent = loc.multiplier;
+    gameData.locationMultiplier = loc.multiplier;
+  }
+}
+function updateSauceDisplay(){
+  const s = saucesList.find(x=>x.id===gameData.currentSauce);
+  if (s) document.getElementById('sauceDisplay').textContent = s.icon;
+}
+
+document.getElementById('logoutBtn').addEventListener('click', async()=>{ await saveGame(); localStorage.removeItem('soysdomofon_user'); location.reload(); });
+document.getElementById('transferBtn').addEventListener('click', ()=> document.getElementById('transferModal').classList.add('active'));
+document.getElementById('eloCtaBtn').addEventListener('click', ()=> document.getElementById('pvpModal').classList.add('active') || openPvpModalFill());
+document.getElementById('pvpBtn').addEventListener('click', ()=>{ document.getElementById('pvpModal').classList.add('active'); openPvpModalFill(); });
+document.getElementById('casesBtn').addEventListener('click', ()=>{ document.getElementById('casesModal').classList.add('active'); renderCases(); });
+
+function openPvpModalFill(){
+  const rank = getRank(gameData.pvpMMR);
+  const badge = document.getElementById('pvpModalRank');
+  badge.textContent = rank.icon+' '+rank.name; badge.style.background = rank.color;
+  document.getElementById('pvpModalMMR').textContent = gameData.pvpMMR;
+  document.getElementById('pvpModalWins').textContent = gameData.pvpWins;
+  document.getElementById('pvpModalStreak').textContent = gameData.pvpWinStreak;
+}
+
+window.closeTransferModal = ()=> document.getElementById('transferModal').classList.remove('active');
+window.closePVPModal = ()=> document.getElementById('pvpModal').classList.remove('active');
+window.closeCasesModal = ()=> document.getElementById('casesModal').classList.remove('active');
+
+window.sendTransfer = async function(){
+  const recipient = document.getElementById('transferRecipient').value.trim();
+  const amount = parseInt(document.getElementById('transferAmount').value);
+  if (!recipient || !amount || amount<=0 || amount>gameData.cheese || recipient===currentUser){ showNotification('Неверные данные','error'); return; }
+  let recipientRec = null;
+  try{ recipientRec = await core.collection('players').getFirstListItem(`login="${recipient}"`); }catch(e){ recipientRec = null; }
+  if (!recipientRec){ showNotification('Получатель не найден','error'); return; }
+  gameData.cheese -= amount;
+  const recipientGameData = recipientRec.gamedata || {};
+  recipientGameData.cheese = (recipientGameData.cheese||0) + amount;
+  await core.collection('players').update(recipientRec.id, { gamedata: recipientGameData });
+  try{
+    await core.collection('transfers').create({ sender: currentUser, recipient, amount, timestamp: Date.now(), processed:true });
+  }catch(e){ /* лог переводов не критичен */ }
+  showNotification('Перевод отправлен!','success'); updateUI(); saveGame(); closeTransferModal();
+  document.getElementById('transferRecipient').value=''; document.getElementById('transferAmount').value='';
+};
+
+// === PVP / ELO ===
+let pvpGameState = { active:false, mode:'casual', bet:0, p1:0, p2:0, botDiff:.3, botSpeed:800, target:15 };
+
+window.startCasualPVP = async function(bet){
+  if (gameData.cheese < bet){ showNotification('Недостаточно сыра','error'); return; }
+  gameData.cheese -= bet; updateUI(); saveGame(); closePVPModal();
+  let difficulty=.3, speed=750;
+  if (bet>5000){ difficulty=.45; speed=600; }
+  if (bet>15000){ difficulty=.6; speed=480; }
+  beginPvpMatch('casual', bet, difficulty, speed);
+};
+
+window.startRankedPVP = async function(){
+  closePVPModal();
+  const rank = getRank(gameData.pvpMMR);
+  beginPvpMatch('ranked', 0, rank.botDiff, rank.botSpeed);
+  incQuest('rankedPlayed', 1);
+};
+
+async function beginPvpMatch(mode, bet, difficulty, speed){
+  pvpGameState = { active:true, mode, bet, p1:0, p2:0, botDiff:difficulty, botSpeed:speed, target:15 };
+  document.getElementById('pvpArena').classList.add('active');
+  document.getElementById('pvpPlayer1Name').textContent = currentUser;
+  document.getElementById('pvpPlayer2Name').textContent = mode==='ranked' ? 'Соперник ('+getRank(gameData.pvpMMR).name+')' : 'Бот';
+  document.getElementById('pvpModeLabel').textContent = mode==='ranked' ? '⭐ Рейтинговый бой (ELO)' : 'Ставка: '+(bet*2).toLocaleString()+' 🧀';
+  document.getElementById('pvpPlayer1Hits').textContent='0'; document.getElementById('pvpPlayer2Hits').textContent='0';
+  await countdownPVP();
+  spawnPVPSauce();
+}
+
+async function countdownPVP(){
+  const timer = document.getElementById('pvpTimer'); timer.style.display='block';
+  for (let i=3;i>0;i--){ timer.textContent=i; await new Promise(r=>setTimeout(r,1000)); }
+  timer.textContent='БОЙ!'; await new Promise(r=>setTimeout(r,500)); timer.style.display='none';
+}
+
+function spawnPVPSauce(){
+  if (!pvpGameState.active) return;
+  const bf = document.getElementById('pvpBattlefield');
+  const sauce = document.createElement('div');
+  sauce.className='pvp-sauce';
+  const rs = saucesList[Math.floor(Math.random()*saucesList.length)];
+  sauce.textContent = rs.icon;
+  const maxX = bf.clientWidth-90, maxY = bf.clientHeight-90;
+  sauce.style.left = Math.random()*maxX+'px'; sauce.style.top = Math.random()*maxY+'px';
+  let clicked=false;
+
+  sauce.addEventListener('click', ()=>{
+    if (!pvpGameState.active||clicked) return;
+    clicked=true; pvpGameState.p1++;
+    document.getElementById('pvpPlayer1Hits').textContent = pvpGameState.p1;
+    sauce.remove();
+    if (pvpGameState.p1>=pvpGameState.target){ endPVP(true); return; }
+    setTimeout(spawnPVPSauce,180);
+  });
+  bf.appendChild(sauce);
+
+  setTimeout(()=>{
+    if (sauce.parentElement && pvpGameState.active && !clicked && Math.random()<pvpGameState.botDiff){
+      clicked=true; pvpGameState.p2++;
+      document.getElementById('pvpPlayer2Hits').textContent = pvpGameState.p2;
+      sauce.remove();
+      if (pvpGameState.p2>=pvpGameState.target){ endPVP(false); return; }
+      setTimeout(spawnPVPSauce,180);
+    }
+  }, pvpGameState.botSpeed);
+}
+
+async function endPVP(playerWon){
+  pvpGameState.active=false;
+  const bf = document.getElementById('pvpBattlefield'); bf.innerHTML='';
+  const mode = pvpGameState.mode;
+
+  if (mode==='casual'){
+    const reward = pvpGameState.bet*2;
+    if (playerWon){ gameData.cheese += reward; gameData.pvpWins++; }
+    else { gameData.pvpLosses++; }
+    showWinOverlay(playerWon, playerWon?`+${reward.toLocaleString()} 🧀`:`-${pvpGameState.bet.toLocaleString()} 🧀`, null);
+  } else {
+    const rank = getRank(gameData.pvpMMR);
+    const baseGain = 22 + rank.idx*1.5;
+    const baseLoss = 18 + rank.idx*1.5;
+    let mmrChange;
+    if (playerWon){
+      gameData.pvpWins++; gameData.pvpWinStreak++;
+      gameData.pvpBestStreak = Math.max(gameData.pvpBestStreak||0, gameData.pvpWinStreak);
+      const streakBonus = Math.min(10, gameData.pvpWinStreak*1.5);
+      mmrChange = Math.floor(baseGain + streakBonus);
+      gameData.pvpMMR += mmrChange;
+      incQuest('rankedWins',1);
+    } else {
+      gameData.pvpLosses++; gameData.pvpWinStreak=0;
+      mmrChange = -Math.floor(baseLoss);
+      gameData.pvpMMR = Math.max(0, gameData.pvpMMR + mmrChange);
+    }
+    const newRank = getRank(gameData.pvpMMR);
+    showWinOverlay(playerWon, (mmrChange>=0?'+':'')+mmrChange+' ELO', null);
+    if (newRank.idx > rank.idx) setTimeout(()=>showRankUp(newRank), 1700);
+  }
+
+  updateRankUI(); updateUI(); await saveGame();
+}
+
+function showWinOverlay(won, rewardText, _unused){
+  const ov = document.getElementById('winOverlay');
+  ov.innerHTML = `<div class="win-card ${won?'win':'lose'}">
+    <h2>${won?'🎉 ПОБЕДА!':'💀 ПОРАЖЕНИЕ'}</h2>
+    <div style="font-size:1.8em;font-weight:800;color:${won?'#fbbf24':'#ef4444'};margin-bottom:18px">${rewardText}</div>
+    <button class="admin-button" onclick="closeWinOverlay()">Продолжить</button>
+  </div>`;
+  ov.classList.add('show');
+  if (won) launchConfetti();
+}
+window.closeWinOverlay = function(){
+  document.getElementById('winOverlay').classList.remove('show');
+  document.getElementById('pvpArena').classList.remove('active');
+  document.getElementById('pvpBattlefield').innerHTML = '<div class="pvp-timer" id="pvpTimer">3</div>';
+};
+
+function showRankUp(rank){
+  const ov = document.getElementById('rankupOverlay');
+  ov.innerHTML = `<div class="rankup-card"><div class="ricon" style="color:${rank.color}">${rank.icon}</div>
+    <h2>НОВЫЙ РАНГ!</h2><div style="font-size:1.6em;font-weight:800;color:${rank.color}">${rank.name}</div>
+    <button class="admin-button" style="margin-top:20px" onclick="document.getElementById('rankupOverlay').classList.remove('show')">Класс!</button></div>`;
+  ov.classList.add('show');
+  launchConfetti(60);
+}
+
+function launchConfetti(count=40){
+  const colors=['#fbbf24','#f59e0b','#ef4444','#10b981','#3b82f6','#a855f7'];
+  for (let i=0;i<count;i++){
+    const c = document.createElement('div');
+    c.className='confetti';
+    c.style.left = Math.random()*100+'vw';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration = (2+Math.random()*1.5)+'s';
+    c.style.animationDelay = (Math.random()*.5)+'s';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4000);
+  }
+}
+
+// === КЕЙСЫ ===
+function renderCases(){
+  const grid = document.getElementById('caseGrid'); grid.innerHTML='';
+  casesList.forEach(c=>{
+    const unopened = c.items.filter(i=>!gameData.inventory.decorations.includes(i.id));
+    const allOpened = unopened.length===0;
+    const card = document.createElement('div');
+    card.className = 'case-card'+(allOpened?' locked':'');
+    card.innerHTML = `<div class="case-icon">${c.icon}</div><div class="case-name">${c.name}</div>
+      <div class="case-price">${c.price.toLocaleString()} 🧀</div>
+      <div class="case-items-count">${unopened.length}/${c.items.length} предметов</div>
+      ${allOpened?'<div style="color:#10b981;font-weight:700;margin-top:8px">ВСЁ ОТКРЫТО</div>':''}`;
+    if (!allOpened) card.addEventListener('click', ()=>openCase(c.id));
+    grid.appendChild(card);
+  });
+}
+
+async function openCase(caseId){
+  const c = casesList.find(x=>x.id===caseId); if (!c) return;
+  if (gameData.cheese < c.price){ showNotification('Недостаточно сыра!','error'); return; }
+  const unopened = c.items.filter(i=>!gameData.inventory.decorations.includes(i.id));
+  if (!unopened.length) return;
+  gameData.cheese -= c.price; updateUI(); closeCasesModal();
+  document.getElementById('caseOpening').classList.add('active');
+  document.getElementById('caseBox').textContent = c.icon;
+  await new Promise(r=>setTimeout(r,1600));
+  const won = unopened[Math.floor(Math.random()*unopened.length)];
+  gameData.inventory.decorations.push(won.id);
+  document.getElementById('caseResult').innerHTML = `<div class="case-item-reveal" style="border-color:${rarityColor(won.rarity)}">
+    <div class="item-icon">${won.icon}</div><div class="item-name">${won.name}</div>
+    <div class="item-rarity rarity-${won.rarity}">${rarityName(won.rarity)}</div>
+    <button class="admin-button" onclick="closeCaseOpening()">Забрать</button></div>`;
+  await saveGame();
+}
+window.closeCaseOpening = function(){
+  document.getElementById('caseOpening').classList.remove('active');
+  document.getElementById('caseResult').innerHTML='';
+  showNotification('Добавлено в инвентарь!','success');
+  renderShop();
+};
+function rarityColor(r){ return {common:'#71717a',uncommon:'#10b981',rare:'#3b82f6',epic:'#a855f7',legendary:'#f59e0b',mythic:'#ef4444'}[r]||'#71717a'; }
+function rarityName(r){ return {common:'ОБЫЧНЫЙ',uncommon:'НЕОБЫЧНЫЙ',rare:'РЕДКИЙ',epic:'ЭПИЧЕСКИЙ',legendary:'ЛЕГЕНДАРНЫЙ',mythic:'МИФИЧЕСКИЙ'}[r]||'ОБЫЧНЫЙ'; }
+
+function showNotification(msg,type='success'){
+  const n = document.createElement('div'); n.className=`notification ${type}`; n.textContent=msg;
+  document.body.appendChild(n); setTimeout(()=>n.remove(),4500);
+}
+
+async function saveGame(){
+  if (!currentUser || !currentUserId) return;
+  try{
+    await core.collection('players').update(currentUserId, { gamedata: gameData });
+    const lbData = {
+      login: currentUser, cheese: gameData.cheese, alltimecheese: gameData.allTimeCheese,
+      rebirths: gameData.rebirths, level: gameData.level, pvpmmr: gameData.pvpMMR,
+      pvpwins: gameData.pvpWins, pvplosses: gameData.pvpLosses, pvpwinstreak: gameData.pvpWinStreak
+    };
+    try{
+      const lbRec = await core.collection('leaderboard').getFirstListItem(`login="${currentUser}"`);
+      await core.collection('leaderboard').update(lbRec.id, lbData);
+    }catch(e){
+      await core.collection('leaderboard').create(lbData);
+    }
+  }catch(e){ console.error('save error',e); }
+}
+
+function renderShop(){
+  let h='';
+  upgradesList.forEach(u=>{
+    const lvl = gameData.upgrades[u.id]||0;
+    const cost = Math.floor(u.baseCost*Math.pow(u.scale,lvl)*Math.pow(1.1,gameData.rebirths));
+    h+=`<div class="shop-item"><div class="shop-item-header"><div class="shop-item-name">${u.name}</div><div class="shop-item-level">Ур.${lvl}</div></div>
+    <div class="shop-item-desc">${u.desc}</div><div class="shop-item-footer"><div class="shop-item-cost">${cost.toLocaleString()} 🧀</div>
+    <button class="buy-btn" data-upgrade="${u.id}">Купить</button></div></div>`;
+  });
+  document.getElementById('upgradesTab').innerHTML = h;
+
+  h='';
+  intercomsList.forEach(ic=>{
+    const owned = gameData.intercoms.includes(ic.id);
+    const active = gameData.currentIntercom===ic.id;
+    let btn = ic.id==='cyfral' ? `<button class="select-btn ${active?'active':''}" data-select-intercom="${ic.id}">Выбран</button>`
+      : owned ? `<button class="select-btn ${active?'active':''}" data-select-intercom="${ic.id}">${active?'Выбран':'Выбрать'}</button>`
+      : `<button class="buy-btn" data-buy-intercom="${ic.id}" data-cost="${ic.cost}">Купить</button>`;
+    h+=`<div class="shop-item"><div class="shop-item-header"><div class="shop-item-name">🚪 ${ic.name}</div></div>
+    <div class="shop-item-desc">x${ic.bonus} к авто-доходу</div>
+    <div class="shop-item-footer"><div class="shop-item-cost">${ic.cost===0?'БЕСПЛАТНО':ic.cost.toLocaleString()+' 🧀'}</div>${btn}</div></div>`;
+  });
+  document.getElementById('intercomsTab').innerHTML = h;
+
+  h='';
+  saucesList.forEach(s=>{
+    const owned = gameData.sauces.includes(s.id);
+    const active = gameData.currentSauce===s.id;
+    let btn = s.id==='basic' ? `<button class="select-btn ${active?'active':''}" data-select-sauce="${s.id}">Выбран</button>`
+      : owned ? `<button class="select-btn ${active?'active':''}" data-select-sauce="${s.id}">${active?'Выбран':'Выбрать'}</button>`
+      : `<button class="buy-btn" data-buy-sauce="${s.id}" data-cost="${s.cost}">Купить</button>`;
+    h+=`<div class="shop-item"><div class="shop-item-header"><div class="shop-item-name">${s.icon} ${s.name}</div></div>
+    <div class="shop-item-desc">+${s.bonus} сыра за клик</div>
+    <div class="shop-item-footer"><div class="shop-item-cost">${s.cost===0?'БЕСПЛАТНО':s.cost.toLocaleString()+' 🧀'}</div>${btn}</div></div>`;
+  });
+  document.getElementById('sauceTab').innerHTML = h;
+
+  h='';
+  locationsList.forEach(l=>{
+    const active = gameData.currentLocation===l.id;
+    const canUnlock = gameData.rebirths >= l.requiredRebirths;
+    let btn = l.id==='entrance' ? `<button class="select-btn active">Выбрана</button>`
+      : active ? `<button class="select-btn active">Выбрана</button>`
+      : !canUnlock ? `<button class="buy-btn" disabled>Нужно ${l.requiredRebirths} ⭐</button>`
+      : `<button class="select-btn" data-select-location="${l.id}">Выбрать</button>`;
+    h+=`<div class="shop-item"><div class="shop-item-header"><div class="shop-item-name">${l.icon} ${l.name}</div></div>
+    <div class="shop-item-desc">x${l.multiplier} | нужно ${l.requiredRebirths} ⭐</div>
+    <div class="shop-item-footer"><div class="shop-item-cost">${l.cost===0?'СТАРТОВАЯ':l.cost.toLocaleString()+' 🧀'}</div>${btn}</div></div>`;
+  });
+  document.getElementById('locationsTab').innerHTML = h;
+
+  // инвентарь
+  const owned = casesList.flatMap(c=>c.items).filter(i=>gameData.inventory.decorations.includes(i.id));
+  if (!owned.length){
+    document.getElementById('inventoryTab').innerHTML = `<div style="text-align:center;color:#94a3b8;padding:20px">Инвентарь пуст. Открой кейсы!</div>`;
+  } else {
+    let inv='';
+    owned.forEach(d=>{
+      const eq = gameData.equipped.decoration===d.id;
+      inv+=`<div class="shop-item"><div class="shop-item-header"><div class="shop-item-name">${d.icon} ${d.name}</div>
+      <div class="item-rarity rarity-${d.rarity}" style="font-size:.65em;padding:3px 8px">${rarityName(d.rarity)}</div></div>
+      <div class="shop-item-footer"><button class="select-btn ${eq?'active':''}" data-equip-decoration="${d.id}">${eq?'Надето':'Надеть'}</button>
+      ${eq?'<button class="buy-btn" style="background:#ef4444" data-unequip-decoration="true">Снять</button>':''}</div></div>`;
+    });
+    document.getElementById('inventoryTab').innerHTML = inv;
+  }
+}
+
+function renderQuests(){
+  const list = document.getElementById('questsList'); list.innerHTML='';
+  questDefs.forEach(q=>{
+    const progress = (gameData.quests[q.id]&&gameData.quests[q.id].progress) || 0;
+    const claimed = gameData.quests[q.id] && gameData.quests[q.id].claimed;
+    const done = progress >= q.goal;
+    const pct = Math.min(100,(progress/q.goal)*100);
+    list.innerHTML += `<div class="quest-item ${claimed?'done':''}">
+      <div style="font-size:.85em;font-weight:600">${q.name}</div>
+      <div class="quest-bar-bg"><div class="quest-bar-fill" style="width:${pct}%"></div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+      <span style="font-size:.72em;color:#94a3b8">${Math.min(progress,q.goal)}/${q.goal}</span>
+      ${claimed?'<span style="font-size:.72em;color:#10b981">✓ Получено</span>'
+        : done?`<button class="admin-button" style="padding:5px 12px;font-size:.72em;margin:0" data-claim-quest="${q.id}">+${q.reward} 🧀</button>`
+        : `<span style="font-size:.72em;color:#fbbf24">+${q.reward} 🧀</span>`}
+      </div></div>`;
+  });
+}
+
+function incQuest(track, amount){
+  questDefs.filter(q=>q.track===track).forEach(q=>{
+    if (!gameData.quests[q.id]) gameData.quests[q.id] = {progress:0, claimed:false};
+    if (!gameData.quests[q.id].claimed) gameData.quests[q.id].progress += amount;
+  });
+  renderQuests();
+}
+
+document.getElementById('intercom').addEventListener('click', function(event){
+  const eventMult = activeEventMultiplier();
+  const clickPower = (gameData.clickPower + gameData.sauceBonus) * gameData.locationMultiplier * eventMult;
+  const bonusMultiplier = 1 + gameData.rebirths*0.06;
+  const totalGain = Math.max(1, Math.floor(clickPower * bonusMultiplier));
+
+  gameData.cheese += totalGain; gameData.totalCheese += totalGain; gameData.allTimeCheese += totalGain;
+
+  const splash = document.createElement('div');
+  splash.className='cheese-splash'; splash.textContent=`+${totalGain.toLocaleString()} 🧀`;
+  splash.style.left = event.clientX+'px'; splash.style.top = event.clientY+'px'; splash.style.color='#fbbf24';
+  document.body.appendChild(splash); setTimeout(()=>splash.remove(),1400);
+
+  incQuest('clicks',1);
+  incQuest('totalEarned', totalGain);
+
+  updateUI(); checkLevelUp();
+});
+
+function setupEventListeners(){
+  document.addEventListener('click', function(e){
+    if (e.target.dataset.upgrade){
+      const u = upgradesList.find(x=>x.id===e.target.dataset.upgrade); if (!u) return;
+      const lvl = gameData.upgrades[u.id]||0;
+      const cost = Math.floor(u.baseCost*Math.pow(u.scale,lvl)*Math.pow(1.1,gameData.rebirths));
+      if (gameData.cheese>=cost){
+        gameData.cheese-=cost; gameData.upgrades[u.id]++;
+        if (u.type==='click') gameData.clickPower += u.power; else gameData.cheesePerSecond += u.power;
+        incQuest('upgradesBought',1);
+        renderShop(); updateUI(); saveGame();
+      }
+    } else if (e.target.dataset.buyIntercom){
+      const cost = parseInt(e.target.dataset.cost); const type = e.target.dataset.buyIntercom;
+      if (gameData.cheese>=cost && !gameData.intercoms.includes(type)){
+        gameData.cheese-=cost; gameData.intercoms.push(type);
+        const ic = intercomsList.find(i=>i.id===type);
+        if (ic){ gameData.currentIntercom=type; gameData.intercomBonus=ic.bonus; updateIntercomVisual(type); }
+        renderShop(); updateUI(); saveGame();
+      }
+    } else if (e.target.dataset.selectIntercom){
+      const type = e.target.dataset.selectIntercom; gameData.currentIntercom=type;
+      const ic = intercomsList.find(i=>i.id===type);
+      if (ic){ gameData.intercomBonus=ic.bonus; updateIntercomVisual(type); }
+      renderShop(); updateUI(); saveGame();
+    } else if (e.target.dataset.buySauce){
+      const cost = parseInt(e.target.dataset.cost); const type = e.target.dataset.buySauce;
+      if (gameData.cheese>=cost && !gameData.sauces.includes(type)){
+        gameData.cheese-=cost; gameData.sauces.push(type);
+        const s = saucesList.find(x=>x.id===type);
+        if (s){ gameData.currentSauce=type; gameData.sauceBonus=s.bonus; updateSauceDisplay(); }
+        renderShop(); updateUI(); saveGame();
+      }
+    } else if (e.target.dataset.selectSauce){
+      const type = e.target.dataset.selectSauce; gameData.currentSauce=type;
+      const s = saucesList.find(x=>x.id===type);
+      if (s){ gameData.sauceBonus=s.bonus; updateSauceDisplay(); }
+      renderShop(); updateUI(); saveGame();
+    } else if (e.target.dataset.selectLocation){
+      const type = e.target.dataset.selectLocation; const loc = locationsList.find(l=>l.id===type);
+      if (loc && gameData.rebirths>=loc.requiredRebirths){
+        gameData.currentLocation=type; gameData.locationMultiplier=loc.multiplier;
+        updateLocationDisplay(); renderShop(); updateUI(); saveGame();
+      }
+    } else if (e.target.dataset.equipDecoration){
+      gameData.equipped.decoration = e.target.dataset.equipDecoration; renderShop(); saveGame();
+    } else if (e.target.dataset.unequipDecoration){
+      gameData.equipped.decoration = null; renderShop(); saveGame();
+    } else if (e.target.dataset.claimQuest){
+      const qid = e.target.dataset.claimQuest; const q = questDefs.find(x=>x.id===qid);
+      if (q && gameData.quests[qid] && gameData.quests[qid].progress>=q.goal && !gameData.quests[qid].claimed){
+        gameData.quests[qid].claimed = true; gameData.cheese += q.reward;
+        showNotification(`Квест выполнен! +${q.reward} 🧀`,'success');
+        renderQuests(); updateUI(); saveGame();
+        if (Math.random()<0.4) showNotification('Совет: попробуй сыграть в ⚔️ ELO — там лучшая награда за прогресс!','success');
+      }
+    }
+  });
+
+  document.querySelectorAll('.shop-tab').forEach(tab=>{
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.shop-tab').forEach(t=>t.classList.remove('active'));
+      this.classList.add('active');
+      ['upgrades','intercoms','sauce','locations','inventory'].forEach(t=>document.getElementById(t+'Tab').classList.add('hidden'));
+      document.getElementById(this.dataset.tab+'Tab').classList.remove('hidden');
+    });
+  });
+
+  document.querySelectorAll('.leaderboard-tab').forEach(tab=>{
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.leaderboard-tab').forEach(t=>t.classList.remove('active'));
+      this.classList.add('active'); currentLeaderboardTab = this.dataset.lbTab; loadLeaderboard();
+    });
+  });
+
+  document.getElementById('rebirthBtn').addEventListener('click', doRebirth);
+  document.getElementById('resetProgressBtn').addEventListener('click', doResetProgress);
+}
+
+function getRebirthCost(){ return Math.floor(300000*Math.pow(3.2,gameData.rebirths)); }
+
+function doRebirth(){
+  const cost = getRebirthCost();
+  if (gameData.cheese>=cost){
+    if (confirm(`Переродиться? Прогресс по добыче сбросится.\nБонус: +6% к доходу навсегда\nСледующая стоимость: ${(cost*3.2).toLocaleString()} 🧀`)){
+      gameData.rebirths++; gameData.cheese=0; gameData.totalCheese=0; gameData.level=1;
+      gameData.clickPower=1; gameData.cheesePerSecond=0;
+      upgradesList.forEach(u=>gameData.upgrades[u.id]=0);
+      gameData.intercoms=['cyfral']; gameData.currentIntercom='cyfral';
+      gameData.sauces=['basic']; gameData.currentSauce='basic';
+      gameData.intercomBonus=1; gameData.sauceBonus=0;
+      updateIntercomVisual('cyfral'); updateSauceDisplay(); renderShop(); updateUI(); saveGame();
+    }
+  }
+}
+
+function doResetProgress(){
+  if (!confirm('Точно сбросить ВЕСЬ прогресс игры (кроме ELO) до нуля? Это нельзя отменить.')) return;
+  gameData.cheese=0; gameData.totalCheese=0; gameData.allTimeCheese=0; gameData.level=1; gameData.rebirths=0;
+  gameData.clickPower=1; gameData.cheesePerSecond=0;
+  upgradesList.forEach(u=>gameData.upgrades[u.id]=0);
+  gameData.intercoms=['cyfral']; gameData.currentIntercom='cyfral';
+  gameData.sauces=['basic']; gameData.currentSauce='basic';
+  gameData.intercomBonus=1; gameData.sauceBonus=0;
+  gameData.currentLocation='entrance'; gameData.locationMultiplier=1;
+  gameData.inventory={decorations:[]}; gameData.equipped={decoration:null};
+  gameData.quests={};
+  updateIntercomVisual('cyfral'); updateSauceDisplay(); updateLocationDisplay(); renderShop(); renderQuests(); updateUI(); saveGame();
+  showNotification('Прогресс полностью сброшен','success');
+}
+
+function checkLevelUp(){
+  const next = gameData.level*4000;
+  if (gameData.totalCheese >= next){ gameData.level++; updateUI(); }
+}
+
+function updateUI(){
+  document.getElementById('cheeseCount').textContent = Math.floor(gameData.cheese).toLocaleString();
+  document.getElementById('levelDisplay').textContent = gameData.level;
+  document.getElementById('rebirthCount').textContent = gameData.rebirths;
+  const eventMult = activeEventMultiplier();
+  document.getElementById('clickPower').textContent = Math.max(1,Math.floor((gameData.clickPower+gameData.sauceBonus)*gameData.locationMultiplier*eventMult)).toLocaleString();
+  const cps = Math.floor(gameData.cheesePerSecond * gameData.intercomBonus * (1+gameData.rebirths*0.06) * gameData.locationMultiplier * eventMult);
+  document.getElementById('cheesePerSec').textContent = cps.toLocaleString();
+  document.getElementById('pvpWins').textContent = gameData.pvpWins;
+  document.getElementById('pvpLosses').textContent = gameData.pvpLosses;
+  const cost = getRebirthCost();
+  document.getElementById('rebirthCost').textContent = cost.toLocaleString();
+  document.getElementById('rebirthBtn').disabled = gameData.cheese < cost;
+}
+
+let currentLeaderboardTab = 'elo';
+
+async function loadLeaderboard(){
+  let leaders;
+  try{ leaders = await core.collection('leaderboard').getFullList({ sort: '-cheese' }); }catch(e){ leaders = []; }
+  if (!leaders.length){ document.getElementById('leaderboardList').innerHTML='<div style="text-align:center;color:#94a3b8;padding:18px">Нет данных</div>'; return; }
+  leaders = leaders.map(l=>({
+    login: l.login, cheese: l.cheese||0, rebirths: l.rebirths||0,
+    pvpMMR: l.pvpmmr||1000, pvpWinStreak: l.pvpwinstreak||0
+  }));
+  if (currentLeaderboardTab==='elo') leaders.sort((a,b)=>(b.pvpMMR||1000)-(a.pvpMMR||1000));
+  else if (currentLeaderboardTab==='balance') leaders.sort((a,b)=>b.cheese-a.cheese);
+  else leaders.sort((a,b)=>b.rebirths-a.rebirths);
+  leaders = leaders.slice(0,10);
+
+  document.getElementById('leaderboardList').innerHTML = leaders.map((l,i)=>{
+    const rc = i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    let score='';
+    if (currentLeaderboardTab==='elo'){ const r=getRank(l.pvpMMR||1000); score=`${r.icon} ${l.pvpMMR||1000}`; }
+    else if (currentLeaderboardTab==='balance') score=`${Math.floor(l.cheese||0).toLocaleString()} 🧀`;
+    else score=`⭐ ${l.rebirths||0}`;
+    return `<div class="leaderboard-item"><div class="leaderboard-rank ${rc}">${i+1}</div>
+      <div class="leaderboard-player">${l.login}${l.pvpWinStreak>2&&currentLeaderboardTab==='elo'?` <span class="streak">🔥${l.pvpWinStreak}</span>`:''}</div>
+      <div class="leaderboard-score">${score}</div></div>`;
+  }).join('');
+}
+
+// === СЕЗОН ELO (сброс раз в неделю) ===
+async function checkSeason(){
+  let season;
+  try{
+    const rec = await core.collection('meta').getOne('season_info');
+    season = rec.payload;
+  }catch(e){
+    season = { number:1, startedAt: Date.now(), endsAt: Date.now()+7*24*60*60*1000 };
+    try{ await core.collection('meta').create({ id:'season_info', payload: season }); }catch(e2){
+      try{ await core.collection('meta').create({ key:'season_info', payload: season }); }catch(e3){}
+    }
+  }
+
+  if (Date.now() > season.endsAt){
+    season = { number:(season.number||1)+1, startedAt: Date.now(), endsAt: Date.now()+7*24*60*60*1000 };
+    try{ await core.collection('meta').update('season_info', { payload: season }); }catch(e){}
+  }
+
+  if (gameData.lastSeasonNumber !== season.number){
+    gameData.pvpMMR = Math.max(1000, Math.floor((gameData.pvpMMR||1000)*0.6 + 400));
+    gameData.pvpWinStreak = 0;
+    gameData.lastSeasonNumber = season.number;
+    saveGame();
+  }
+
+  window._season = season;
+  updateSeasonTimer();
+  setInterval(updateSeasonTimer, 1000);
+}
+
+function updateSeasonTimer(){
+  if (!window._season) return;
+  const left = window._season.endsAt - Date.now();
+  const el = document.getElementById('seasonTimer');
+  if (left<=0){ el.textContent='Сезон ELO завершается...'; return; }
+  const d = Math.floor(left/86400000), h=Math.floor((left%86400000)/3600000), m=Math.floor((left%3600000)/60000);
+  el.textContent = `Сезон #${window._season.number} ELO — до сброса: ${d}д ${h}ч ${m}м`;
+}
+
+// === ГЛОБАЛЬНОЕ СОБЫТИЕ (от админки) ===
+let currentEvent = null;
+async function fetchGlobalEvent(){
+  try{
+    const rec = await core.collection('meta').getOne('global_event');
+    currentEvent = rec.payload || null;
+  }catch(e){ currentEvent = null; }
+  renderEventBanner();
+}
+function listenGlobalEvent(){
+  fetchGlobalEvent();
+  setInterval(fetchGlobalEvent, 5000);
+  setInterval(renderEventBanner, 1000);
+  try{
+    core.collection('meta').subscribe('global_event', (e)=>{
+      currentEvent = (e.record && e.record.payload) || null;
+      renderEventBanner();
+    });
+  }catch(e){ /* реал-тайм недоступен — работаем по таймеру опроса */ }
+}
+function activeEventMultiplier(){
+  if (currentEvent && currentEvent.active && Date.now() < currentEvent.endsAt) return currentEvent.multiplier || 1;
+  return 1;
+}
+function renderEventBanner(){
+  const banner = document.getElementById('eventBanner');
+  const small = document.getElementById('eventCountdownSmall');
+  if (currentEvent && currentEvent.active && Date.now() < currentEvent.endsAt){
+    const left = currentEvent.endsAt - Date.now();
+    const m = Math.floor(left/60000), s = Math.floor((left%60000)/1000);
+    document.getElementById('eventText').textContent = currentEvent.text;
+    document.getElementById('eventMult').textContent = currentEvent.multiplier;
+    document.getElementById('eventTimeLeft').textContent = `${m}м ${s}с`;
+    banner.classList.add('show');
+    small.textContent = `🔥 Событие x${currentEvent.multiplier} — осталось ${m}м ${s}с`;
+    document.body.classList.add('event-glow');
+  } else {
+    banner.classList.remove('show');
+    small.textContent='';
+    document.body.classList.remove('event-glow');
+  }
+}
+
+function startGameLoop(){
+  setInterval(()=>{
+    const eventMult = activeEventMultiplier();
+    const cps = gameData.cheesePerSecond * gameData.intercomBonus * (1+gameData.rebirths*0.06) * gameData.locationMultiplier * eventMult;
+    gameData.cheese += cps/10; gameData.totalCheese += cps/10; gameData.allTimeCheese += cps/10;
+    updateUI(); checkLevelUp();
+  }, 100);
+  setInterval(saveGame, 10000);
+}
+</script>
+</body>
+</html>
