@@ -280,7 +280,8 @@ textarea{width:100%;padding:11px;background:rgba(255,255,255,.05);border:1px sol
       <div class="leaderboard">
         <h2>🏆 Топ Игроков</h2>
         <div class="leaderboard-tabs">
-          <button class="leaderboard-tab active" data-lb-tab="elo">ELO</button>
+          <button class="leaderboard-tab active" data-lb-tab="elo_season">ELO (сезон)</button>
+          <button class="leaderboard-tab" data-lb-tab="elo_alltime">ELO (все сезоны)</button>
           <button class="leaderboard-tab" data-lb-tab="balance">Баланс</button>
           <button class="leaderboard-tab" data-lb-tab="rebirths">Перерождения</button>
         </div>
@@ -365,36 +366,53 @@ let gameData = {
   clickPower:1, cheesePerSecond:0, upgrades:{}, intercoms:['cyfral'], currentIntercom:'cyfral',
   sauces:['basic'], currentSauce:'basic', intercomBonus:1, sauceBonus:0, isBanned:false,
   currentLocation:'entrance', locationMultiplier:1,
-  pvpWins:0, pvpLosses:0, pvpMMR:1000, pvpWinStreak:0, pvpBestStreak:0,
+  pvpWins:0, pvpLosses:0, pvpMMR:1000, pvpMMRAllTime:1000, pvpWinStreak:0, pvpBestStreak:0,
   inventory:{decorations:[]}, equipped:{decoration:null}, openedCases:{},
-  quests:{}, lastSeasonNumber:0
+  quests:{}, lastSeasonNumber:0,
+  upgradeMaxBonus:{}, pendingSeasonBonus:0, lastSeasonELO:0, seasonResetSeen:false
 };
 
 // === ДОМОФОНЫ КАК КАРТИНКИ (положи рядом файлы с такими именами) ===
 const intercomsList = [
-  { id:'cyfral',  name:'CYFRAL',   bonus:1.00, cost:0,        img:'cyfral.png' },
-  { id:'metakom', name:'МЕТАКОМ',  bonus:1.08, cost:8000,     img:'metakom.png' },
-  { id:'vizit',   name:'VIZIT',    bonus:1.16, cost:30000,    img:'vizit.png' },
-  { id:'eltis',   name:'ELTIS',    bonus:1.25, cost:120000,   img:'eltis.png' },
-  { id:'stalker', name:'СТАЛКЕР',  bonus:1.35, cost:500000,   img:'stalker.png' },
-  { id:'quantum', name:'QUANTUM',  bonus:1.45, cost:2000000,  img:'quantum.png' },
-  { id:'neon',    name:'NEON',     bonus:1.55, cost:8000000,  img:'neon.png' },
-  { id:'gold',    name:'GOLD',     bonus:1.70, cost:30000000, img:'gold.png' },
+  { id:'cyfral',  name:'CYFRAL',    bonus:1.00, cost:0,             img:'cyfral.png' },
+  { id:'metakom', name:'МЕТАКОМ',   bonus:1.08, cost:8000,          img:'metakom.png' },
+  { id:'vizit',   name:'VIZIT',     bonus:1.16, cost:30000,         img:'vizit.png' },
+  { id:'eltis',   name:'ELTIS',     bonus:1.25, cost:120000,        img:'eltis.png' },
+  { id:'stalker', name:'СТАЛКЕР',   bonus:1.35, cost:500000,        img:'stalker.png' },
+  { id:'quantum', name:'QUANTUM',   bonus:1.45, cost:2000000,       img:'quantum.png' },
+  { id:'neon',    name:'NEON',      bonus:1.55, cost:8000000,       img:'neon.png' },
+  { id:'gold',    name:'GOLD',      bonus:1.70, cost:30000000,      img:'gold.png' },
+  { id:'ultra',   name:'ULTRA',     bonus:1.90, cost:500000000,     img:'ultra.png' },
+  { id:'titan',   name:'TITAN',     bonus:2.20, cost:5000000000,    img:'titan.png' },
+  { id:'cosmos',  name:'COSMOS',    bonus:2.70, cost:15000000000,   img:'cosmos.png' },
 ];
 
+const MAX_UPGRADE_LEVEL = 120;
+const MAX_REBIRTHS = 50;
+
 const upgradesList = [
-  { id:'finger', name:'👆 Палец', desc:'+1 сыра/клик', baseCost:30, type:'click', power:1, scale:1.13 },
-  { id:'glove', name:'🧤 Перчатка', desc:'+3 сыра/клик', baseCost:150, type:'click', power:3, scale:1.13 },
-  { id:'brush2', name:'🖌️ Кисть', desc:'+8 сыра/клик', baseCost:600, type:'click', power:8, scale:1.14 },
-  { id:'roller', name:'🎨 Валик', desc:'+20 сыра/клик', baseCost:2500, type:'click', power:20, scale:1.14 },
-  { id:'sprayer', name:'💧 Спрей', desc:'+50 сыра/клик', baseCost:10000, type:'click', power:50, scale:1.15 },
-  { id:'bucket', name:'🪣 Ведро', desc:'+150 сыра/клик', baseCost:40000, type:'click', power:150, scale:1.15 },
-  { id:'auto', name:'🤖 Робот', desc:'+1 сыр/сек', baseCost:60, type:'auto', power:1, scale:1.15 },
-  { id:'sponge', name:'🧽 Губка', desc:'+5 сыр/сек', baseCost:300, type:'auto', power:5, scale:1.15 },
-  { id:'drone', name:'🚁 Дрон', desc:'+15 сыр/сек', baseCost:1200, type:'auto', power:15, scale:1.16 },
-  { id:'brush', name:'🖌️ Авто-кисть', desc:'+50 сыр/сек', baseCost:5000, type:'auto', power:50, scale:1.16 },
-  { id:'spray', name:'💦 Распылитель', desc:'+150 сыр/сек', baseCost:20000, type:'auto', power:150, scale:1.17 },
-  { id:'machine', name:'⚙️ Машина', desc:'+500 сыр/сек', baseCost:80000, type:'auto', power:500, scale:1.17 },
+  { id:'finger',   name:'👆 Палец',        desc:'+1 сыра/клик',       baseCost:30,          type:'click', power:1,       scale:1.13 },
+  { id:'glove',    name:'🧤 Перчатка',     desc:'+3 сыра/клик',       baseCost:150,         type:'click', power:3,       scale:1.13 },
+  { id:'brush2',   name:'🖌️ Кисть',        desc:'+8 сыра/клик',       baseCost:600,         type:'click', power:8,       scale:1.14 },
+  { id:'roller',   name:'🎨 Валик',        desc:'+20 сыра/клик',      baseCost:2500,        type:'click', power:20,      scale:1.14 },
+  { id:'sprayer',  name:'💧 Спрей',        desc:'+50 сыра/клик',      baseCost:10000,       type:'click', power:50,      scale:1.15 },
+  { id:'bucket',   name:'🪣 Ведро',        desc:'+150 сыра/клик',     baseCost:40000,       type:'click', power:150,     scale:1.15 },
+  { id:'hammer',   name:'🔨 Молоток',      desc:'+400 сыра/клик',     baseCost:500000,      type:'click', power:400,     scale:1.16 },
+  { id:'cannon',   name:'💣 Пушка',        desc:'+1200 сыра/клик',    baseCost:5000000,     type:'click', power:1200,    scale:1.16 },
+  { id:'laser',    name:'🔫 Лазер',        desc:'+4000 сыра/клик',    baseCost:80000000,    type:'click', power:4000,    scale:1.17 },
+  { id:'nuke',     name:'☢️ Ядерка',       desc:'+15000 сыра/клик',   baseCost:2000000000,  type:'click', power:15000,   scale:1.17 },
+  { id:'blackhole',name:'🌑 Чёрная дыра',  desc:'+60000 сыра/клик',   baseCost:50000000000, type:'click', power:60000,   scale:1.18 },
+  { id:'auto',     name:'🤖 Робот',        desc:'+1 сыр/сек',         baseCost:60,          type:'auto',  power:1,       scale:1.15 },
+  { id:'sponge',   name:'🧽 Губка',        desc:'+5 сыр/сек',         baseCost:300,         type:'auto',  power:5,       scale:1.15 },
+  { id:'drone',    name:'🚁 Дрон',         desc:'+15 сыр/сек',        baseCost:1200,        type:'auto',  power:15,      scale:1.16 },
+  { id:'brush',    name:'🖌️ Авто-кисть',   desc:'+50 сыр/сек',        baseCost:5000,        type:'auto',  power:50,      scale:1.16 },
+  { id:'spray',    name:'💦 Распылитель',  desc:'+150 сыр/сек',       baseCost:20000,       type:'auto',  power:150,     scale:1.17 },
+  { id:'machine',  name:'⚙️ Машина',       desc:'+500 сыр/сек',       baseCost:80000,       type:'auto',  power:500,     scale:1.17 },
+  { id:'factory',  name:'🏭 Завод',        desc:'+2000 сыр/сек',      baseCost:1000000,     type:'auto',  power:2000,    scale:1.18 },
+  { id:'reactor',  name:'⚡ Реактор',      desc:'+8000 сыр/сек',      baseCost:20000000,    type:'auto',  power:8000,    scale:1.18 },
+  { id:'satellite',name:'🛰️ Спутник',      desc:'+30000 сыр/сек',     baseCost:500000000,   type:'auto',  power:30000,   scale:1.19 },
+  { id:'dyson',    name:'🌞 Сфера Дайсона',desc:'+150000 сыр/сек',    baseCost:15000000000, type:'auto',  power:150000,  scale:1.19 },
+  { id:'multiverse',name:'🌀 Мультивселенная',desc:'+800000 сыр/сек', baseCost:80000000000, type:'auto',  power:800000,  scale:1.20 },
 ];
 
 const saucesList = [
@@ -409,54 +427,59 @@ const saucesList = [
 ];
 
 const locationsList = [
-  { id:'entrance', name:'Подъезд', icon:'🏠', multiplier:1.0, cost:0, requiredRebirths:0 },
-  { id:'district', name:'Район', icon:'🏘️', multiplier:1.15, cost:30000, requiredRebirths:1 },
-  { id:'city', name:'Город', icon:'🏙️', multiplier:1.3, cost:200000, requiredRebirths:2 },
-  { id:'megapolis', name:'Мегаполис', icon:'🌆', multiplier:1.5, cost:1500000, requiredRebirths:4 },
-  { id:'country', name:'Страна', icon:'🗺️', multiplier:1.75, cost:10000000, requiredRebirths:6 },
-  { id:'continent', name:'Континент', icon:'🌍', multiplier:2.1, cost:60000000, requiredRebirths:9 },
-  { id:'planet', name:'Планета', icon:'🌎', multiplier:2.6, cost:300000000, requiredRebirths:13 },
-  { id:'galaxy', name:'Галактика', icon:'🌌', multiplier:3.3, cost:1500000000, requiredRebirths:18 },
+  { id:'entrance',  name:'Подъезд',     icon:'🏠', multiplier:1.0,  cost:0,              requiredRebirths:0 },
+  { id:'district',  name:'Район',       icon:'🏘️', multiplier:1.15, cost:30000,          requiredRebirths:1 },
+  { id:'city',      name:'Город',       icon:'🏙️', multiplier:1.3,  cost:200000,         requiredRebirths:2 },
+  { id:'megapolis', name:'Мегаполис',   icon:'🌆', multiplier:1.5,  cost:1500000,        requiredRebirths:4 },
+  { id:'country',   name:'Страна',      icon:'🗺️', multiplier:1.75, cost:10000000,       requiredRebirths:6 },
+  { id:'continent', name:'Континент',   icon:'🌍', multiplier:2.1,  cost:60000000,       requiredRebirths:9 },
+  { id:'planet',    name:'Планета',     icon:'🌎', multiplier:2.6,  cost:300000000,      requiredRebirths:13 },
+  { id:'galaxy',    name:'Галактика',   icon:'🌌', multiplier:3.3,  cost:1500000000,     requiredRebirths:18 },
+  { id:'universe',  name:'Вселенная',   icon:'✨', multiplier:4.5,  cost:20000000000,    requiredRebirths:25 },
 ];
 
 const casesList = [
-  { id:'starter', name:'Стартовый', icon:'📦', price:300, items:[
+  { id:'starter', name:'Стартовый', icon:'📦', price:100000, items:[
     {id:'k1',name:'Брелок сыр',icon:'🧀',rarity:'common'},{id:'k2',name:'Брелок ключ',icon:'🔑',rarity:'common'},
     {id:'k3',name:'Брелок сердце',icon:'❤️',rarity:'uncommon'},{id:'k4',name:'Брелок звезда',icon:'⭐',rarity:'uncommon'},
     {id:'k5',name:'Брелок корона',icon:'👑',rarity:'rare'} ] },
-  { id:'premium', name:'Премиум', icon:'🎁', price:3000, items:[
+  { id:'premium', name:'Премиум', icon:'🎁', price:5000000, items:[
     {id:'k6',name:'Брелок алмаз',icon:'💎',rarity:'rare'},{id:'k7',name:'Брелок молния',icon:'⚡',rarity:'rare'},
     {id:'k8',name:'Брелок огонь',icon:'🔥',rarity:'epic'},{id:'k9',name:'Брелок череп',icon:'💀',rarity:'epic'},
     {id:'k10',name:'Брелок дракон',icon:'🐉',rarity:'legendary'} ] },
-  { id:'elite', name:'Элитный', icon:'💼', price:25000, items:[
+  { id:'elite', name:'Элитный', icon:'💼', price:100000000, items:[
     {id:'k11',name:'Брелок галактика',icon:'🌌',rarity:'legendary'},{id:'k12',name:'Брелок радуга',icon:'🌈',rarity:'legendary'},
     {id:'k13',name:'Брелок космос',icon:'🚀',rarity:'mythic'},{id:'k14',name:'Брелок инфинити',icon:'∞',rarity:'mythic'} ] },
+  { id:'god', name:'Кейс БОГА', icon:'☀️', price:1000000000, items:[
+    {id:'k15',name:'Брелок судьба',icon:'🎲',rarity:'mythic'},{id:'k16',name:'Брелок хаос',icon:'🌀',rarity:'mythic'},
+    {id:'k17',name:'Брелок вечность',icon:'⏳',rarity:'mythic'},{id:'k18',name:'Брелок абсолют',icon:'💫',rarity:'mythic'},
+    {id:'k19',name:'Корона богов',icon:'🌟',rarity:'mythic'} ] },
 ];
 
 // === МНОГО РАНГОВ ===
 const rankThresholds = [
-  { name:'Новичок I',   mmr:0,    color:'#71717a', icon:'🌱', botDiff:.22, botSpeed:900 },
-  { name:'Новичок II',  mmr:200,  color:'#84858a', icon:'🌱', botDiff:.25, botSpeed:870 },
-  { name:'Новичок III', mmr:400,  color:'#9ca3af', icon:'🌱', botDiff:.28, botSpeed:840 },
-  { name:'Бронза I',    mmr:600,  color:'#d97706', icon:'🥉', botDiff:.32, botSpeed:800 },
-  { name:'Бронза II',   mmr:750,  color:'#e0820a', icon:'🥉', botDiff:.35, botSpeed:770 },
-  { name:'Бронза III',  mmr:900,  color:'#f59e0b', icon:'🥉', botDiff:.38, botSpeed:740 },
-  { name:'Серебро I',   mmr:1050, color:'#94a3b8', icon:'🥈', botDiff:.42, botSpeed:700 },
-  { name:'Серебро II',  mmr:1200, color:'#a8b4c4', icon:'🥈', botDiff:.45, botSpeed:670 },
-  { name:'Серебро III', mmr:1350, color:'#cbd5e1', icon:'🥈', botDiff:.48, botSpeed:640 },
-  { name:'Золото I',    mmr:1500, color:'#f59e0b', icon:'🥇', botDiff:.52, botSpeed:600 },
-  { name:'Золото II',   mmr:1650, color:'#fbbf24', icon:'🥇', botDiff:.55, botSpeed:570 },
-  { name:'Золото III',  mmr:1800, color:'#fde047', icon:'🥇', botDiff:.58, botSpeed:540 },
-  { name:'Платина I',   mmr:1950, color:'#3b82f6', icon:'💠', botDiff:.62, botSpeed:500 },
-  { name:'Платина II',  mmr:2100, color:'#60a5fa', icon:'💠', botDiff:.65, botSpeed:470 },
-  { name:'Платина III', mmr:2250, color:'#93c5fd', icon:'💠', botDiff:.68, botSpeed:440 },
-  { name:'Алмаз I',     mmr:2400, color:'#06b6d4', icon:'💎', botDiff:.72, botSpeed:400 },
-  { name:'Алмаз II',    mmr:2550, color:'#22d3ee', icon:'💎', botDiff:.75, botSpeed:380 },
-  { name:'Алмаз III',   mmr:2700, color:'#67e8f9', icon:'💎', botDiff:.78, botSpeed:360 },
-  { name:'Мастер',      mmr:2900, color:'#8b5cf6', icon:'🔮', botDiff:.83, botSpeed:320 },
-  { name:'Грандмастер', mmr:3150, color:'#a78bfa', icon:'👑', botDiff:.88, botSpeed:280 },
-  { name:'Чемпион',     mmr:3450, color:'#ef4444', icon:'🏆', botDiff:.93, botSpeed:240 },
-  { name:'Легенда',     mmr:3800, color:'#f87171', icon:'⚜️', botDiff:.97, botSpeed:200 },
+  { name:'Новичок I',   mmr:0,    color:'#71717a', icon:'🌱', botDiff:.18, botSpeed:1100 },
+  { name:'Новичок II',  mmr:200,  color:'#84858a', icon:'🌱', botDiff:.20, botSpeed:1050 },
+  { name:'Новичок III', mmr:400,  color:'#9ca3af', icon:'🌱', botDiff:.22, botSpeed:1000 },
+  { name:'Бронза I',    mmr:600,  color:'#d97706', icon:'🥉', botDiff:.25, botSpeed:960 },
+  { name:'Бронза II',   mmr:750,  color:'#e0820a', icon:'🥉', botDiff:.27, botSpeed:920 },
+  { name:'Бронза III',  mmr:900,  color:'#f59e0b', icon:'🥉', botDiff:.30, botSpeed:880 },
+  { name:'Серебро I',   mmr:1050, color:'#94a3b8', icon:'🥈', botDiff:.33, botSpeed:840 },
+  { name:'Серебро II',  mmr:1200, color:'#a8b4c4', icon:'🥈', botDiff:.36, botSpeed:800 },
+  { name:'Серебро III', mmr:1350, color:'#cbd5e1', icon:'🥈', botDiff:.39, botSpeed:770 },
+  { name:'Золото I',    mmr:1500, color:'#f59e0b', icon:'🥇', botDiff:.42, botSpeed:740 },
+  { name:'Золото II',   mmr:1650, color:'#fbbf24', icon:'🥇', botDiff:.45, botSpeed:710 },
+  { name:'Золото III',  mmr:1800, color:'#fde047', icon:'🥇', botDiff:.47, botSpeed:680 },
+  { name:'Платина I',   mmr:1950, color:'#3b82f6', icon:'💠', botDiff:.50, botSpeed:650 },
+  { name:'Платина II',  mmr:2100, color:'#60a5fa', icon:'💠', botDiff:.52, botSpeed:620 },
+  { name:'Платина III', mmr:2250, color:'#93c5fd', icon:'💠', botDiff:.54, botSpeed:595 },
+  { name:'Алмаз I',     mmr:2400, color:'#06b6d4', icon:'💎', botDiff:.56, botSpeed:570 },
+  { name:'Алмаз II',    mmr:2550, color:'#22d3ee', icon:'💎', botDiff:.58, botSpeed:545 },
+  { name:'Алмаз III',   mmr:2700, color:'#67e8f9', icon:'💎', botDiff:.60, botSpeed:520 },
+  { name:'Мастер',      mmr:2900, color:'#8b5cf6', icon:'🔮', botDiff:.63, botSpeed:490 },
+  { name:'Грандмастер', mmr:3150, color:'#a78bfa', icon:'👑', botDiff:.66, botSpeed:460 },
+  { name:'Чемпион',     mmr:3450, color:'#ef4444', icon:'🏆', botDiff:.69, botSpeed:430 },
+  { name:'Легенда',     mmr:3800, color:'#f87171', icon:'⚜️', botDiff:.72, botSpeed:400 },
 ];
 
 function getRank(mmr){
@@ -529,7 +552,9 @@ async function loadGameData(){
     gameData = { ...gameData, ...ld,
       upgrades: ld.upgrades||{}, inventory: ld.inventory||{decorations:[]},
       equipped: ld.equipped||{decoration:null}, openedCases: ld.openedCases||{},
-      quests: ld.quests||{} };
+      quests: ld.quests||{}, upgradeMaxBonus: ld.upgradeMaxBonus||{},
+      pendingSeasonBonus: ld.pendingSeasonBonus||0, lastSeasonELO: ld.lastSeasonELO||0,
+      seasonResetSeen: ld.seasonResetSeen||false };
     if (gameData.isBanned){ alert('Аккаунт заблокирован!'); localStorage.removeItem('soysdomofon_user'); location.reload(); return; }
     upgradesList.forEach(u=>{ if(gameData.upgrades[u.id]===undefined) gameData.upgrades[u.id]=0; });
     document.getElementById('playerName').textContent = currentUser;
@@ -550,6 +575,11 @@ async function loadGameData(){
   loadLeaderboard();
   setupEventListeners();
   listenGlobalEvent();
+
+  // показать сезонный бонус если есть нераспределённые уровни
+  if (gameData.pendingSeasonBonus > 0) {
+    setTimeout(()=>showSeasonBonusModal(), 1000);
+  }
 }
 
 function updateRankUI(){
@@ -828,11 +858,14 @@ function showNotification(msg,type='success'){
 
 async function saveGame(){
   if (!currentUser || !currentUserId) return;
+  // обновляем рекорд ELO за всё время
+  gameData.pvpMMRAllTime = Math.max(gameData.pvpMMRAllTime||1000, gameData.pvpMMR||1000);
   try{
     await core.collection('players').update(currentUserId, { gamedata: gameData });
     const lbData = {
       login: currentUser, cheese: gameData.cheese, alltimecheese: gameData.allTimeCheese,
-      rebirths: gameData.rebirths, level: gameData.level, pvpmmr: gameData.pvpMMR,
+      rebirths: gameData.rebirths, level: gameData.level,
+      pvpmmr: gameData.pvpMMR, pvpmmralltime: gameData.pvpMMRAllTime,
       pvpwins: gameData.pvpWins, pvplosses: gameData.pvpLosses, pvpwinstreak: gameData.pvpWinStreak
     };
     try{
@@ -848,10 +881,16 @@ function renderShop(){
   let h='';
   upgradesList.forEach(u=>{
     const lvl = gameData.upgrades[u.id]||0;
-    const cost = Math.floor(u.baseCost*Math.pow(u.scale,lvl)*Math.pow(1.1,gameData.rebirths));
-    h+=`<div class="shop-item"><div class="shop-item-header"><div class="shop-item-name">${u.name}</div><div class="shop-item-level">Ур.${lvl}</div></div>
-    <div class="shop-item-desc">${u.desc}</div><div class="shop-item-footer"><div class="shop-item-cost">${cost.toLocaleString()} 🧀</div>
-    <button class="buy-btn" data-upgrade="${u.id}">Купить</button></div></div>`;
+    const maxLvl = getUpgradeMax(u.id);
+    const isMax = lvl >= maxLvl;
+    const bonusStr = (gameData.upgradeMaxBonus[u.id]||0) > 0 ? ` <span style="color:#a78bfa;font-size:.75em">+${gameData.upgradeMaxBonus[u.id]} сезон</span>` : '';
+    const cost = isMax ? 0 : Math.floor(u.baseCost*Math.pow(u.scale,lvl)*Math.pow(1.1,gameData.rebirths));
+    h+=`<div class="shop-item"><div class="shop-item-header"><div class="shop-item-name">${u.name}${bonusStr}</div>
+    <div class="shop-item-level">${isMax?'MAX':('Ур.'+lvl+'/'+maxLvl)}</div></div>
+    <div class="shop-item-desc">${u.desc}</div><div class="shop-item-footer">
+    <div class="shop-item-cost">${isMax?'—':cost.toLocaleString()+' 🧀'}</div>
+    ${isMax?'<button class="buy-btn" disabled style="background:#10b981">MAX ✓</button>':`<button class="buy-btn" data-upgrade="${u.id}">Купить</button>`}
+    </div></div>`;
   });
   document.getElementById('upgradesTab').innerHTML = h;
 
@@ -958,11 +997,83 @@ document.getElementById('intercom').addEventListener('click', function(event){
   updateUI(); checkLevelUp();
 });
 
+function getUpgradeMax(upgradeId){
+  return MAX_UPGRADE_LEVEL + (gameData.upgradeMaxBonus[upgradeId]||0);
+}
+
+function showSeasonBonusModal(){
+  const bonus = gameData.pendingSeasonBonus;
+  if (bonus <= 0) return;
+  const elo = gameData.lastSeasonELO;
+
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:40000;display:flex;align-items:center;justify-content:center;padding:16px';
+  modal.id = 'seasonBonusModal';
+
+  let upgradesHTML = upgradesList.map(u=>{
+    const curBonus = gameData.upgradeMaxBonus[u.id]||0;
+    return `<div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:12px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer" data-bonus-upgrade="${u.id}">
+      <div>
+        <div style="font-weight:700;font-size:.95em">${u.name}</div>
+        <div style="font-size:.8em;color:#94a3b8">Текущий макс: <span style="color:#fbbf24">${MAX_UPGRADE_LEVEL + curBonus}</span></div>
+      </div>
+      <button style="padding:9px 16px;border:none;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;font-weight:700;cursor:pointer;font-size:13px" data-bonus-btn="${u.id}">+1 уровень</button>
+    </div>`;
+  }).join('');
+
+  modal.innerHTML = `<div style="background:rgba(15,23,42,.97);border:2px solid #fbbf24;border-radius:24px;padding:30px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:3em">🏆</div>
+      <h2 style="font-size:1.6em;font-weight:900;color:#fbbf24;margin:10px 0">Сезон завершён!</h2>
+      <div style="color:#94a3b8;font-size:.9em;margin-bottom:6px">Твой ELO прошлого сезона: <span style="color:#fbbf24;font-weight:700">${elo}</span></div>
+      <div style="color:#e2e8f0;font-weight:700">Ты заработал <span style="color:#a78bfa;font-size:1.2em">${bonus}</span> бонусных уровней — распредели их по прокачкам выше MAX!</div>
+      <div style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.4);border-radius:10px;padding:10px;margin-top:12px;font-size:.82em;color:#c4b5fd">
+        Осталось распределить: <span id="bonusLeft" style="font-weight:900;font-size:1.3em;color:#fbbf24">${bonus}</span>
+      </div>
+    </div>
+    <div id="bonusUpgradeList">${upgradesHTML}</div>
+    <button id="bonusCloseBtn" style="width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-weight:700;font-size:1em;cursor:pointer;margin-top:10px" ${bonus>0?'disabled style="width:100%;padding:14px;border:none;border-radius:12px;background:rgba(255,255,255,.1);color:#94a3b8;font-weight:700;font-size:1em;cursor:not-allowed;margin-top:10px"':''}>
+      ${bonus>0?'Распредели все уровни для продолжения':'✓ Готово!'}
+    </button>
+  </div>`;
+
+  document.body.appendChild(modal);
+
+  modal.addEventListener('click', function(e){
+    const uid = e.target.dataset.bonusBtn || (e.target.closest('[data-bonus-btn]') && e.target.closest('[data-bonus-btn]').dataset.bonusBtn);
+    if (!uid) return;
+    if (gameData.pendingSeasonBonus <= 0) return;
+    if (!gameData.upgradeMaxBonus[uid]) gameData.upgradeMaxBonus[uid]=0;
+    gameData.upgradeMaxBonus[uid]++;
+    gameData.pendingSeasonBonus--;
+
+    // обновить отображение
+    document.getElementById('bonusLeft').textContent = gameData.pendingSeasonBonus;
+    const div = modal.querySelector(`[data-bonus-upgrade="${uid}"] div div:last-child span`);
+    if (div) div.textContent = MAX_UPGRADE_LEVEL + gameData.upgradeMaxBonus[uid];
+
+    if (gameData.pendingSeasonBonus <= 0){
+      const btn = document.getElementById('bonusCloseBtn');
+      btn.disabled = false;
+      btn.textContent = '✓ Готово!';
+      btn.style.cssText = 'width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-weight:700;font-size:1em;cursor:pointer;margin-top:10px';
+    }
+  });
+
+  document.getElementById('bonusCloseBtn').addEventListener('click', function(){
+    if (gameData.pendingSeasonBonus > 0) return;
+    modal.remove();
+    renderShop();
+    saveGame();
+  });
+}
+
 function setupEventListeners(){
   document.addEventListener('click', function(e){
     if (e.target.dataset.upgrade){
       const u = upgradesList.find(x=>x.id===e.target.dataset.upgrade); if (!u) return;
       const lvl = gameData.upgrades[u.id]||0;
+      if (lvl >= getUpgradeMax(u.id)) return;
       const cost = Math.floor(u.baseCost*Math.pow(u.scale,lvl)*Math.pow(1.1,gameData.rebirths));
       if (gameData.cheese>=cost){
         gameData.cheese-=cost; gameData.upgrades[u.id]++;
@@ -1040,6 +1151,10 @@ function setupEventListeners(){
 function getRebirthCost(){ return Math.floor(300000*Math.pow(3.2,gameData.rebirths)); }
 
 function doRebirth(){
+  if (gameData.rebirths >= MAX_REBIRTHS){
+    showNotification('🏆 Максимальный уровень перерождений достигнут!','success');
+    return;
+  }
   const cost = getRebirthCost();
   if (gameData.cheese>=cost){
     if (confirm(`Переродиться? Прогресс по добыче сбросится.\nБонус: +6% к доходу навсегда\nСледующая стоимость: ${(cost*3.2).toLocaleString()} 🧀`)){
@@ -1086,32 +1201,51 @@ function updateUI(){
   document.getElementById('pvpLosses').textContent = gameData.pvpLosses;
   const cost = getRebirthCost();
   document.getElementById('rebirthCost').textContent = cost.toLocaleString();
-  document.getElementById('rebirthBtn').disabled = gameData.cheese < cost;
+  if (gameData.rebirths >= MAX_REBIRTHS){
+    document.getElementById('rebirthBtn').textContent = '🏆 МАКСИМАЛЬНЫЙ УРОВЕНЬ ДОСТИГНУТ';
+    document.getElementById('rebirthBtn').disabled = true;
+  } else {
+    document.getElementById('rebirthBtn').innerHTML = `⭐ ПЕРЕРОДИТЬСЯ (<span id="rebirthCost">${cost.toLocaleString()}</span> 🧀)`;
+    document.getElementById('rebirthBtn').disabled = gameData.cheese < cost;
+  }
 }
 
-let currentLeaderboardTab = 'elo';
+let currentLeaderboardTab = 'elo_season';
 
 async function loadLeaderboard(){
   let leaders;
-  try{ leaders = await core.collection('leaderboard').getFullList({ sort: '-cheese' }); }catch(e){ leaders = []; }
+  try{ leaders = await core.collection('leaderboard').getFullList({ sort: '-pvpmmr' }); }catch(e){ leaders = []; }
   if (!leaders.length){ document.getElementById('leaderboardList').innerHTML='<div style="text-align:center;color:#94a3b8;padding:18px">Нет данных</div>'; return; }
   leaders = leaders.map(l=>({
     login: l.login, cheese: l.cheese||0, rebirths: l.rebirths||0,
-    pvpMMR: l.pvpmmr||1000, pvpWinStreak: l.pvpwinstreak||0
+    pvpMMR: l.pvpmmr||1000, pvpMMRAllTime: l.pvpmmralltime||l.pvpmmr||1000,
+    pvpWinStreak: l.pvpwinstreak||0
   }));
-  if (currentLeaderboardTab==='elo') leaders.sort((a,b)=>(b.pvpMMR||1000)-(a.pvpMMR||1000));
+
+  if (currentLeaderboardTab==='elo_season') leaders.sort((a,b)=>b.pvpMMR-a.pvpMMR);
+  else if (currentLeaderboardTab==='elo_alltime') leaders.sort((a,b)=>b.pvpMMRAllTime-a.pvpMMRAllTime);
   else if (currentLeaderboardTab==='balance') leaders.sort((a,b)=>b.cheese-a.cheese);
   else leaders.sort((a,b)=>b.rebirths-a.rebirths);
   leaders = leaders.slice(0,10);
 
+  const isElo = currentLeaderboardTab==='elo_season'||currentLeaderboardTab==='elo_alltime';
+
   document.getElementById('leaderboardList').innerHTML = leaders.map((l,i)=>{
     const rc = i===0?'gold':i===1?'silver':i===2?'bronze':'';
-    let score='';
-    if (currentLeaderboardTab==='elo'){ const r=getRank(l.pvpMMR||1000); score=`${r.icon} ${l.pvpMMR||1000}`; }
-    else if (currentLeaderboardTab==='balance') score=`${Math.floor(l.cheese||0).toLocaleString()} 🧀`;
-    else score=`⭐ ${l.rebirths||0}`;
+    let score='', mmrVal;
+    if (currentLeaderboardTab==='elo_season'){
+      mmrVal = l.pvpMMR;
+      const r=getRank(mmrVal); score=`${r.icon} ${mmrVal}`;
+    } else if (currentLeaderboardTab==='elo_alltime'){
+      mmrVal = l.pvpMMRAllTime;
+      const r=getRank(mmrVal); score=`${r.icon} ${mmrVal} 🏆`;
+    } else if (currentLeaderboardTab==='balance'){
+      score=`${Math.floor(l.cheese||0).toLocaleString()} 🧀`;
+    } else {
+      score=`⭐ ${l.rebirths||0}`;
+    }
     return `<div class="leaderboard-item"><div class="leaderboard-rank ${rc}">${i+1}</div>
-      <div class="leaderboard-player">${l.login}${l.pvpWinStreak>2&&currentLeaderboardTab==='elo'?` <span class="streak">🔥${l.pvpWinStreak}</span>`:''}</div>
+      <div class="leaderboard-player">${l.login}${l.pvpWinStreak>2&&isElo?` <span class="streak">🔥${l.pvpWinStreak}</span>`:''}</div>
       <div class="leaderboard-score">${score}</div></div>`;
   }).join('');
 }
@@ -1135,7 +1269,16 @@ async function checkSeason(){
   }
 
   if (gameData.lastSeasonNumber !== season.number){
-    gameData.pvpMMR = Math.max(1000, Math.floor((gameData.pvpMMR||1000)*0.6 + 400));
+    const oldMMR = gameData.pvpMMR || 1000;
+    // бонус: 2000 эло = 2 уровня, 3000 = 3 уровня; 1000 не считается
+    const bonusLevels = oldMMR >= 2000 ? Math.floor(oldMMR / 1000) : 0;
+    gameData.lastSeasonELO = oldMMR;
+    if (bonusLevels > 0 && gameData.lastSeasonNumber > 0) {
+      // только если это не первый заход (lastSeasonNumber был 0 = новый игрок)
+      gameData.pendingSeasonBonus = (gameData.pendingSeasonBonus||0) + bonusLevels;
+      gameData.seasonResetSeen = false;
+    }
+    gameData.pvpMMR = Math.max(1000, Math.floor(oldMMR*0.6 + 400));
     gameData.pvpWinStreak = 0;
     gameData.lastSeasonNumber = season.number;
     saveGame();
